@@ -1,0 +1,56 @@
+{
+	"name": "Enrollment_table_new",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "StateId",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "CountyId",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "BidId",
+				"type": "varchar"
+			},
+			{
+				"name": "Enrollments",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Year",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Month",
+				"type": "nvarchar"
+			},
+			{
+				"name": "MonthNumber",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Id",
+				"type": "int",
+				"precision": 10
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "OrgEnrollment"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
