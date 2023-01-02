@@ -1,0 +1,27 @@
+{
+	"name": "Parent_org_table",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "Parent_Organization",
+				"type": "varchar"
+			},
+			{
+				"name": "ParentOrganizationId",
+				"type": "int",
+				"precision": 10
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "OrgParentOrganization"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,72 @@
+{
+	"name": "geography_plan_filters_table",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "PId",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "StateId",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "CountyId",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "BidId",
+				"type": "nvarchar"
+			},
+			{
+				"name": "PlanTypeId",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "SnpTypeId",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "CrosswalkId",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "PlanCategoryId",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "HFProductCutsId",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "SnpTagId",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "ParentOrganizationId",
+				"type": "int",
+				"precision": 10
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "GeographyPlanFiltersCopy"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

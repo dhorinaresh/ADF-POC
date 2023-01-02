@@ -1,0 +1,53 @@
+{
+	"name": "DelimitedText4",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "Output_Geography_plan_filters/Geography_plan_filters_final",
+				"fileSystem": "pfcontainer"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "StateId",
+				"type": "String"
+			},
+			{
+				"name": "CountyId",
+				"type": "String"
+			},
+			{
+				"name": "BidId",
+				"type": "String"
+			},
+			{
+				"name": "PlanTypeId",
+				"type": "String"
+			},
+			{
+				"name": "SnpTypeId",
+				"type": "String"
+			},
+			{
+				"name": "CrosswalkId",
+				"type": "String"
+			},
+			{
+				"name": "ParentOrganizationId",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

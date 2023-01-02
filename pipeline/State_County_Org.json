@@ -1,0 +1,560 @@
+{
+	"name": "State_County_Org",
+	"properties": {
+		"activities": [
+			{
+				"name": "State_Counrt_Org_Script",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Start_time_update_geo",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/hwaitech@healthworksai.com/Plan_Finder/Geography_Scripts/State_County_Org_Id"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks4_pfcluster3",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Copy_State_data",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Truncate_table",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"wildcardFolderPath": "Output_Id_Mappings/State_details_final",
+							"wildcardFileName": "p*",
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "State_data",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "State_table_sink",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "Start_time_update_geo",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "INSERT INTO Audit_plan(Operation, StartTime)\nValues('GeoIds_script', (Select GETDATE()));\nSelect * from Audit_plan;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "Plan_details_Audit_table",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "Pass_status_update_geo",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "State_Counrt_Org_Script",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "Update Audit_plan\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit_plan);\n\nUpdate Audit_plan\nSET Status = 'pass'\nwhere Id = (select Count(*) from Audit_plan);\n\nUpdate Audit_plan\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit_plan);\n\nSelect * from Audit_plan;\n",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "Plan_details_Audit_table",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "Fail_status_update_geo",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "State_Counrt_Org_Script",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "Update Audit_plan\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit_plan);\n\nUpdate Audit_plan\nSET Status = 'Fail'\nwhere Id = (select Count(*) from Audit_plan);\n\nUpdate Audit_plan\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit_plan);\n\nSelect * from Audit_plan;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "Plan_details_Audit_table",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "Start_time_update_geoCopy",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Pass_status_update_geo",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "INSERT INTO Audit_plan(Operation, StartTime)\nValues('GeoIds_copy', (Select GETDATE()));\nSelect * from Audit_plan;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "Plan_details_Audit_table",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "Pass_status_geoIdCopy",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Copy_ParentOrgData",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "Update Audit_plan\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit_plan);\n\nUpdate Audit_plan\nSET Status = 'pass'\nwhere Id = (select Count(*) from Audit_plan);\n\nUpdate Audit_plan\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit_plan);\n\nSelect * from Audit_plan;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "Plan_details_Audit_table",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "Fail_status_geoidCopy",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Copy_ParentOrgData",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "Update Audit_plan\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit_plan);\n\nUpdate Audit_plan\nSET Status = 'Fail'\nwhere Id = (select Count(*) from Audit_plan);\n\nUpdate Audit_plan\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit_plan);\n\nSelect * from Audit_plan;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "Plan_details_Audit_table",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "send email update for geo script",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "Fail_status_update_geo",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+					"method": "POST",
+					"body": {
+						"value": "{\n \"title\":\"PIPELINE RUN FOR GEOGRAPHY UPDATE FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the State_County_org Script and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "send email update for geo Id Copy",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "Fail_status_geoidCopy",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+					"method": "POST",
+					"body": {
+						"value": "{\n \"title\":\"PIPELINE RUN FOR GEOGRAPHY UPDATE FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the Geography ID Copy to database and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Truncate_table",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Start_time_update_geoCopy",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "Truncate table OrgState;\nselect * from OrgState;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "OrgState",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "Copy_County_data",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Truncate_table_parent_org",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"wildcardFolderPath": "Output_Id_Mappings/County_details_final",
+							"wildcardFileName": "p*",
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "County_data",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "County_table",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "Copy_ParentOrgData",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Copy_County_data",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"wildcardFolderPath": "Output_Id_Mappings/ParentOrg_details_final",
+							"wildcardFileName": "p*",
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Parent_Org_Data",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Parent_org_table",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "Truncate_table_county",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Copy_State_data",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "Truncate table OrgCounty;\nselect * from OrgCounty;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "County_table",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "Truncate_table_parent_org",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Truncate_table_county",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "Truncate table OrgParentOrganization;\nselect * from OrgParentOrganization;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "Parent_org_table",
+						"type": "DatasetReference"
+					}
+				}
+			}
+		],
+		"folder": {
+			"name": "PF_Pipelines/AEP_Refresh"
+		},
+		"annotations": [],
+		"lastPublishTime": "2022-11-23T08:54:33Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

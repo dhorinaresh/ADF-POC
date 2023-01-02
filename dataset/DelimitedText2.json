@@ -1,0 +1,193 @@
+{
+	"name": "DelimitedText2",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "Output_Org_Plans/Plan_comparision_table_final",
+				"fileSystem": "pfcontainer"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "StateId",
+				"type": "String"
+			},
+			{
+				"name": "CountyId",
+				"type": "String"
+			},
+			{
+				"name": "BidId",
+				"type": "String"
+			},
+			{
+				"name": "RichPlans",
+				"type": "String"
+			},
+			{
+				"name": "LeanPlans",
+				"type": "String"
+			},
+			{
+				"name": "WinningPlans",
+				"type": "String"
+			},
+			{
+				"name": "PlanName",
+				"type": "String"
+			},
+			{
+				"name": "PremiumCD",
+				"type": "String"
+			},
+			{
+				"name": "PartD",
+				"type": "String"
+			},
+			{
+				"name": "PartBGiveBack",
+				"type": "String"
+			},
+			{
+				"name": "PlanCoverage",
+				"type": "String"
+			},
+			{
+				"name": "SbWorldWideEmegency",
+				"type": "String"
+			},
+			{
+				"name": "SbHearing",
+				"type": "String"
+			},
+			{
+				"name": "HealthDeductible",
+				"type": "String"
+			},
+			{
+				"name": "AnnualDrugDeductible",
+				"type": "String"
+			},
+			{
+				"name": "MOOP",
+				"type": "String"
+			},
+			{
+				"name": "SbVision",
+				"type": "String"
+			},
+			{
+				"name": "OverallStarRating",
+				"type": "String"
+			},
+			{
+				"name": "TEGPlanValue",
+				"type": "String"
+			},
+			{
+				"name": "Supplemental_Benefit_Value",
+				"type": "String"
+			},
+			{
+				"name": "TEG_Plan_Value_PartC",
+				"type": "String"
+			},
+			{
+				"name": "TEG_Plan_Value_PartD",
+				"type": "String"
+			},
+			{
+				"name": "Actuarial (%)",
+				"type": "String"
+			},
+			{
+				"name": "OOPC",
+				"type": "String"
+			},
+			{
+				"name": "PCP",
+				"type": "String"
+			},
+			{
+				"name": "Specalist",
+				"type": "String"
+			},
+			{
+				"name": "InpatAcute",
+				"type": "String"
+			},
+			{
+				"name": "SbInpatient",
+				"type": "String"
+			},
+			{
+				"name": "OCTCoverage",
+				"type": "String"
+			},
+			{
+				"name": "SbOTC",
+				"type": "String"
+			},
+			{
+				"name": "SbCompDental",
+				"type": "String"
+			},
+			{
+				"name": "CompDentalCoverage",
+				"type": "String"
+			},
+			{
+				"name": "SbChiropractor",
+				"type": "String"
+			},
+			{
+				"name": "SbMeal",
+				"type": "String"
+			},
+			{
+				"name": "SbFitness",
+				"type": "String"
+			},
+			{
+				"name": "EmergencyCare",
+				"type": "String"
+			},
+			{
+				"name": "OpHospital",
+				"type": "String"
+			},
+			{
+				"name": "SbTeleHealth",
+				"type": "String"
+			},
+			{
+				"name": "SbHomeSupport",
+				"type": "String"
+			},
+			{
+				"name": "SbHomeSafety",
+				"type": "String"
+			},
+			{
+				"name": "SBPers",
+				"type": "String"
+			},
+			{
+				"name": "SbAmbulance",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

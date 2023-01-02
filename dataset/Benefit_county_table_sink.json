@@ -1,0 +1,46 @@
+{
+	"name": "Benefit_county_table_sink",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "Id",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Bid_Id",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "StateId",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "CountyId",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Benefits",
+				"type": "varchar"
+			},
+			{
+				"name": "BenefitValue",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "Benefits_data_county"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

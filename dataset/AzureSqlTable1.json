@@ -1,0 +1,47 @@
+{
+	"name": "AzureSqlTable1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "Id",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "File_name",
+				"type": "varchar"
+			},
+			{
+				"name": "File_location",
+				"type": "varchar"
+			},
+			{
+				"name": "File_type",
+				"type": "varchar"
+			},
+			{
+				"name": "Operation",
+				"type": "varchar"
+			},
+			{
+				"name": "Date",
+				"type": "date"
+			},
+			{
+				"name": "Status",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "Audit1"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
