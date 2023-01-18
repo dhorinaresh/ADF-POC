@@ -327,7 +327,7 @@
 				"type": "WebActivity",
 				"dependsOn": [
 					{
-						"activity": "end time update for ASAY script",
+						"activity": "Copy QC Output",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -479,6 +479,84 @@
 						}
 					}
 				}
+			},
+			{
+				"name": "Copy QC Output",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "end time update for ASAY script",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "ASAY_QC",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "dataset_sql",
+						"type": "DatasetReference",
+						"parameters": {
+							"sql_server_dataset": {
+								"value": "@pipeline().parameters.sql_server_dataset_name",
+								"type": "Expression"
+							},
+							"db_name_dataset": {
+								"value": "@pipeline().parameters.db_name",
+								"type": "Expression"
+							},
+							"user_name_dataset": {
+								"value": "@pipeline().parameters.user_name",
+								"type": "Expression"
+							},
+							"password_dataset": {
+								"value": "@pipeline().parameters.password",
+								"type": "Expression"
+							},
+							"sql_table_name": "Summary_QC"
+						}
+					}
+				]
 			}
 		],
 		"parameters": {
