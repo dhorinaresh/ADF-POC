@@ -1,0 +1,84 @@
+{
+	"name": "Crosswalk",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Linked_service_AzureDataLakeStorage2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "Crosswalk/Output/crosswalk_2023",
+				"fileSystem": "hwaicontainer"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "PREVIOUS_CONTRACT_ID",
+				"type": "String"
+			},
+			{
+				"name": "PREVIOUS_PLAN_ID",
+				"type": "String"
+			},
+			{
+				"name": "PREVIOUS_PLAN_NAME",
+				"type": "String"
+			},
+			{
+				"name": "PREVIOUS_SNP_TYPE",
+				"type": "String"
+			},
+			{
+				"name": "PREVIOUS_SNP_INSTITUTIONAL",
+				"type": "String"
+			},
+			{
+				"name": "CURRENT_CONTRACT_ID",
+				"type": "String"
+			},
+			{
+				"name": "CURRENT_PLAN_ID",
+				"type": "String"
+			},
+			{
+				"name": "CURRENT_PLAN_NAME",
+				"type": "String"
+			},
+			{
+				"name": "CURRENT_SNP_TYPE",
+				"type": "String"
+			},
+			{
+				"name": "CURRENT_SNP_INSTITUTIONAL",
+				"type": "String"
+			},
+			{
+				"name": "DESCRIPTION",
+				"type": "String"
+			},
+			{
+				"name": "CP_ID_prev",
+				"type": "String"
+			},
+			{
+				"name": "CP_ID_curr",
+				"type": "String"
+			},
+			{
+				"name": "flag",
+				"type": "String"
+			},
+			{
+				"name": "Year",
+				"type": "String"
+			}
+		]
+	}
+}
