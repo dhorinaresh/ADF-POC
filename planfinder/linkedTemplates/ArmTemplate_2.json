@@ -1,0 +1,1125 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "planfinder"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/Org_Plan_table')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "StateId",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "CountyId",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "BidId",
+						"type": "nvarchar"
+					},
+					{
+						"name": "RichPlans",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "LeanPlans",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "WinningPlans",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "PlanName",
+						"type": "nvarchar"
+					},
+					{
+						"name": "PremiumCD",
+						"type": "nvarchar"
+					},
+					{
+						"name": "PartD",
+						"type": "nvarchar"
+					},
+					{
+						"name": "PartBGiveBack",
+						"type": "nvarchar"
+					},
+					{
+						"name": "PlanCoverage",
+						"type": "nvarchar"
+					},
+					{
+						"name": "SbWorldWideEmegency",
+						"type": "nvarchar"
+					},
+					{
+						"name": "SbHearing",
+						"type": "nvarchar"
+					},
+					{
+						"name": "HealthDeductible",
+						"type": "nvarchar"
+					},
+					{
+						"name": "AnnualDrugDeductible",
+						"type": "nvarchar"
+					},
+					{
+						"name": "MOOP",
+						"type": "nvarchar"
+					},
+					{
+						"name": "SbVision",
+						"type": "nvarchar"
+					},
+					{
+						"name": "TEGPlanValue",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "OOPC",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "PCP",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Specalist",
+						"type": "nvarchar"
+					},
+					{
+						"name": "InpatAcute",
+						"type": "nvarchar"
+					},
+					{
+						"name": "SbInpatient",
+						"type": "nvarchar"
+					},
+					{
+						"name": "OCTCoverage",
+						"type": "nvarchar"
+					},
+					{
+						"name": "SbOTC",
+						"type": "nvarchar"
+					},
+					{
+						"name": "SbCompDental",
+						"type": "nvarchar"
+					},
+					{
+						"name": "CompDentalCoverage",
+						"type": "nvarchar"
+					},
+					{
+						"name": "SbChiropractor",
+						"type": "nvarchar"
+					},
+					{
+						"name": "SbMeal",
+						"type": "nvarchar"
+					},
+					{
+						"name": "SbFitness",
+						"type": "nvarchar"
+					},
+					{
+						"name": "EmergencyCare",
+						"type": "nvarchar"
+					},
+					{
+						"name": "OpHospital",
+						"type": "nvarchar"
+					},
+					{
+						"name": "SbTeleHealth",
+						"type": "nvarchar"
+					},
+					{
+						"name": "SbHomeSupport",
+						"type": "nvarchar"
+					},
+					{
+						"name": "SbHomeSafety",
+						"type": "nvarchar"
+					},
+					{
+						"name": "SBPers",
+						"type": "nvarchar"
+					},
+					{
+						"name": "SbAmbulance",
+						"type": "nvarchar"
+					},
+					{
+						"name": "OverallStarRating",
+						"type": "varchar"
+					},
+					{
+						"name": "GeographyPlanFilterID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Id",
+						"type": "int",
+						"precision": 10
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "OrgPlans"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Org_Plans_data')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileSystem": "pfcontainer"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "bid_id",
+						"type": "String"
+					},
+					{
+						"name": "pbp_a_dsnp_zerodollar",
+						"type": "String"
+					},
+					{
+						"name": "pbp_a_snp_state_cvg_yn",
+						"type": "String"
+					},
+					{
+						"name": "plan_type_new_updated",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Parent_Org_Data')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileSystem": "pfcontainer"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "bid_id",
+						"type": "String"
+					},
+					{
+						"name": "pbp_a_dsnp_zerodollar",
+						"type": "String"
+					},
+					{
+						"name": "pbp_a_snp_state_cvg_yn",
+						"type": "String"
+					},
+					{
+						"name": "plan_type_new_updated",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Parent_org_table')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "Parent_Organization",
+						"type": "varchar"
+					},
+					{
+						"name": "ParentOrganizationId",
+						"type": "int",
+						"precision": 10
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "OrgParentOrganization"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Plan_Table')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "Output_Plan_details",
+						"fileSystem": "pfcontainer"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Plan_comparision_output')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "part-00000-tid-3460078169827958077-2d1bd854-30fa-4fec-8346-6d160f7c09e6-77-1-c000.csv",
+						"folderPath": "Output_Org_Plans/Plan_comparision_table_final",
+						"fileSystem": "pfcontainer"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "StateId",
+						"type": "String"
+					},
+					{
+						"name": "CountyId",
+						"type": "String"
+					},
+					{
+						"name": "BidId",
+						"type": "String"
+					},
+					{
+						"name": "RichPlans",
+						"type": "String"
+					},
+					{
+						"name": "LeanPlans",
+						"type": "String"
+					},
+					{
+						"name": "WinningPlans",
+						"type": "String"
+					},
+					{
+						"name": "PlanName",
+						"type": "String"
+					},
+					{
+						"name": "PremiumCD",
+						"type": "String"
+					},
+					{
+						"name": "PartD",
+						"type": "String"
+					},
+					{
+						"name": "PartBGiveBack",
+						"type": "String"
+					},
+					{
+						"name": "PlanCoverage",
+						"type": "String"
+					},
+					{
+						"name": "SbWorldWideEmegency",
+						"type": "String"
+					},
+					{
+						"name": "SbHearing",
+						"type": "String"
+					},
+					{
+						"name": "HealthDeductible",
+						"type": "String"
+					},
+					{
+						"name": "AnnualDrugDeductible",
+						"type": "String"
+					},
+					{
+						"name": "MOOP",
+						"type": "String"
+					},
+					{
+						"name": "SbVision",
+						"type": "String"
+					},
+					{
+						"name": "OverallStarRating",
+						"type": "String"
+					},
+					{
+						"name": "TEGPlanValue",
+						"type": "String"
+					},
+					{
+						"name": "OOPC",
+						"type": "String"
+					},
+					{
+						"name": "PCP",
+						"type": "String"
+					},
+					{
+						"name": "Specalist",
+						"type": "String"
+					},
+					{
+						"name": "InpatAcute",
+						"type": "String"
+					},
+					{
+						"name": "SbInpatient",
+						"type": "String"
+					},
+					{
+						"name": "OCTCoverage",
+						"type": "String"
+					},
+					{
+						"name": "SbOTC",
+						"type": "String"
+					},
+					{
+						"name": "SbCompDental",
+						"type": "String"
+					},
+					{
+						"name": "CompDentalCoverage",
+						"type": "String"
+					},
+					{
+						"name": "SbChiropractor",
+						"type": "String"
+					},
+					{
+						"name": "SbMeal",
+						"type": "String"
+					},
+					{
+						"name": "SbFitness",
+						"type": "String"
+					},
+					{
+						"name": "EmergencyCare",
+						"type": "String"
+					},
+					{
+						"name": "OpHospital",
+						"type": "String"
+					},
+					{
+						"name": "SbTeleHealth",
+						"type": "String"
+					},
+					{
+						"name": "SbHomeSupport",
+						"type": "String"
+					},
+					{
+						"name": "SbHomeSafety",
+						"type": "String"
+					},
+					{
+						"name": "SBPers",
+						"type": "String"
+					},
+					{
+						"name": "SbAmbulance",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Plan_comparision_table')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "Id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "StateId",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "CountyId",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "BidId",
+						"type": "nvarchar"
+					},
+					{
+						"name": "RichPlans",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "LeanPlans",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "WinningPlans",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "PlanName",
+						"type": "nvarchar"
+					},
+					{
+						"name": "PremiumCD",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "PartD",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "PartBGiveBack",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "PlanCoverage",
+						"type": "nvarchar"
+					},
+					{
+						"name": "SbWorldWideEmegency",
+						"type": "nvarchar"
+					},
+					{
+						"name": "SbHearing",
+						"type": "nvarchar"
+					},
+					{
+						"name": "HealthDeductible",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "AnnualDrugDeductible",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "MOOP",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "SbVision",
+						"type": "nvarchar"
+					},
+					{
+						"name": "TEGPlanValue",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "OOPC",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "PCP",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Specalist",
+						"type": "nvarchar"
+					},
+					{
+						"name": "InpatAcute",
+						"type": "nvarchar"
+					},
+					{
+						"name": "SbInpatient",
+						"type": "nvarchar"
+					},
+					{
+						"name": "OCTCoverage",
+						"type": "nvarchar"
+					},
+					{
+						"name": "SbOTC",
+						"type": "nvarchar"
+					},
+					{
+						"name": "SbCompDental",
+						"type": "nvarchar"
+					},
+					{
+						"name": "CompDentalCoverage",
+						"type": "nvarchar"
+					},
+					{
+						"name": "SbChiropractor",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "SbMeal",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "SbFitness",
+						"type": "nvarchar"
+					},
+					{
+						"name": "EmergencyCare",
+						"type": "nvarchar"
+					},
+					{
+						"name": "OpHospital",
+						"type": "nvarchar"
+					},
+					{
+						"name": "SbTeleHealth",
+						"type": "nvarchar"
+					},
+					{
+						"name": "SbHomeSupport",
+						"type": "nvarchar"
+					},
+					{
+						"name": "SbHomeSafety",
+						"type": "nvarchar"
+					},
+					{
+						"name": "SBPers",
+						"type": "nvarchar"
+					},
+					{
+						"name": "SbAmbulance",
+						"type": "nvarchar"
+					},
+					{
+						"name": "OverallStarRating",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "OrgPlansCopy"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Plan_details_Audit_table')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Plan_details_QC')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "QC",
+						"fileSystem": "pfcontainer"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Plan_table_sink')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "Plan_Id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "BidId",
+						"type": "varchar"
+					},
+					{
+						"name": "PlanName",
+						"type": "varchar"
+					},
+					{
+						"name": "StateId",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "CountyId",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "PlantypeId",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "SnptypeId",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "CrosswalkId",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "ParentOrgId",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Active_Ind",
+						"type": "int",
+						"precision": 10
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Plan_Table"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/QC_dummy_output')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "ID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Output",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "QC_dummy_output"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/QC_dummy_table')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "ID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Test_Script_Type",
+						"type": "varchar"
+					},
+					{
+						"name": "Test_Script_location",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "QC_files_table"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Section_C_OON_final_data')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "Output_final",
+						"fileSystem": "pfcontainer"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Section_C_POS_final_data')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "Output_final",
+						"fileSystem": "pfcontainer"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Section_C_final_data')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "Output_final",
+						"fileSystem": "pfcontainer"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/State_data')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileSystem": "pfcontainer"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/State_table_sink')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "StateId",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "State",
+						"type": "varchar"
+					},
+					{
+						"name": "Statecode",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "OrgState"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Summary_QC')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "ID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Test_Case",
+						"type": "varchar"
+					},
+					{
+						"name": "Expected_Value",
+						"type": "varchar"
+					},
+					{
+						"name": "Found_Value",
+						"type": "varchar"
+					},
+					{
+						"name": "FileName",
+						"type": "varchar"
+					},
+					{
+						"name": "Created_date",
+						"type": "date"
+					},
+					{
+						"name": "Status",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Summary_QC"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/b10a_final_data')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "Output_final",
+						"fileSystem": "pfcontainer"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/b10b_final_data')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "Output_final",
+						"fileSystem": "pfcontainer"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		}
+	]
+}
