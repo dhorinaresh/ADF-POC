@@ -1,0 +1,54 @@
+{
+	"name": "enrrollments_compiled",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "Month",
+				"type": "varchar"
+			},
+			{
+				"name": "Year",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "enrollment",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Geography_Id",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "cpid",
+				"type": "varchar"
+			},
+			{
+				"name": "is_Active",
+				"type": "varchar"
+			},
+			{
+				"name": "Enrolment_Id",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Plan_Id",
+				"type": "int",
+				"precision": 10
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "Enrollments_compiled"
+		}
+	}
+}
