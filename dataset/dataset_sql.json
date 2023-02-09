@@ -2,26 +2,8 @@
 	"name": "dataset_sql",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "Linked_Service_SQL",
-			"type": "LinkedServiceReference",
-			"parameters": {
-				"sql_server": {
-					"value": "@dataset().sql_server_dataset",
-					"type": "Expression"
-				},
-				"db_name": {
-					"value": "@dataset().db_name_dataset",
-					"type": "Expression"
-				},
-				"user_name": {
-					"value": "@dataset().user_name_dataset",
-					"type": "Expression"
-				},
-				"password": {
-					"value": "@dataset().password_dataset",
-					"type": "Expression"
-				}
-			}
+			"referenceName": "AzureSqlDatabase1",
+			"type": "LinkedServiceReference"
 		},
 		"parameters": {
 			"sql_server_dataset": {
