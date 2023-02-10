@@ -232,6 +232,9 @@
 				}
 			}
 		],
+		"folder": {
+			"name": "PF_Pipelines/Monthly_Refresh"
+		},
 		"annotations": [],
 		"lastPublishTime": "2022-07-14T05:33:55Z"
 	},
