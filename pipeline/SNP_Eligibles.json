@@ -279,7 +279,7 @@
 						"storeSettings": {
 							"type": "AzureBlobFSReadSettings",
 							"recursive": true,
-							"wildcardFolderPath": " Eligibles / Output / DSNP_Eligible",
+							"wildcardFolderPath": " Eligibles/Output/DSNP_Eligible",
 							"wildcardFileName": "p*",
 							"enablePartitionDiscovery": false
 						},
@@ -329,7 +329,7 @@
 								"value": "@pipeline().parameters.password",
 								"type": "Expression"
 							},
-							"sql_table_name": "SNP Eligibles"
+							"sql_table_name": "SNP_Eligibles"
 						}
 					}
 				]
@@ -546,16 +546,20 @@
 		],
 		"parameters": {
 			"sql_server_dataset_name": {
-				"type": "String"
+				"type": "String",
+				"defaultValue": "hwpilot.database.windows.net"
 			},
 			"db_name": {
-				"type": "String"
+				"type": "String",
+				"defaultValue": "pf_data"
 			},
 			"user_name": {
-				"type": "String"
+				"type": "String",
+				"defaultValue": "pladmin"
 			},
 			"password": {
-				"type": "String"
+				"type": "String",
+				"defaultValue": "Goteg@12345"
 			}
 		},
 		"folder": {
