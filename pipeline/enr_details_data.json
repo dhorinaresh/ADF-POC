@@ -34,7 +34,7 @@
 				"type": "Copy",
 				"dependsOn": [
 					{
-						"activity": "start time update_enr_data_load_to_db",
+						"activity": "Delete data if exists",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -487,6 +487,57 @@
 								"type": "Expression"
 							},
 							"sql_table_name": "Audit"
+						}
+					}
+				}
+			},
+			{
+				"name": "Delete data if exists",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "start time update_enr_data_load_to_db",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "DELETE FROM OrgEnrollment where Month = (SELECT DATENAME(month,GETDATE())) and Year = (SELECT YEAR(GETDATE()));\nSELECT TOP 10 * FROM OrgEnrollment;\n",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "dataset_sql",
+						"type": "DatasetReference",
+						"parameters": {
+							"sql_server_dataset": {
+								"value": "@pipeline().parameters.sql_server_dataset_name",
+								"type": "Expression"
+							},
+							"db_name_dataset": {
+								"value": "@pipeline().parameters.db_name",
+								"type": "Expression"
+							},
+							"user_name_dataset": {
+								"value": "@pipeline().parameters.user_name",
+								"type": "Expression"
+							},
+							"password_dataset": {
+								"value": "@pipeline().parameters.password",
+								"type": "Expression"
+							},
+							"sql_table_name": "OrgEnrollment"
 						}
 					}
 				}
