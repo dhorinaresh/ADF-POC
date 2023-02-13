@@ -559,7 +559,7 @@
 			},
 			"password": {
 				"type": "String",
-				"defaultValue": "Gpteg@12345"
+				"defaultValue": "Goteg@12345"
 			}
 		},
 		"folder": {
