@@ -103,7 +103,8 @@
 							"password_dataset": {
 								"value": "@pipeline().parameters.password",
 								"type": "Expression"
-							}
+							},
+							"sql_table_name": "OrgEnrollment"
 						}
 					}
 				]
