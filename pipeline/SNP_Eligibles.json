@@ -407,7 +407,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "Update Audit_plan\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit_plan);\n\nUpdate Audit_plan\nSET Status = 'Fail'\nwhere Id = (select Count(*) from Audit_plan);\n\nUpdate Audit_plan\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit_plan);\n\nSelect * from Audit_plan;",
+						"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'Fail'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
