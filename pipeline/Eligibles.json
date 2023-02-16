@@ -221,14 +221,23 @@
 					"secureOutput": false,
 					"secureInput": false
 				},
-				"userProperties": [],
+				"userProperties": [
+					{
+						"name": "Source",
+						"value": "hwaicontainer/Eligibles/ Output/Eligibles/p*"
+					},
+					{
+						"name": "Destination",
+						"value": "dbo.@{'Eligibles'}"
+					}
+				],
 				"typeProperties": {
 					"source": {
 						"type": "DelimitedTextSource",
 						"storeSettings": {
 							"type": "AzureBlobFSReadSettings",
 							"recursive": true,
-							"wildcardFolderPath": "Eligibles/Output/Eligibles",
+							"wildcardFolderPath": "Eligibles / Output / Eligibles",
 							"wildcardFileName": "p*",
 							"enablePartitionDiscovery": false
 						},
