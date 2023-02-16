@@ -2,7 +2,7 @@
 	"name": "Eligibles",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "AzureDataLakeStorage1",
+			"referenceName": "Linked_service_AzureDataLakeStorage2",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
@@ -10,6 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
+				"fileName": "p*",
 				"folderPath": "Eligibles/ Output/Eligibles",
 				"fileSystem": "hwaicontainer"
 			},
