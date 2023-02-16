@@ -228,7 +228,7 @@
 						"storeSettings": {
 							"type": "AzureBlobFSReadSettings",
 							"recursive": true,
-							"wildcardFolderPath": " Eligibles / Output / Eligibles",
+							"wildcardFolderPath": "Eligibles/Output/Eligibles",
 							"wildcardFileName": "p*",
 							"enablePartitionDiscovery": false
 						},
@@ -388,14 +388,7 @@
 			{
 				"name": "Fail_status_update_Eligibles_to_DB",
 				"type": "Lookup",
-				"dependsOn": [
-					{
-						"activity": "Copy Eligibles to Db",
-						"dependencyConditions": [
-							"Failed"
-						]
-					}
-				],
+				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
