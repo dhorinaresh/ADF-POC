@@ -337,14 +337,7 @@
 			{
 				"name": "Pass_status_update_Eligibles_to_DB",
 				"type": "Lookup",
-				"dependsOn": [
-					{
-						"activity": "Copy Eligibles to Db",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
+				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
