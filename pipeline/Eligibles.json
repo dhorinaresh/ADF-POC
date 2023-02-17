@@ -724,12 +724,6 @@
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "send email update for Eligibles script",
-						"dependencyConditions": [
-							"Failed"
-						]
-					},
-					{
 						"activity": "start time update_data_upload_DB",
 						"dependencyConditions": [
 							"Succeeded"
