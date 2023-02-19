@@ -514,7 +514,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "-- DELETE FROM OrgEnrollment where Month = (SELECT DATENAME(month,GETDATE())) and Year = (SELECT YEAR(GETDATE()));\nDELETE FROM OrgEnrollment where Month = 'January' and Year = 2023;\nSELECT TOP 10 * FROM OrgEnrollment;\n",
+						"sqlReaderQuery": "DELETE FROM OrgEnrollment where Month = (SELECT DATENAME(month,GETDATE())) and Year = (SELECT YEAR(GETDATE()));\nSELECT TOP 10 * FROM OrgEnrollment;\n",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
