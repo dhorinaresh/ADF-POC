@@ -1,0 +1,44 @@
+{
+	"name": "OrgBenefit",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "ID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Bid_Id",
+				"type": "varchar"
+			},
+			{
+				"name": "Benefits",
+				"type": "varchar"
+			},
+			{
+				"name": "BenefitValue",
+				"type": "varchar"
+			},
+			{
+				"name": "Year",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Plan_Name",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "OrgBenefits"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

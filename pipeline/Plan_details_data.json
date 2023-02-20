@@ -1,0 +1,774 @@
+{
+	"name": "Plan_details_data",
+	"properties": {
+		"activities": [
+			{
+				"name": "Start_time_Audit_Update",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "INSERT INTO Audit_plan_details_new(Operation, StartTime)\nValues('Execution', (Select GETDATE()));\nSelect * from Audit_plan_details_new;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "Plan_details_Audit_table",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "Plan_details_part1",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Start_time_Audit_Update",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/hwaitech@healthworksai.com/Plan_details_part1"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks3",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Plan_details_final",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Plan_details_part1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/hwaitech@healthworksai.com/Plan details"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks3",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "End_time_audit_update",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Geo_plan_filter_col_update",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "copy_plan_comparision_final_to_db",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "Update Audit_plan_details_new\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit_plan_details_new);\n\nUpdate Audit_plan_details_new\nSET Status = 'pass'\nwhere Id = (select Count(*) from Audit_plan_details_new);\n\nUpdate Audit_plan_details_new\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit_plan_details_new);\n\nSelect * from Audit_plan_details_new;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "Plan_details_Audit_table",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "Geo_plan_filter_col_update",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Geo_plan_filters_col_add",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "UPDATE GeographyPlanFiltersCopy\nSET HFProductCutsId = (\nSELECT HFProductCutsId\nFROM Client_specific_data\nWHERE Client_specific_data.StateId = GeographyPlanFiltersCopy.StateId and Client_specific_data.BidId = GeographyPlanFiltersCopy.BidId \nand Client_specific_data.CountyId = GeographyPlanFiltersCopy.CountyId\n);\n\nUPDATE GeographyPlanFiltersCopy\nSET SnpTagId = (\nSELECT SnpTagId\nFROM Client_specific_data\nWHERE Client_specific_data.StateId = GeographyPlanFiltersCopy.StateId and Client_specific_data.BidId = GeographyPlanFiltersCopy.BidId \nand Client_specific_data.CountyId = GeographyPlanFiltersCopy.CountyId\n);\n\nSelect * from GeographyPlanFiltersCopy;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "geography_plan_filters_table",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "copy_geo_plan_filters_to_db",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Plan_details_final",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"wildcardFolderPath": "Output_Geography_plan_filters/Geography_plan_filters_final",
+							"wildcardFileName": "p*",
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Geography_plan_filters_output",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "geography_plan_filters_table",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "copy_plan_comparision_final_to_db",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Plan_details_final",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"wildcardFolderPath": "Output_Org_Plans/Plan_comparision_table_final",
+							"wildcardFileName": "p*",
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "StateId",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "StateId",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							},
+							{
+								"source": {
+									"name": "CountyId",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "CountyId",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							},
+							{
+								"source": {
+									"name": "BidId",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "BidId",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "RichPlans",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "RichPlans",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "LeanPlans",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "LeanPlans",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "WinningPlans",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "WinningPlans",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "PlanName",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PlanName",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "PremiumCD",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PremiumCD",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "PartD",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PartD",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "PartBGiveBack",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PartBGiveBack",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "PlanCoverage",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PlanCoverage",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "SbWorldWideEmegency",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SbWorldWideEmegency",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "SbHearing",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SbHearing",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "HealthDeductible",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "HealthDeductible",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "AnnualDrugDeductible",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "AnnualDrugDeductible",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "MOOP",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "MOOP",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "SbVision",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SbVision",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "TEGPlanValue",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "TEGPlanValue",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "OOPC",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "OOPC",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "PCP",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PCP",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Specalist",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Specalist",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "InpatAcute",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "InpatAcute",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "SbInpatient",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SbInpatient",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "OCTCoverage",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "OCTCoverage",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "SbOTC",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SbOTC",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "SbCompDental",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SbCompDental",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CompDentalCoverage",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "CompDentalCoverage",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "SbChiropractor",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SbChiropractor",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							},
+							{
+								"source": {
+									"name": "SbMeal",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SbMeal",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							},
+							{
+								"source": {
+									"name": "SbFitness",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SbFitness",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "EmergencyCare",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "EmergencyCare",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "OpHospital",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "OpHospital",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "SbTeleHealth",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SbTeleHealth",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "SbHomeSupport",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SbHomeSupport",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "SbHomeSafety",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SbHomeSafety",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "SBPers",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SBPers",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "SbAmbulance",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SbAmbulance",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "OverallStarRating",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "OverallStarRating",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Plan_comparision_output",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Plan_comparision_table",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "Geo_plan_filters_col_add",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "copy_geo_plan_filters_to_db",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "Alter table GeographyPlanFiltersCopy\nadd HFProductCutsId int,SnpTagId int;\nSelect Top(1) from GeographyPlanFiltersCopy;\nSelect * from GeographyPlanFiltersCopy;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "geography_plan_filters_table",
+						"type": "DatasetReference"
+					}
+				}
+			}
+		],
+		"folder": {
+			"name": "Unused_Pipelines"
+		},
+		"annotations": [],
+		"lastPublishTime": "2023-02-20T04:24:08Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

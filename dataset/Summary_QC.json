@@ -1,0 +1,47 @@
+{
+	"name": "Summary_QC",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "ID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Test_Case",
+				"type": "varchar"
+			},
+			{
+				"name": "Expected_Value",
+				"type": "varchar"
+			},
+			{
+				"name": "Found_Value",
+				"type": "varchar"
+			},
+			{
+				"name": "FileName",
+				"type": "varchar"
+			},
+			{
+				"name": "Created_date",
+				"type": "date"
+			},
+			{
+				"name": "Status",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "Summary_QC"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

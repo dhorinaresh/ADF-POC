@@ -1,0 +1,158 @@
+{
+	"name": "Benefits_QC",
+	"properties": {
+		"activities": [
+			{
+				"name": "Benefits_QC_Start_time_Update",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "INSERT INTO Benefits_QC(Operation, StartTime)\nValues('Execution', (Select GETDATE()));\nSelect * from Benefits_QC;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "Benefits_QC",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "Benefits_QC",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Benefits_QC_Start_time_Update",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/hwaitech@healthworksai.com/Plan_Finder/QC_Scripts/Benefits_QC"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks4_pfcluster3",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Benefits_QC_End_time_Update",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Copy_Benefits_QC_to_db",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "Update Benefits_QC\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Benefits_QC);\n\nUpdate Benefits_QC\nSET Status = 'Pass'\nwhere Id = (select Count(*) from Benefits_QC);\n\nUpdate Benefits_QC\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Benefits_QC);\n\nSelect * from Benefits_QC;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "Benefits_QC",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "Copy_Benefits_QC_to_db",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Benefits_QC",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"wildcardFolderPath": "QC/Summary_benefits_QC",
+							"wildcardFileName": "p*",
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Benefits_QC_table",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Summary_QC",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"folder": {
+			"name": "PF_Pipelines/AEP_Refresh"
+		},
+		"annotations": [],
+		"lastPublishTime": "2022-11-16T05:02:35Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

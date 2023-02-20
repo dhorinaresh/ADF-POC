@@ -1,0 +1,170 @@
+{
+	"name": "Master_Pipeline_benefit_2",
+	"properties": {
+		"activities": [
+			{
+				"name": "Update Year Column",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Benefit QC",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": " ALTER TABLE [dbo].[Benefits_data] ADD Year INT;\r\n Select TOP (10) [Bid_Id] from Benefits_data;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "Benefits_data",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "Ben_Lscape",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Benefit_county_data",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "send email update for Ben_Lscape",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "Ben_Lscape",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+					"method": "POST",
+					"body": {
+						"value": "{\n \"title\":\"PIPELINE RUN FOR BENEFITS DATA UPDATE FAILED IN Benefit_data_OON\",\n \"color\":\"RED\",\n \"message\":\"error in Ben_Lscape code\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Benefit QC",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Delete Unused benefits",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Benefits_QC",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "Delete Unused benefits",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Ben_Lscape",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "Delete from Benefits_data where Benefits in ('orgtype','segment_id','version');\r\n\r\nselect Benefits from Benefits_data;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "Benefits_data",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "Update Year Values",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Update Year Column",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": " Update [dbo].[Benefits_data] set Year = (Select YEAR(GETDATE())+1);\r\n Select TOP (10) [Bid_Id] from Benefits_data;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "Benefits_data",
+						"type": "DatasetReference"
+					}
+				}
+			}
+		],
+		"folder": {
+			"name": "PF_Pipelines/AEP_Refresh"
+		},
+		"annotations": [],
+		"lastPublishTime": "2022-11-23T22:44:19Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

@@ -1,0 +1,30 @@
+{
+	"name": "AzureSqlTable2",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "Bid_Id",
+				"type": "varchar"
+			},
+			{
+				"name": "Benefits",
+				"type": "varchar"
+			},
+			{
+				"name": "BenefitValue",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "benefits"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
