@@ -547,15 +547,15 @@
 		"parameters": {
 			"sql_server_dataset_name": {
 				"type": "String",
-				"defaultValue": "hwpilot.database.windows.net"
+				"defaultValue": "teghws.database.windows.net"
 			},
 			"db_name": {
 				"type": "String",
-				"defaultValue": "pf_data"
+				"defaultValue": "pf_data_prod"
 			},
 			"user_name": {
 				"type": "String",
-				"defaultValue": "pladmin"
+				"defaultValue": "hwstegadmin"
 			},
 			"password": {
 				"type": "String",
