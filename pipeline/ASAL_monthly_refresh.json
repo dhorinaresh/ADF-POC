@@ -505,6 +505,8 @@
 						"storeSettings": {
 							"type": "AzureBlobFSReadSettings",
 							"recursive": true,
+							"wildcardFolderPath": "hwaicontainer/AllStateAllYears/Output/Output_QC",
+							"wildcardFileName": "p*",
 							"enablePartitionDiscovery": false
 						},
 						"formatSettings": {
@@ -583,6 +585,8 @@
 						"storeSettings": {
 							"type": "AzureBlobFSReadSettings",
 							"recursive": true,
+							"wildcardFolderPath": "hwaicontainer/AllStateAllYears/Output/Output_QC",
+							"wildcardFileName": "p*",
 							"enablePartitionDiscovery": false
 						},
 						"formatSettings": {
