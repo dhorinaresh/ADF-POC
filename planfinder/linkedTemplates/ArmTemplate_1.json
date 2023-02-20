@@ -13,6 +13,74 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('factoryName'), '/Ben_data_prev_yrs')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileSystem": "pfcontainer"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "bid_id",
+						"type": "String"
+					},
+					{
+						"name": "pbp_a_dsnp_zerodollar",
+						"type": "String"
+					},
+					{
+						"name": "pbp_a_snp_state_cvg_yn",
+						"type": "String"
+					},
+					{
+						"name": "plan_type_new_updated",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Benefit_county_table')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "Output_Benefit_County",
+						"fileSystem": "pfcontainer"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/Benefit_county_table_sink')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -249,6 +317,93 @@
 					"schema": "dbo",
 					"table": "OrgCounty"
 				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Crosswalk')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Linked_service_AzureDataLakeStorage2",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "Crosswalk/Output/crosswalk_2023",
+						"fileSystem": "hwaicontainer"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "PREVIOUS_CONTRACT_ID",
+						"type": "String"
+					},
+					{
+						"name": "PREVIOUS_PLAN_ID",
+						"type": "String"
+					},
+					{
+						"name": "PREVIOUS_PLAN_NAME",
+						"type": "String"
+					},
+					{
+						"name": "PREVIOUS_SNP_TYPE",
+						"type": "String"
+					},
+					{
+						"name": "PREVIOUS_SNP_INSTITUTIONAL",
+						"type": "String"
+					},
+					{
+						"name": "CURRENT_CONTRACT_ID",
+						"type": "String"
+					},
+					{
+						"name": "CURRENT_PLAN_ID",
+						"type": "String"
+					},
+					{
+						"name": "CURRENT_PLAN_NAME",
+						"type": "String"
+					},
+					{
+						"name": "CURRENT_SNP_TYPE",
+						"type": "String"
+					},
+					{
+						"name": "CURRENT_SNP_INSTITUTIONAL",
+						"type": "String"
+					},
+					{
+						"name": "DESCRIPTION",
+						"type": "String"
+					},
+					{
+						"name": "CP_ID_prev",
+						"type": "String"
+					},
+					{
+						"name": "CP_ID_curr",
+						"type": "String"
+					},
+					{
+						"name": "flag",
+						"type": "String"
+					},
+					{
+						"name": "Year",
+						"type": "String"
+					}
+				]
 			},
 			"dependsOn": []
 		},
@@ -1036,125 +1191,6 @@
 						"type": "String"
 					}
 				]
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Geography_table_sink')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureSqlDatabase1",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "Geography_Id",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "Country_Id",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "State_Id",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "County_Id",
-						"type": "int",
-						"precision": 10
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "Geography_Table"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/OrgBenefit')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureSqlDatabase1",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "ID",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "Bid_Id",
-						"type": "varchar"
-					},
-					{
-						"name": "Benefits",
-						"type": "varchar"
-					},
-					{
-						"name": "BenefitValue",
-						"type": "varchar"
-					},
-					{
-						"name": "Year",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "Plan_Name",
-						"type": "varchar"
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "OrgBenefits"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/OrgState')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureSqlDatabase1",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "StateId",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "State",
-						"type": "varchar"
-					},
-					{
-						"name": "Statecode",
-						"type": "varchar"
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "OrgState"
-				}
 			},
 			"dependsOn": []
 		}

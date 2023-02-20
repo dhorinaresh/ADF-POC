@@ -5,9 +5,6 @@
 		"factoryName": {
 			"value": "planfinder"
 		},
-		"AzureBlobStorage1_connectionString": {
-			"value": ""
-		},
 		"AzureDataLakeStorage1_accountKey": {
 			"value": ""
 		},
@@ -26,8 +23,17 @@
 		"AzureSqlDatabase1_connectionString": {
 			"value": ""
 		},
+		"Linked_Service_SQL_connectionString": {
+			"value": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=@{linkedService().sql_server};Initial Catalog=@{linkedService().db_name};User ID=@{linkedService().user_name};Password=@{linkedService().password}"
+		},
+		"Linked_service_AzureDataLakeStorage2_accountKey": {
+			"value": ""
+		},
 		"AzureDataLakeStorage1_properties_typeProperties_url": {
 			"value": "https://planfinderstorage.dfs.core.windows.net"
+		},
+		"Linked_service_AzureDataLakeStorage2_properties_typeProperties_url": {
+			"value": "https://planfinderstorage.dfs.core.windows.net/"
 		}
 	}
 }
