@@ -17,7 +17,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "INSERT INTO Audit(FileName, Operation, StartTime,Dashboard)\nValues('Crosswalk', 'Crosswalk_data_prep', (Select GETDATE()),'Crosswalk');\nSelect * from Audit;",
+						"sqlReaderQuery": "INSERT INTO Audit(FileName, Operation, StartTime,Dashboard)\nValues('ASAY_Crosswalk_MS', 'ASAY_Crosswalk_MS', (Select GETDATE()),'Market_Snapshot');\nSelect * from Audit;",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -47,7 +47,7 @@
 				}
 			},
 			{
-				"name": "Crosswalk_raw_file_processing",
+				"name": "ASAY_Crosswalk_MS",
 				"type": "DatabricksNotebook",
 				"dependsOn": [
 					{
@@ -66,7 +66,7 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Crosswalk/Crosswalk_rawFileTo_GoldenLayer"
+					"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Market_Snapshot/ASAY_Crosswalk_Market_Snapshot"
 				},
 				"linkedServiceName": {
 					"referenceName": "AzureDatabricks4_pfcluster3",
@@ -74,11 +74,11 @@
 				}
 			},
 			{
-				"name": "end time update for Crosswalk_raw_file_processing",
+				"name": "end time update for MS Script",
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "Crosswalk_raw_file_processing",
+						"activity": "Market_Snapshot_final",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -125,11 +125,11 @@
 				}
 			},
 			{
-				"name": "end time update for crosswalk fail",
+				"name": "end time update for MS script fail",
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "Crosswalk_raw_file_processing",
+						"activity": "Market_Snapshot_final",
 						"dependencyConditions": [
 							"Failed"
 						]
@@ -176,11 +176,11 @@
 				}
 			},
 			{
-				"name": "Copy Crosswalk to Db",
+				"name": "Copy MS data to Db",
 				"type": "Copy",
 				"dependsOn": [
 					{
-						"activity": "start time update_copy_crosswalk_data",
+						"activity": "start time update_copy_MS_data",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -256,11 +256,11 @@
 				]
 			},
 			{
-				"name": "start time update_copy_crosswalk_data",
+				"name": "start time update_copy_MS_data",
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "end time update for Crosswalk_raw_file_processing",
+						"activity": "end time update for MS Script",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -277,7 +277,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "INSERT INTO Audit(FileName, Operation, StartTime,Dashboard)\nValues('Crosswalk', 'Crosswalk_data_load_to_db', (Select GETDATE()),'Crosswalk');\nSelect * from Audit;",
+						"sqlReaderQuery": "INSERT INTO Audit(FileName, Operation, StartTime,Dashboard)\nValues('Market_Snapshot', 'MS_data_load_to_db', (Select GETDATE()),'Market_Snapshot');\nSelect * from Audit;",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -307,11 +307,11 @@
 				}
 			},
 			{
-				"name": "end time update for Crosswalk_load_to_db",
+				"name": "end time update for MS_data_load_to_db",
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "Copy Crosswalk to Db",
+						"activity": "Copy MS data to Db",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -358,11 +358,11 @@
 				}
 			},
 			{
-				"name": "end time update for crosswalk load to db fail",
+				"name": "end time update for MS_data_load to db fail",
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "Copy Crosswalk to Db",
+						"activity": "Copy MS data to Db",
 						"dependencyConditions": [
 							"Failed"
 						]
@@ -409,11 +409,11 @@
 				}
 			},
 			{
-				"name": "send email update for crosswalk script fail",
+				"name": "send email update forMarket snapshot script fail",
 				"type": "WebActivity",
 				"dependsOn": [
 					{
-						"activity": "end time update for crosswalk fail",
+						"activity": "end time update for MS script fail",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -431,17 +431,17 @@
 					"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
 					"method": "POST",
 					"body": {
-						"value": "{\n \"title\":\"PIPELINE RUN FOR Crosswalk Update Script UPDATE FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the ASAY Script and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+						"value": "{\n \"title\":\"PIPELINE RUN FOR MS Update Script UPDATE FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the MS Script and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
 						"type": "Expression"
 					}
 				}
 			},
 			{
-				"name": "send email update for crosswalk data load fail",
+				"name": "send email update for MS data load fail",
 				"type": "WebActivity",
 				"dependsOn": [
 					{
-						"activity": "end time update for crosswalk load to db fail",
+						"activity": "end time update for MS_data_load to db fail",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -459,17 +459,17 @@
 					"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
 					"method": "POST",
 					"body": {
-						"value": "{\n \"title\":\"PIPELINE RUN FOR crosswalk data load FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the Crosswalk Data Load and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+						"value": "{\n \"title\":\"PIPELINE RUN FOR MS data load FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the MS Data Load and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
 						"type": "Expression"
 					}
 				}
 			},
 			{
-				"name": "send email update for ACrosswalk pipeline success",
+				"name": "send email update for Market_Snapshot pipeline success",
 				"type": "WebActivity",
 				"dependsOn": [
 					{
-						"activity": "end time update for Crosswalk_load_to_db",
+						"activity": "end time update for MS_data_load_to_db",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -487,9 +487,36 @@
 					"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
 					"method": "POST",
 					"body": {
-						"value": "{\n \"title\":\"PIPELINE RUN FOR Crosswalk data SUCCESS\",\n \"color\":\"GREEN\",\n \"message\":\"Check the QC Output\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+						"value": "{\n \"title\":\"PIPELINE RUN FOR Market Snapshot data refresh SUCCESS\",\n \"color\":\"GREEN\",\n \"message\":\"Check the QC Output\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
 						"type": "Expression"
 					}
+				}
+			},
+			{
+				"name": "Market_Snapshot_final",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "ASAY_Crosswalk_MS",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Market_Snapshot/Market_Snapshot_final"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks4_pfcluster3",
+					"type": "LinkedServiceReference"
 				}
 			}
 		],
@@ -512,7 +539,7 @@
 			}
 		},
 		"folder": {
-			"name": "Hwai_Refresh/Hwai_Crosswalk"
+			"name": "Hwai_Refresh/Hwai_Market_Snapshot"
 		},
 		"annotations": []
 	}
