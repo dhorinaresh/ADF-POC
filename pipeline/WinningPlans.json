@@ -340,7 +340,7 @@
 							"type": "AzureBlobFSReadSettings",
 							"recursive": true,
 							"wildcardFolderPath": "WinningPlans / Output",
-							"wildcardFileName": "p*",
+							"wildcardFileName": "enr_final2.csv",
 							"enablePartitionDiscovery": false
 						},
 						"formatSettings": {
