@@ -276,7 +276,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "DELETE FROM WinningPlans where Month = (SELECT DATENAME(month,GETDATE())) and Year = (SELECT YEAR(GETDATE()));\nSELECT TOP 10 * FROM WinningPlans;",
+						"sqlReaderQuery": "Truncate table WinningPlans;\nSELECT TOP 10 * FROM WinningPlans;",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
