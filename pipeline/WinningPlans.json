@@ -773,16 +773,20 @@
 		],
 		"parameters": {
 			"sql_server_dataset_name": {
-				"type": "String"
+				"type": "String",
+				"defaultValue": "hwpilot.database.windows.net"
 			},
 			"db_name": {
-				"type": "String"
+				"type": "String",
+				"defaultValue": "pf_data"
 			},
 			"user_name": {
-				"type": "String"
+				"type": "String",
+				"defaultValue": "Pladmin"
 			},
 			"password": {
-				"type": "String"
+				"type": "String",
+				"defaultValue": "Goteg@12345"
 			}
 		},
 		"annotations": []
