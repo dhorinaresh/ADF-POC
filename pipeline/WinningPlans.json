@@ -340,8 +340,8 @@
 							"type": "AzureBlobFSReadSettings",
 							"recursive": true,
 							"modifiedDatetimeStart": "2023-03-07T00:00:00.000Z",
-							"wildcardFolderPath": " WinningPlans / Output",
-							"wildcardFileName": "enr_final2",
+							"wildcardFolderPath": "WinningPlans/Output",
+							"wildcardFileName": "enr_final2.csv",
 							"enablePartitionDiscovery": false
 						},
 						"formatSettings": {
