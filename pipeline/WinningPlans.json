@@ -550,29 +550,49 @@
 								}
 							},
 							{
+								"source": {
+									"name": "Cardiac and Pulmonary Rehabilitation Services Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "String"
+								},
 								"sink": {
-									"name": "Cardiac and Pulmonary Rehabilitation Services Coinsurance Copay",
+									"name": "Cardiac and Pulmonary Rehabilitation Services Coinsurance/Copay",
 									"type": "String",
 									"physicalType": "varchar"
 								}
 							},
 							{
+								"source": {
+									"name": "Emergency Care Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "String"
+								},
 								"sink": {
-									"name": "Emergency Care Coinsurance Copay",
+									"name": "Emergency Care Coinsurance/Copay",
 									"type": "String",
 									"physicalType": "varchar"
 								}
 							},
 							{
+								"source": {
+									"name": "Transport Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "String"
+								},
 								"sink": {
-									"name": "Transport Coinsurance Copay",
+									"name": "Transport Coinsurance/Copay",
 									"type": "String",
 									"physicalType": "varchar"
 								}
 							},
 							{
+								"source": {
+									"name": "OTC Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "String"
+								},
 								"sink": {
-									"name": "OTC Coinsurance Copay",
+									"name": "OTC Coinsurance/Copay",
 									"type": "String",
 									"physicalType": "varchar"
 								}
@@ -590,99 +610,169 @@
 								}
 							},
 							{
+								"source": {
+									"name": "Meal Benefit Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "String"
+								},
 								"sink": {
-									"name": "Meal Benefit Coinsurance Copay",
+									"name": "Meal Benefit Coinsurance/Copay",
 									"type": "String",
 									"physicalType": "varchar"
 								}
 							},
 							{
+								"source": {
+									"name": "Preventive Dental Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "String"
+								},
 								"sink": {
-									"name": "Preventive Dental Coinsurance Copay",
+									"name": "Preventive Dental Coinsurance/Copay",
 									"type": "String",
 									"physicalType": "varchar"
 								}
 							},
 							{
+								"source": {
+									"name": "Comprehensive Dental Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "String"
+								},
 								"sink": {
-									"name": "Comprehensive Dental Coinsurance Copay",
+									"name": "Comprehensive Dental Coinsurance/Copay",
 									"type": "String",
 									"physicalType": "varchar"
 								}
 							},
 							{
+								"source": {
+									"name": "Eye Exams Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "String"
+								},
 								"sink": {
-									"name": "Eye Exams Coinsurance Copay",
+									"name": "Eye Exams Coinsurance/Copay",
 									"type": "String",
 									"physicalType": "varchar"
 								}
 							},
 							{
+								"source": {
+									"name": "Eyewear Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "String"
+								},
 								"sink": {
-									"name": "Eyewear Coinsurance Copay",
+									"name": "Eyewear Coinsurance/Copay",
 									"type": "String",
 									"physicalType": "varchar"
 								}
 							},
 							{
+								"source": {
+									"name": "Hearing Aids Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "String"
+								},
 								"sink": {
-									"name": "Hearing Aids Coinsurance Copay",
+									"name": "Hearing Aids Coinsurance/Copay",
 									"type": "String",
 									"physicalType": "varchar"
 								}
 							},
 							{
+								"source": {
+									"name": "Hearing Exams Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "String"
+								},
 								"sink": {
-									"name": "Hearing Exams Coinsurance Copay",
+									"name": "Hearing Exams Coinsurance/Copay",
 									"type": "String",
 									"physicalType": "varchar"
 								}
 							},
 							{
+								"source": {
+									"name": "Chiropractic Services Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "String"
+								},
 								"sink": {
-									"name": "Chiropractic Services Coinsurance Copay",
+									"name": "Chiropractic Services Coinsurance/Copay",
 									"type": "String",
 									"physicalType": "varchar"
 								}
 							},
 							{
+								"source": {
+									"name": "Podiatry Services Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "String"
+								},
 								"sink": {
-									"name": "Podiatry Services Coinsurance Copay",
+									"name": "Podiatry Services Coinsurance/Copay",
 									"type": "String",
 									"physicalType": "varchar"
 								}
 							},
 							{
+								"source": {
+									"name": "Acupuncture Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "String"
+								},
 								"sink": {
-									"name": "Acupuncture Coinsurance Copay",
+									"name": "Acupuncture Coinsurance/Copay",
 									"type": "String",
 									"physicalType": "varchar"
 								}
 							},
 							{
+								"source": {
+									"name": "Annual Physical Exam Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "String"
+								},
 								"sink": {
-									"name": "Annual Physical Exam Coinsurance Copay",
+									"name": "Annual Physical Exam Coinsurance/Copay",
 									"type": "String",
 									"physicalType": "varchar"
 								}
 							},
 							{
+								"source": {
+									"name": "Outpatient Blood Services Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "String"
+								},
 								"sink": {
-									"name": "Outpatient Blood Services Coinsurance Copay",
+									"name": "Outpatient Blood Services Coinsurance/Copay",
 									"type": "String",
 									"physicalType": "varchar"
 								}
 							},
 							{
+								"source": {
+									"name": "Alternative Therapy Coins/Copay",
+									"type": "String",
+									"physicalType": "String"
+								},
 								"sink": {
-									"name": "Alternative Therapy Coins Copay",
+									"name": "Alternative Therapy Coins/Copay",
 									"type": "String",
 									"physicalType": "varchar"
 								}
 							},
 							{
+								"source": {
+									"name": "PERS Coins/Copay",
+									"type": "String",
+									"physicalType": "String"
+								},
 								"sink": {
-									"name": "PERS Coins Copay",
+									"name": "PERS Coins/Copay",
 									"type": "String",
 									"physicalType": "varchar"
 								}
