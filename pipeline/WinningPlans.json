@@ -326,11 +326,11 @@
 				"userProperties": [
 					{
 						"name": "Source",
-						"value": "hwaicontainer/Eligibles/ Output/Eligibles/p*"
+						"value": "hwaicontainer/WinningPlans/Output/enr_final2.csv"
 					},
 					{
 						"name": "Destination",
-						"value": "dbo.@{'Eligibles'}"
+						"value": "dbo.@{'WinningPlans'}"
 					}
 				],
 				"typeProperties": {
