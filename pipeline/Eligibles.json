@@ -505,7 +505,7 @@
 								"value": "@pipeline().parameters.password",
 								"type": "Expression"
 							},
-							"sql_table_name": "Eligibles"
+							"sql_table_name": "HWAI_Eligibles"
 						}
 					}
 				]
