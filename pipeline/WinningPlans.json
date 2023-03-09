@@ -1838,7 +1838,7 @@
 				]
 			},
 			{
-				"name": "Pass_status_update_Eligibles_to_DB",
+				"name": "Pass_status_update_WinningPlans_to_DB",
 				"type": "Lookup",
 				"dependsOn": [
 					{
@@ -1889,7 +1889,7 @@
 				}
 			},
 			{
-				"name": "Fail_status_update_Eligibles_to_DB",
+				"name": "Fail_status_update_WinningPlans_to_DB",
 				"type": "Lookup",
 				"dependsOn": [
 					{
@@ -1940,11 +1940,11 @@
 				}
 			},
 			{
-				"name": "Eligibles pipeline run successfully",
+				"name": "WinningPlans pipeline run successfully",
 				"type": "WebActivity",
 				"dependsOn": [
 					{
-						"activity": "Pass_status_update_Eligibles_to_DB",
+						"activity": "Pass_status_update_WinningPlans_to_DB",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -1962,17 +1962,17 @@
 					"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
 					"method": "POST",
 					"body": {
-						"value": "{\n \"title\":\"PIPELINE RUN FOR Eligibles_to_DB IS SUCCESS\",\n \"color\":\"GREEN\",\n \"message\":\"Eligibles_to_DB completed sccessfully\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+						"value": "{\n \"title\":\"PIPELINE RUN FOR WinningPlans_to_DB IS SUCCESS\",\n \"color\":\"GREEN\",\n \"message\":\"WinningPlans_to_DB completed sccessfully\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
 						"type": "Expression"
 					}
 				}
 			},
 			{
-				"name": "send email update for fail Eligibles to DB",
+				"name": "send email update for fail WinningPlans to DB",
 				"type": "WebActivity",
 				"dependsOn": [
 					{
-						"activity": "Fail_status_update_Eligibles_to_DB",
+						"activity": "Fail_status_update_WinningPlans_to_DB",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -1990,7 +1990,7 @@
 					"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
 					"method": "POST",
 					"body": {
-						"value": "{\n \"title\":\"PIPELINE RUN FOR Eligibles_to_DB FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the Eligibles_to_DB and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+						"value": "{\n \"title\":\"PIPELINE RUN FOR WinningPlans_to_DB FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the WinningPlans_to_DB and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
 						"type": "Expression"
 					}
 				}
