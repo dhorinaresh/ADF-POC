@@ -741,7 +741,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "DELETE FROM HWAI_Eligibles where Month = (SELECT DATENAME(month,GETDATE())) and Year = (SELECT YEAR(GETDATE()));\nSELECT TOP 10 * FROM Eligibles;",
+						"sqlReaderQuery": "DELETE FROM HWAI_Eligibles where Month = (SELECT DATENAME(month,GETDATE())) and Year = (SELECT YEAR(GETDATE()));\nSELECT TOP 10 * FROM HWAI_Eligibles;",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
