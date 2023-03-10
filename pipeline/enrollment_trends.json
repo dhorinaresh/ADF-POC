@@ -447,8 +447,8 @@
 				}
 			},
 			{
-				"name": "start_time_update_enr_trends_data_push",
-				"type": "Lookup",
+				"name": "Email update for succesfull execution of step3",
+				"type": "WebActivity",
 				"dependsOn": [
 					{
 						"activity": "enr_trends_post_broadcasting_step3",
@@ -458,7 +458,7 @@
 					}
 				],
 				"policy": {
-					"timeout": "0.12:00:00",
+					"timeout": "7.00:00:00",
 					"retry": 0,
 					"retryIntervalInSeconds": 30,
 					"secureOutput": false,
@@ -466,116 +466,13 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"source": {
-						"type": "AzureSqlSource",
-						"sqlReaderQuery": "INSERT INTO Audit(FileName, Operation, StartTime,Dashboard)\nValues('enr_trends_raw_data', 'enr_trends_data_load_to_db', (Select GETDATE()),'enr_trends');\nSelect * from Audit;",
-						"queryTimeout": "02:00:00",
-						"partitionOption": "None"
-					},
-					"dataset": {
-						"referenceName": "dataset_sql",
-						"type": "DatasetReference",
-						"parameters": {
-							"sql_server_dataset": {
-								"value": "@pipeline().parameters.sql_server_dataset_name",
-								"type": "Expression"
-							},
-							"db_name_dataset": {
-								"value": "@pipeline().parameters.db_name",
-								"type": "Expression"
-							},
-							"user_name_dataset": {
-								"value": "@pipeline().parameters.user_name",
-								"type": "Expression"
-							},
-							"password_dataset": {
-								"value": "@pipeline().parameters.password",
-								"type": "Expression"
-							},
-							"sql_table_name": "Audit"
-						}
+					"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+					"method": "POST",
+					"body": {
+						"value": "{\n \"title\":\"PIPELINE RUN FOR ENR FINAL STEP SUCCEDED\",\n \"color\":\"GREEN\",\n \"message\":\"Debug the enr trends broadcasting step 2c script and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+						"type": "Expression"
 					}
 				}
-			},
-			{
-				"name": "Copy enr trends data to db",
-				"type": "Copy",
-				"dependsOn": [
-					{
-						"activity": "start_time_update_enr_trends_data_push",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"policy": {
-					"timeout": "0.12:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"source": {
-						"type": "DelimitedTextSource",
-						"storeSettings": {
-							"type": "AzureBlobFSReadSettings",
-							"recursive": true,
-							"wildcardFolderPath": "Crosswalk/Output/crosswalk_2023",
-							"wildcardFileName": "p*",
-							"enablePartitionDiscovery": false
-						},
-						"formatSettings": {
-							"type": "DelimitedTextReadSettings"
-						}
-					},
-					"sink": {
-						"type": "AzureSqlSink",
-						"writeBehavior": "insert",
-						"sqlWriterUseTableLock": false
-					},
-					"enableStaging": false,
-					"translator": {
-						"type": "TabularTranslator",
-						"typeConversion": true,
-						"typeConversionSettings": {
-							"allowDataTruncation": true,
-							"treatBooleanAsNumber": false
-						}
-					}
-				},
-				"inputs": [
-					{
-						"referenceName": "Crosswalk",
-						"type": "DatasetReference"
-					}
-				],
-				"outputs": [
-					{
-						"referenceName": "dataset_sql",
-						"type": "DatasetReference",
-						"parameters": {
-							"sql_server_dataset": {
-								"value": "@pipeline().parameters.sql_server_dataset_name",
-								"type": "Expression"
-							},
-							"db_name_dataset": {
-								"value": "@pipeline().parameters.db_name",
-								"type": "Expression"
-							},
-							"user_name_dataset": {
-								"value": "@pipeline().parameters.user_name",
-								"type": "Expression"
-							},
-							"password_dataset": {
-								"value": "@pipeline().parameters.password",
-								"type": "Expression"
-							},
-							"sql_table_name": "Crosswalk_Master_Data"
-						}
-					}
-				]
 			}
 		],
 		"folder": {
