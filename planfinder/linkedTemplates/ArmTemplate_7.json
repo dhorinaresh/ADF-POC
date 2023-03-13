@@ -13,6 +13,1129 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('factoryName'), '/Benefits_4c_11c_12')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Data_cleaning_b11c",
+						"type": "DatabricksNotebook",
+						"dependsOn": [
+							{
+								"activity": "b11c_Start_time_update",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Users/hwaitech@healthworksai.com/Plan_Finder/Benefit_Scripts/b11c_data_cleaning"
+						},
+						"linkedServiceName": {
+							"referenceName": "AzureDatabricks4_pfcluster3",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "Blank_Interpretation_b11c",
+						"type": "DatabricksNotebook",
+						"dependsOn": [
+							{
+								"activity": "b11c_data_cleaning_update",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Users/hwaitech@healthworksai.com/Plan_Finder/Benefit_Scripts/b11c_BI"
+						},
+						"linkedServiceName": {
+							"referenceName": "AzureDatabricks4_pfcluster3",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "Final_changes_b11c",
+						"type": "DatabricksNotebook",
+						"dependsOn": [
+							{
+								"activity": "b11c_blank_interpretation",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Users/hwaitech@healthworksai.com/Plan_Finder/Benefit_Scripts/b11c_drop_melt_final"
+						},
+						"linkedServiceName": {
+							"referenceName": "AzureDatabricks4_pfcluster3",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "Data_cleaning_b12",
+						"type": "DatabricksNotebook",
+						"dependsOn": [
+							{
+								"activity": "b12_Start_time_update",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Users/hwaitech@healthworksai.com/Plan_Finder/Benefit_Scripts/b12_data_cleaning"
+						},
+						"linkedServiceName": {
+							"referenceName": "AzureDatabricks4_pfcluster3",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "Blank_Interpretation_b12",
+						"type": "DatabricksNotebook",
+						"dependsOn": [
+							{
+								"activity": "b12_data_cleaning_update",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Users/hwaitech@healthworksai.com/Plan_Finder/Benefit_Scripts/b12_blank_interpretation"
+						},
+						"linkedServiceName": {
+							"referenceName": "AzureDatabricks4_pfcluster3",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "Final_changes_b12",
+						"type": "DatabricksNotebook",
+						"dependsOn": [
+							{
+								"activity": "b12_blank_interpretation",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Users/hwaitech@healthworksai.com/Plan_Finder/Benefit_Scripts/b12_drop_melt_final"
+						},
+						"linkedServiceName": {
+							"referenceName": "AzureDatabricks4_pfcluster3",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "Data_cleaning_b4c",
+						"type": "DatabricksNotebook",
+						"dependsOn": [
+							{
+								"activity": "b4c_Start_time_update",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Users/hwaitech@healthworksai.com/Plan_Finder/Benefit_Scripts/b4c_data_cleaning"
+						},
+						"linkedServiceName": {
+							"referenceName": "AzureDatabricks4_pfcluster3",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "Blank_Interpretation_b4c",
+						"type": "DatabricksNotebook",
+						"dependsOn": [
+							{
+								"activity": "b4c_data_cleaning_update",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Users/hwaitech@healthworksai.com/Plan_Finder/Benefit_Scripts/b4c_blank_interpretation"
+						},
+						"linkedServiceName": {
+							"referenceName": "AzureDatabricks4_pfcluster3",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "Final_changes_b4c",
+						"type": "DatabricksNotebook",
+						"dependsOn": [
+							{
+								"activity": "b4c_blank_interpretation",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Users/hwaitech@healthworksai.com/Plan_Finder/Benefit_Scripts/b4c_drop_melt_final"
+						},
+						"linkedServiceName": {
+							"referenceName": "AzureDatabricks4_pfcluster3",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "b11c_Start_time_update",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "INSERT INTO Audit_benefits(FileName, Operation, StartTime)\nValues('b11c', 'Data_Cleaning', (Select GETDATE()));\nSelect * from Audit_benefits;",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "Audit_benefits_table",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						}
+					},
+					{
+						"name": "b12_Start_time_update",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "INSERT INTO Audit_benefits(FileName, Operation, StartTime)\nValues('b12', 'Data_Cleaning', (Select GETDATE()));\nSelect * from Audit_benefits;",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "Audit_benefits_table",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						}
+					},
+					{
+						"name": "b4c_Start_time_update",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "INSERT INTO Audit_benefits(FileName, Operation, StartTime)\nValues('b4c', 'Data_Cleaning', (Select GETDATE()));\nSelect * from Audit_benefits;",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "Audit_benefits_table",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						}
+					},
+					{
+						"name": "b11c_data_cleaning_update",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Data_cleaning_b11c",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "DECLARE @file as NVARCHAR(MAX)\nset @file = 'b11c';\n\nUpdate Audit_benefits\nset EndTime = (Select GETDATE())\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Data_Cleaning'));\n\nUpdate Audit_benefits\nSET Status = 'pass'\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Data_Cleaning'));\n\nUpdate Audit_benefits\nset Timetaken = EndTime-StartTime\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Data_Cleaning'));\n\nINSERT INTO Audit_benefits(FileName, Operation, StartTime)\nValues(@file, 'Blanks_Interpretation', (Select GETDATE()));\n\nSelect * from Audit_benefits;",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "Audit_benefits_table",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						}
+					},
+					{
+						"name": "b12_data_cleaning_update",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Data_cleaning_b12",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "DECLARE @file as NVARCHAR(MAX)\nset @file = 'b12';\n\nUpdate Audit_benefits\nset EndTime = (Select GETDATE())\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Data_Cleaning'));\n\nUpdate Audit_benefits\nSET Status = 'pass'\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Data_Cleaning'));\n\nUpdate Audit_benefits\nset Timetaken = EndTime-StartTime\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Data_Cleaning'));\n\nINSERT INTO Audit_benefits(FileName, Operation, StartTime)\nValues(@file, 'Blanks_Interpretation', (Select GETDATE()));\n\nSelect * from Audit_benefits;",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "Audit_benefits_table",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						}
+					},
+					{
+						"name": "b4c_data_cleaning_update",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Data_cleaning_b4c",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "DECLARE @file as NVARCHAR(MAX)\nset @file = 'b4c';\n\nUpdate Audit_benefits\nset EndTime = (Select GETDATE())\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Data_Cleaning'));\n\nUpdate Audit_benefits\nSET Status = 'pass'\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Data_Cleaning'));\n\nUpdate Audit_benefits\nset Timetaken = EndTime-StartTime\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Data_Cleaning'));\n\nINSERT INTO Audit_benefits(FileName, Operation, StartTime)\nValues(@file, 'Blanks_Interpretation', (Select GETDATE()));\n\nSelect * from Audit_benefits;",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "Audit_benefits_table",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						}
+					},
+					{
+						"name": "b11c_blank_interpretation",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Blank_Interpretation_b11c",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "DECLARE @file as NVARCHAR(MAX)\nset @file = 'b11c';\n\nUpdate Audit_benefits\nset EndTime = (Select GETDATE())\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Blanks_Interpretation'));\n\nUpdate Audit_benefits\nSET Status = 'pass'\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Blanks_Interpretation'));\n\nUpdate Audit_benefits\nset Timetaken = EndTime-StartTime\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Blanks_Interpretation'));\n\nINSERT INTO Audit_benefits(FileName, Operation, StartTime)\nValues(@file, 'Final_data_changes', (Select GETDATE()));\n\nSelect * from Audit_benefits;",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "Audit_benefits_table",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						}
+					},
+					{
+						"name": "b12_blank_interpretation",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Blank_Interpretation_b12",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "DECLARE @file as NVARCHAR(MAX)\nset @file = 'b12';\n\nUpdate Audit_benefits\nset EndTime = (Select GETDATE())\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Blanks_Interpretation'));\n\nUpdate Audit_benefits\nSET Status = 'pass'\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Blanks_Interpretation'));\n\nUpdate Audit_benefits\nset Timetaken = EndTime-StartTime\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Blanks_Interpretation'));\n\nINSERT INTO Audit_benefits(FileName, Operation, StartTime)\nValues(@file, 'Final_data_changes', (Select GETDATE()));\n\nSelect * from Audit_benefits;",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "Audit_benefits_table",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						}
+					},
+					{
+						"name": "b4c_blank_interpretation",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Blank_Interpretation_b4c",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "DECLARE @file as NVARCHAR(MAX)\nset @file = 'b4c';\n\nUpdate Audit_benefits\nset EndTime = (Select GETDATE())\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Blanks_Interpretation'));\n\nUpdate Audit_benefits\nSET Status = 'pass'\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Blanks_Interpretation'));\n\nUpdate Audit_benefits\nset Timetaken = EndTime-StartTime\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Blanks_Interpretation'));\n\nINSERT INTO Audit_benefits(FileName, Operation, StartTime)\nValues(@file, 'Final_data_changes', (Select GETDATE()));\n\nSelect * from Audit_benefits;",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "Audit_benefits_table",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						}
+					},
+					{
+						"name": "b11c_Final_changes_update",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Final_changes_b11c",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "DECLARE @file as NVARCHAR(MAX)\nset @file = 'b11c';\n\nUpdate Audit_benefits\nset EndTime = (Select GETDATE())\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Final_data_changes'));\n\nUpdate Audit_benefits\nSET Status = 'pass'\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Final_data_changes'));\n\nUpdate Audit_benefits\nset Timetaken = EndTime-StartTime\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Final_data_changes'));\n\nSelect * from Audit_benefits;",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "Audit_benefits_table",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						}
+					},
+					{
+						"name": "b12_Final_changes_update",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Final_changes_b12",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "DECLARE @file as NVARCHAR(MAX)\nset @file = 'b12';\n\nUpdate Audit_benefits\nset EndTime = (Select GETDATE())\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Final_data_changes'));\n\nUpdate Audit_benefits\nSET Status = 'pass'\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Final_data_changes'));\n\nUpdate Audit_benefits\nset Timetaken = EndTime-StartTime\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Final_data_changes'));\n\nSelect * from Audit_benefits;",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "Audit_benefits_table",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						}
+					},
+					{
+						"name": "b4c_Final_changes_update",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Final_changes_b4c",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "DECLARE @file as NVARCHAR(MAX)\nset @file = 'b4c';\n\nUpdate Audit_benefits\nset EndTime = (Select GETDATE())\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Final_data_changes'));\n\nUpdate Audit_benefits\nSET Status = 'pass'\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Final_data_changes'));\n\nUpdate Audit_benefits\nset Timetaken = EndTime-StartTime\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Final_data_changes'));\n\nSelect * from Audit_benefits;",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "Audit_benefits_table",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						}
+					},
+					{
+						"name": "Copy_b11c_data_to_db",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "b11c_Final_changes_update",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"wildcardFolderPath": "Output_final/b11c_final",
+									"wildcardFileName": "p*",
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "b11c_final_data",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "Benefits_data",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "Copy_b12_data_to_db",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "b12_Final_changes_update",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"wildcardFolderPath": "Output_final/b12_final",
+									"wildcardFileName": "p*",
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "b12_final_data",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "Benefits_data",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "Copy_b4c_data_to_db",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "b4c_Final_changes_update",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"wildcardFolderPath": "Output_final/b4c_final",
+									"wildcardFileName": "p*",
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "b4c_final_data",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "Benefits_data",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "b11c_data_cleaning_update_1",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Data_cleaning_b11c",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "DECLARE @file as NVARCHAR(MAX)\nset @file = 'b11c';\n\nUpdate Audit_benefits\nset EndTime = (Select GETDATE())\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Data_Cleaning'));\n\nUpdate Audit_benefits\nSET Status = 'failed'\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Data_Cleaning'));\n\nUpdate Audit_benefits\nset Timetaken = EndTime-StartTime\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Data_Cleaning'));\n\nSelect * from Audit_benefits;",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "Audit_benefits_table",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						}
+					},
+					{
+						"name": "b11c_blank_interpretation_1",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Blank_Interpretation_b11c",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "DECLARE @file as NVARCHAR(MAX)\nset @file = 'b11c';\n\nUpdate Audit_benefits\nset EndTime = (Select GETDATE())\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Blanks_Interpretation'));\n\nUpdate Audit_benefits\nSET Status = 'failed'\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Blanks_Interpretation'));\n\nUpdate Audit_benefits\nset Timetaken = EndTime-StartTime\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Blanks_Interpretation'));\n\nSelect * from Audit_benefits;",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "Audit_benefits_table",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						}
+					},
+					{
+						"name": "b11c_Final_changes_update_1",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Final_changes_b11c",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "DECLARE @file as NVARCHAR(MAX)\nset @file = 'b11c';\n\nUpdate Audit_benefits\nset EndTime = (Select GETDATE())\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Final_data_changes'));\n\nUpdate Audit_benefits\nSET Status = 'failed'\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Final_data_changes'));\n\nUpdate Audit_benefits\nset Timetaken = EndTime-StartTime\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Final_data_changes'));\n\nSelect * from Audit_benefits;",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "Audit_benefits_table",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						}
+					},
+					{
+						"name": "b12_data_cleaning_update_1",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Data_cleaning_b12",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "DECLARE @file as NVARCHAR(MAX)\nset @file = 'b12';\n\nUpdate Audit_benefits\nset EndTime = (Select GETDATE())\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Data_Cleaning'));\n\nUpdate Audit_benefits\nSET Status = 'failed'\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Data_Cleaning'));\n\nUpdate Audit_benefits\nset Timetaken = EndTime-StartTime\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Data_Cleaning'));\n\nSelect * from Audit_benefits;",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "Audit_benefits_table",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						}
+					},
+					{
+						"name": "b12_blank_interpretation_1",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Blank_Interpretation_b12",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "DECLARE @file as NVARCHAR(MAX)\nset @file = 'b12';\n\nUpdate Audit_benefits\nset EndTime = (Select GETDATE())\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Blanks_Interpretation'));\n\nUpdate Audit_benefits\nSET Status = 'failed'\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Blanks_Interpretation'));\n\nUpdate Audit_benefits\nset Timetaken = EndTime-StartTime\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Blanks_Interpretation'));\n\nSelect * from Audit_benefits;",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "Audit_benefits_table",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						}
+					},
+					{
+						"name": "b12_Final_changes_update_1",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Final_changes_b12",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "DECLARE @file as NVARCHAR(MAX)\nset @file = 'b12';\n\nUpdate Audit_benefits\nset EndTime = (Select GETDATE())\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Final_data_changes'));\n\nUpdate Audit_benefits\nSET Status = 'failed'\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Final_data_changes'));\n\nUpdate Audit_benefits\nset Timetaken = EndTime-StartTime\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Final_data_changes'));\n\nSelect * from Audit_benefits;",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "Audit_benefits_table",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						}
+					},
+					{
+						"name": "b4c_data_cleaning_update_1",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Data_cleaning_b4c",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "DECLARE @file as NVARCHAR(MAX)\nset @file = 'b4c';\n\nUpdate Audit_benefits\nset EndTime = (Select GETDATE())\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Data_Cleaning'));\n\nUpdate Audit_benefits\nSET Status = 'failed'\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Data_Cleaning'));\n\nUpdate Audit_benefits\nset Timetaken = EndTime-StartTime\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Data_Cleaning'));\n\nSelect * from Audit_benefits;",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "Audit_benefits_table",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						}
+					},
+					{
+						"name": "b4c_blank_interpretation_1",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Blank_Interpretation_b4c",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "DECLARE @file as NVARCHAR(MAX)\nset @file = 'b4c';\n\nUpdate Audit_benefits\nset EndTime = (Select GETDATE())\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Blanks_Interpretation'));\n\nUpdate Audit_benefits\nSET Status = 'failed'\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Blanks_Interpretation'));\n\nUpdate Audit_benefits\nset Timetaken = EndTime-StartTime\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Blanks_Interpretation'));\n\nSelect * from Audit_benefits;",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "Audit_benefits_table",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						}
+					},
+					{
+						"name": "b4c_Final_changes_update_1",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Final_changes_b4c",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "DECLARE @file as NVARCHAR(MAX)\nset @file = 'b4c';\n\nUpdate Audit_benefits\nset EndTime = (Select GETDATE())\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Final_data_changes'));\n\nUpdate Audit_benefits\nSET Status = 'failed'\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Final_data_changes'));\n\nUpdate Audit_benefits\nset Timetaken = EndTime-StartTime\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Final_data_changes'));\n\nSelect * from Audit_benefits;",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "Audit_benefits_table",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "PF_Pipelines/AEP_Refresh"
+				},
+				"annotations": [],
+				"lastPublishTime": "2022-11-15T06:14:33Z"
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/Benefits_7a_7b_7c')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -9197,6 +10320,563 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/Market_snapshot')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "start time update",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "INSERT INTO Audit(FileName, Operation, StartTime,Dashboard)\nValues('ASAY_Crosswalk_MS', 'ASAY_Crosswalk_MS', (Select GETDATE()),'Market_Snapshot');\nSelect * from Audit;",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "dataset_sql",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							}
+						}
+					},
+					{
+						"name": "ASAY_Crosswalk_MS",
+						"type": "DatabricksNotebook",
+						"dependsOn": [
+							{
+								"activity": "start time update",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Market_Snapshot/ASAY_Crosswalk_Market_Snapshot"
+						},
+						"linkedServiceName": {
+							"referenceName": "AzureDatabricks4_pfcluster3",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "end time update for MS Script",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Market_Snapshot_final",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'pass'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "dataset_sql",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							}
+						}
+					},
+					{
+						"name": "end time update for MS script fail",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Market_Snapshot_final",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'Fail'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "dataset_sql",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							}
+						}
+					},
+					{
+						"name": "Copy MS data to Db",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "start time update_copy_MS_data",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"wildcardFolderPath": "Crosswalk/Output/crosswalk_2023",
+									"wildcardFileName": "p*",
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "Crosswalk",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "dataset_sql",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Crosswalk_Master_Data"
+								}
+							}
+						]
+					},
+					{
+						"name": "start time update_copy_MS_data",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "end time update for MS Script",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "INSERT INTO Audit(FileName, Operation, StartTime,Dashboard)\nValues('Market_Snapshot', 'MS_data_load_to_db', (Select GETDATE()),'Market_Snapshot');\nSelect * from Audit;",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "dataset_sql",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							}
+						}
+					},
+					{
+						"name": "end time update for MS_data_load_to_db",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Copy MS data to Db",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'pass'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "dataset_sql",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							}
+						}
+					},
+					{
+						"name": "end time update for MS_data_load to db fail",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Copy MS data to Db",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'Fail'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "dataset_sql",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							}
+						}
+					},
+					{
+						"name": "send email update forMarket snapshot script fail",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "end time update for MS script fail",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+							"method": "POST",
+							"headers": {},
+							"body": {
+								"value": "{\n \"title\":\"PIPELINE RUN FOR MS Update Script UPDATE FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the MS Script and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "send email update for MS data load fail",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "end time update for MS_data_load to db fail",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+							"method": "POST",
+							"headers": {},
+							"body": {
+								"value": "{\n \"title\":\"PIPELINE RUN FOR MS data load FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the MS Data Load and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "send email update for Market_Snapshot pipeline success",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "end time update for MS_data_load_to_db",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+							"method": "POST",
+							"headers": {},
+							"body": {
+								"value": "{\n \"title\":\"PIPELINE RUN FOR Market Snapshot data refresh SUCCESS\",\n \"color\":\"GREEN\",\n \"message\":\"Check the QC Output\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "Market_Snapshot_final",
+						"type": "DatabricksNotebook",
+						"dependsOn": [
+							{
+								"activity": "ASAY_Crosswalk_MS",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Market_Snapshot/Market_Snapshot_final"
+						},
+						"linkedServiceName": {
+							"referenceName": "AzureDatabricks4_pfcluster3",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"sql_server_dataset_name": {
+						"type": "String",
+						"defaultValue": "hwpilot.database.windows.net"
+					},
+					"db_name": {
+						"type": "String",
+						"defaultValue": "pf_data"
+					},
+					"user_name": {
+						"type": "String",
+						"defaultValue": "pladmin"
+					},
+					"password": {
+						"type": "String",
+						"defaultValue": "Goteg@12345"
+					}
+				},
+				"folder": {
+					"name": "Hwai_Refresh/Hwai_Market_Snapshot"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/Org_Plan_data')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -12319,1608 +13999,6 @@
 				"lastPublishTime": "2022-11-23T08:54:33Z"
 			},
 			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/enr_details_data')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Enr_script",
-						"type": "DatabricksNotebook",
-						"dependsOn": [
-							{
-								"activity": "start time update",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"notebookPath": "/Users/hwaitech@healthworksai.com/Plan_Finder/Enrollment_Scripts/Enrollment_data"
-						},
-						"linkedServiceName": {
-							"referenceName": "AzureDatabricks4_pfcluster3",
-							"type": "LinkedServiceReference"
-						}
-					},
-					{
-						"name": "Copy_enr_data_to_database",
-						"type": "Copy",
-						"dependsOn": [
-							{
-								"activity": "Delete data if exists",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "DelimitedTextSource",
-								"storeSettings": {
-									"type": "AzureBlobFSReadSettings",
-									"recursive": true,
-									"wildcardFolderPath": "Output_enrollment/Enrollment_final_data",
-									"wildcardFileName": "p*",
-									"enablePartitionDiscovery": false
-								},
-								"formatSettings": {
-									"type": "DelimitedTextReadSettings"
-								}
-							},
-							"sink": {
-								"type": "AzureSqlSink",
-								"writeBehavior": "insert",
-								"sqlWriterUseTableLock": false
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "Enr_Output",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "dataset_sql",
-								"type": "DatasetReference",
-								"parameters": {
-									"sql_server_dataset": {
-										"value": "@pipeline().parameters.sql_server_dataset_name",
-										"type": "Expression"
-									},
-									"db_name_dataset": {
-										"value": "@pipeline().parameters.db_name",
-										"type": "Expression"
-									},
-									"user_name_dataset": {
-										"value": "@pipeline().parameters.user_name",
-										"type": "Expression"
-									},
-									"password_dataset": {
-										"value": "@pipeline().parameters.password",
-										"type": "Expression"
-									},
-									"sql_table_name": "OrgEnrollment"
-								}
-							}
-						]
-					},
-					{
-						"name": "Send email update",
-						"type": "WebActivity",
-						"dependsOn": [
-							{
-								"activity": "end time update for enr data load",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
-							"method": "POST",
-							"headers": {},
-							"body": {
-								"value": "{\n \"title\":\"PIPELINE RUN FOR ENROLLMENT REFRESH COMPLETED\",\n \"color\":\"Green\",\n \"message\":\"monthly refresh of enrollment completed\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
-								"type": "Expression"
-							}
-						}
-					},
-					{
-						"name": "send email update for failure",
-						"type": "WebActivity",
-						"dependsOn": [
-							{
-								"activity": "Enr_script",
-								"dependencyConditions": [
-									"Failed"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
-							"method": "POST",
-							"headers": {},
-							"body": {
-								"value": "{\n \"title\":\"PIPELINE RUN FOR ENROLLMENT REFRESH FAILED\",\n \"color\":\"RED\",\n \"message\":\"@{activity('Enr_script').error.message}\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
-								"type": "Expression"
-							}
-						}
-					},
-					{
-						"name": "send email update for failure in copy files",
-						"type": "WebActivity",
-						"dependsOn": [
-							{
-								"activity": "Copy_enr_data_to_database",
-								"dependencyConditions": [
-									"Failed"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
-							"method": "POST",
-							"headers": {},
-							"body": {
-								"value": "{\n \"title\":\"PIPELINE RUN FOR ENROLLMENT REFRESH FAILED\",\n \"color\":\"RED\",\n \"message\":\"monthly refresh of enrollment pipeline gave an error in copying the table to database. plz check it in the pipeline and resolve the error\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
-								"type": "Expression"
-							}
-						}
-					},
-					{
-						"name": "start time update",
-						"type": "Lookup",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"sqlReaderQuery": "INSERT INTO Audit(FileName, Operation, StartTime,Dashboard)\nValues('Enrolment', 'Enrolment_monthly_refresh', (Select GETDATE()),'Plan Finder');\nSelect * from Audit;",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"dataset": {
-								"referenceName": "dataset_sql",
-								"type": "DatasetReference",
-								"parameters": {
-									"sql_server_dataset": {
-										"value": "@pipeline().parameters.sql_server_dataset_name",
-										"type": "Expression"
-									},
-									"db_name_dataset": {
-										"value": "@pipeline().parameters.db_name",
-										"type": "Expression"
-									},
-									"user_name_dataset": {
-										"value": "@pipeline().parameters.user_name",
-										"type": "Expression"
-									},
-									"password_dataset": {
-										"value": "@pipeline().parameters.password",
-										"type": "Expression"
-									},
-									"sql_table_name": "Audit"
-								}
-							}
-						}
-					},
-					{
-						"name": "end time update for Crosswalk_raw_file_processing",
-						"type": "Lookup",
-						"dependsOn": [
-							{
-								"activity": "Enr_script",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'pass'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"dataset": {
-								"referenceName": "dataset_sql",
-								"type": "DatasetReference",
-								"parameters": {
-									"sql_server_dataset": {
-										"value": "@pipeline().parameters.sql_server_dataset_name",
-										"type": "Expression"
-									},
-									"db_name_dataset": {
-										"value": "@pipeline().parameters.db_name",
-										"type": "Expression"
-									},
-									"user_name_dataset": {
-										"value": "@pipeline().parameters.user_name",
-										"type": "Expression"
-									},
-									"password_dataset": {
-										"value": "@pipeline().parameters.password",
-										"type": "Expression"
-									},
-									"sql_table_name": "Audit"
-								}
-							}
-						}
-					},
-					{
-						"name": "end time update for crosswalk fail",
-						"type": "Lookup",
-						"dependsOn": [
-							{
-								"activity": "send email update for failure",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'Fail'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"dataset": {
-								"referenceName": "dataset_sql",
-								"type": "DatasetReference",
-								"parameters": {
-									"sql_server_dataset": {
-										"value": "@pipeline().parameters.sql_server_dataset_name",
-										"type": "Expression"
-									},
-									"db_name_dataset": {
-										"value": "@pipeline().parameters.db_name",
-										"type": "Expression"
-									},
-									"user_name_dataset": {
-										"value": "@pipeline().parameters.user_name",
-										"type": "Expression"
-									},
-									"password_dataset": {
-										"value": "@pipeline().parameters.password",
-										"type": "Expression"
-									},
-									"sql_table_name": "Audit"
-								}
-							}
-						}
-					},
-					{
-						"name": "start time update_enr_data_load_to_db",
-						"type": "Lookup",
-						"dependsOn": [
-							{
-								"activity": "end time update for Crosswalk_raw_file_processing",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"sqlReaderQuery": "INSERT INTO Audit(FileName, Operation, StartTime,Dashboard)\nValues('Enrolment', 'Enrolment_data_load_to_db', (Select GETDATE()),'Plan Finder');\nSelect * from Audit;",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"dataset": {
-								"referenceName": "dataset_sql",
-								"type": "DatasetReference",
-								"parameters": {
-									"sql_server_dataset": {
-										"value": "@pipeline().parameters.sql_server_dataset_name",
-										"type": "Expression"
-									},
-									"db_name_dataset": {
-										"value": "@pipeline().parameters.db_name",
-										"type": "Expression"
-									},
-									"user_name_dataset": {
-										"value": "@pipeline().parameters.user_name",
-										"type": "Expression"
-									},
-									"password_dataset": {
-										"value": "@pipeline().parameters.password",
-										"type": "Expression"
-									},
-									"sql_table_name": "Audit"
-								}
-							}
-						}
-					},
-					{
-						"name": "end time update for enr data load",
-						"type": "Lookup",
-						"dependsOn": [
-							{
-								"activity": "Copy_enr_data_to_database",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'pass'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"dataset": {
-								"referenceName": "dataset_sql",
-								"type": "DatasetReference",
-								"parameters": {
-									"sql_server_dataset": {
-										"value": "@pipeline().parameters.sql_server_dataset_name",
-										"type": "Expression"
-									},
-									"db_name_dataset": {
-										"value": "@pipeline().parameters.db_name",
-										"type": "Expression"
-									},
-									"user_name_dataset": {
-										"value": "@pipeline().parameters.user_name",
-										"type": "Expression"
-									},
-									"password_dataset": {
-										"value": "@pipeline().parameters.password",
-										"type": "Expression"
-									},
-									"sql_table_name": "Audit"
-								}
-							}
-						}
-					},
-					{
-						"name": "end time update for cenr data load fail",
-						"type": "Lookup",
-						"dependsOn": [
-							{
-								"activity": "send email update for failure in copy files",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'Fail'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"dataset": {
-								"referenceName": "dataset_sql",
-								"type": "DatasetReference",
-								"parameters": {
-									"sql_server_dataset": {
-										"value": "@pipeline().parameters.sql_server_dataset_name",
-										"type": "Expression"
-									},
-									"db_name_dataset": {
-										"value": "@pipeline().parameters.db_name",
-										"type": "Expression"
-									},
-									"user_name_dataset": {
-										"value": "@pipeline().parameters.user_name",
-										"type": "Expression"
-									},
-									"password_dataset": {
-										"value": "@pipeline().parameters.password",
-										"type": "Expression"
-									},
-									"sql_table_name": "Audit"
-								}
-							}
-						}
-					},
-					{
-						"name": "Delete data if exists",
-						"type": "Lookup",
-						"dependsOn": [
-							{
-								"activity": "start time update_enr_data_load_to_db",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"sqlReaderQuery": "DELETE FROM OrgEnrollment where Month = (SELECT DATENAME(month,GETDATE())) and Year = (SELECT YEAR(GETDATE()));\nSELECT TOP 10 * FROM OrgEnrollment;\n",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"dataset": {
-								"referenceName": "dataset_sql",
-								"type": "DatasetReference",
-								"parameters": {
-									"sql_server_dataset": {
-										"value": "@pipeline().parameters.sql_server_dataset_name",
-										"type": "Expression"
-									},
-									"db_name_dataset": {
-										"value": "@pipeline().parameters.db_name",
-										"type": "Expression"
-									},
-									"user_name_dataset": {
-										"value": "@pipeline().parameters.user_name",
-										"type": "Expression"
-									},
-									"password_dataset": {
-										"value": "@pipeline().parameters.password",
-										"type": "Expression"
-									},
-									"sql_table_name": "OrgEnrollment"
-								}
-							}
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
-				},
-				"parameters": {
-					"sql_server_dataset_name": {
-						"type": "String",
-						"defaultValue": "hwpilot.database.windows.net"
-					},
-					"db_name": {
-						"type": "String",
-						"defaultValue": "pf_data"
-					},
-					"user_name": {
-						"type": "String",
-						"defaultValue": "pladmin"
-					},
-					"password": {
-						"type": "String",
-						"defaultValue": "Goteg@12345"
-					}
-				},
-				"folder": {
-					"name": "PF_Pipelines/Monthly_Refresh"
-				},
-				"annotations": [],
-				"lastPublishTime": "2022-07-14T05:33:55Z"
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Copy_Master_pipeline_benefit_copy1')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Benefits_10a_10b_13a",
-						"type": "ExecutePipeline",
-						"dependsOn": [],
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "Benefits_10a_10b_13a",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {}
-						}
-					},
-					{
-						"name": "Benefits_13d_13e_13f",
-						"type": "ExecutePipeline",
-						"dependsOn": [
-							{
-								"activity": "Benefits_10a_10b_13a",
-								"dependencyConditions": [
-									"Completed"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "Benefits_13d_13e_13f",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {}
-						}
-					},
-					{
-						"name": "Benefits_13g_14b_14c",
-						"type": "ExecutePipeline",
-						"dependsOn": [
-							{
-								"activity": "Benefits_13d_13e_13f",
-								"dependencyConditions": [
-									"Completed"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "Benefits_13g_14b_14c",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {}
-						}
-					},
-					{
-						"name": "Benefits_16a_16b_17a",
-						"type": "ExecutePipeline",
-						"dependsOn": [
-							{
-								"activity": "Benefits_13g_14b_14c",
-								"dependencyConditions": [
-									"Completed"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "Benefits_16a_16b_17a",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {}
-						}
-					},
-					{
-						"name": "Benefits_7f_7g_7h",
-						"type": "ExecutePipeline",
-						"dependsOn": [
-							{
-								"activity": "Benefits_7a_7b_7c",
-								"dependencyConditions": [
-									"Completed"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "Benefits_7f_7g_7h",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {}
-						}
-					},
-					{
-						"name": "Benefits_7a_7b_7c",
-						"type": "ExecutePipeline",
-						"dependsOn": [
-							{
-								"activity": "Benefits_4c_11c_12",
-								"dependencyConditions": [
-									"Completed"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "Benefits_7a_7b_7c",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {}
-						}
-					},
-					{
-						"name": "Benefits_7i_7j_7k",
-						"type": "ExecutePipeline",
-						"dependsOn": [
-							{
-								"activity": "Benefits_7f_7g_7h",
-								"dependencyConditions": [
-									"Completed"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "Benefits_7i_7j_7k",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {}
-						}
-					},
-					{
-						"name": "Benefits_b2_b3_b20",
-						"type": "ExecutePipeline",
-						"dependsOn": [
-							{
-								"activity": "Benefits_16a_16b_17a",
-								"dependencyConditions": [
-									"Completed"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "Ben_b2_b3_b20",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {}
-						}
-					},
-					{
-						"name": "Benefits_data_OON",
-						"type": "ExecutePipeline",
-						"dependsOn": [
-							{
-								"activity": "Benefits_1a_1b_pbp_c_vt",
-								"dependencyConditions": [
-									"Completed"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "Benefits_data_OON",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {}
-						}
-					},
-					{
-						"name": "Benefits_9a_9b_9c",
-						"type": "ExecutePipeline",
-						"dependsOn": [
-							{
-								"activity": "Benefits_7i_7j_7k",
-								"dependencyConditions": [
-									"Completed"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "Benefits_9a_9b_9c",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {}
-						}
-					},
-					{
-						"name": "Benefits_1a_1b_pbp_c_vt",
-						"type": "ExecutePipeline",
-						"dependsOn": [
-							{
-								"activity": "Benefits_9a_9b_9c",
-								"dependencyConditions": [
-									"Completed"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "Benefits_1a_1b_pbp_c_vt",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {}
-						}
-					},
-					{
-						"name": "Benefits_4c_11c_12",
-						"type": "ExecutePipeline",
-						"dependsOn": [
-							{
-								"activity": "Benefits_b2_b3_b20",
-								"dependencyConditions": [
-									"Completed"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "Benefits_4c_11c_12",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {}
-						}
-					},
-					{
-						"name": "send email update for 10a_10b_13a",
-						"type": "WebActivity",
-						"dependsOn": [
-							{
-								"activity": "Benefits_10a_10b_13a",
-								"dependencyConditions": [
-									"Failed"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
-							"method": "POST",
-							"headers": {},
-							"body": {
-								"value": "{\n \"title\":\"PIPELINE RUN FOR BENEFITS DATA UPDATE FAILED IN Benefits_10a_10b_11a_11b_13a\",\n \"color\":\"RED\",\n \"message\":\"@{activity('Benefits_10a_10b_13a').error.message}\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
-								"type": "Expression"
-							}
-						}
-					},
-					{
-						"name": "send email update for 13d_13e_13f",
-						"type": "WebActivity",
-						"dependsOn": [
-							{
-								"activity": "Benefits_13d_13e_13f",
-								"dependencyConditions": [
-									"Failed"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
-							"method": "POST",
-							"headers": {},
-							"body": {
-								"value": "{\n \"title\":\"PIPELINE RUN FOR BENEFITS DATA UPDATE FAILED IN Benefits_13b_13c_13d_13e_13f\",\n \"color\":\"RED\",\n \"message\":\"@{activity('Benefits_13d_13e_13f').error.message}\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
-								"type": "Expression"
-							}
-						}
-					},
-					{
-						"name": "send email update for 13g_14b_14c",
-						"type": "WebActivity",
-						"dependsOn": [
-							{
-								"activity": "Benefits_13g_14b_14c",
-								"dependencyConditions": [
-									"Failed"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
-							"method": "POST",
-							"headers": {},
-							"body": {
-								"value": "{\n \"title\":\"PIPELINE RUN FOR BENEFITS DATA UPDATE FAILED IN Benefits_13g_14a_14b_14c_14d\",\n \"color\":\"RED\",\n \"message\":\"@{activity('Benefits_13g_14b_14c').error.message}\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
-								"type": "Expression"
-							}
-						}
-					},
-					{
-						"name": "send email update for 16a_16b_17a",
-						"type": "WebActivity",
-						"dependsOn": [
-							{
-								"activity": "Benefits_16a_16b_17a",
-								"dependencyConditions": [
-									"Failed"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
-							"method": "POST",
-							"headers": {},
-							"body": {
-								"value": "{\n \"title\":\"PIPELINE RUN FOR BENEFITS DATA UPDATE FAILED IN Benefits_16a_16b_17a_17b_18a\",\n \"color\":\"RED\",\n \"message\":\"@{activity('Benefits_16a_16b_17a').error.message}\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
-								"type": "Expression"
-							}
-						}
-					},
-					{
-						"name": "send email update for 2_3_20",
-						"type": "WebActivity",
-						"dependsOn": [
-							{
-								"activity": "Benefits_b2_b3_b20",
-								"dependencyConditions": [
-									"Failed"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
-							"method": "POST",
-							"headers": {},
-							"body": {
-								"value": "{\n \"title\":\"PIPELINE RUN FOR BENEFITS DATA UPDATE FAILED IN Benefits_b2_b3_4a_4b_b20\",\n \"color\":\"RED\",\n \"message\":\"@{activity('Benefits_b2_b3_b20').error.message}\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
-								"type": "Expression"
-							}
-						}
-					},
-					{
-						"name": "send email update for 4c_11c_12",
-						"type": "WebActivity",
-						"dependsOn": [
-							{
-								"activity": "Benefits_4c_11c_12",
-								"dependencyConditions": [
-									"Failed"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
-							"method": "POST",
-							"headers": {},
-							"body": {
-								"value": "{\n \"title\":\"PIPELINE RUN FOR BENEFITS DATA UPDATE FAILED IN Benefits_4c_11c_12_14e_18b\",\n \"color\":\"RED\",\n \"message\":\"@{activity('Benefits_4c_11c_12').error.message}\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
-								"type": "Expression"
-							}
-						}
-					},
-					{
-						"name": "send email update for 7a_7b_7c",
-						"type": "WebActivity",
-						"dependsOn": [
-							{
-								"activity": "Benefits_7a_7b_7c",
-								"dependencyConditions": [
-									"Failed"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
-							"method": "POST",
-							"headers": {},
-							"body": {
-								"value": "{\n \"title\":\"PIPELINE RUN FOR BENEFITS DATA UPDATE FAILED IN Benefits_b5_b6_7a_7b_7c\",\n \"color\":\"RED\",\n \"message\":\"@{activity('Benefits_7a_7b_7c').error.message}\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
-								"type": "Expression"
-							}
-						}
-					},
-					{
-						"name": "send email update for 7f_7g_7h",
-						"type": "WebActivity",
-						"dependsOn": [
-							{
-								"activity": "Benefits_7f_7g_7h",
-								"dependencyConditions": [
-									"Failed"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
-							"method": "POST",
-							"headers": {},
-							"body": {
-								"value": "{\n \"title\":\"PIPELINE RUN FOR BENEFITS DATA UPDATE FAILED IN Benefits_7d_7e_7f_7g_7h\",\n \"color\":\"RED\",\n \"message\":\"@{activity('Benefits_7f_7g_7h').error.message}\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
-								"type": "Expression"
-							}
-						}
-					},
-					{
-						"name": "send email update for 7i_7j_7k",
-						"type": "WebActivity",
-						"dependsOn": [
-							{
-								"activity": "Benefits_7i_7j_7k",
-								"dependencyConditions": [
-									"Failed"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
-							"method": "POST",
-							"headers": {},
-							"body": {
-								"value": "{\n \"title\":\"PIPELINE RUN FOR BENEFITS DATA UPDATE FAILED IN Benefits_7i_7j_7k_8a_8b\",\n \"color\":\"RED\",\n \"message\":\"@{activity('Benefits_7i_7j_7k').error.message}\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
-								"type": "Expression"
-							}
-						}
-					},
-					{
-						"name": "send email update for 9a_9b_9c",
-						"type": "WebActivity",
-						"dependsOn": [
-							{
-								"activity": "Benefits_9a_9b_9c",
-								"dependencyConditions": [
-									"Failed"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
-							"method": "POST",
-							"headers": {},
-							"body": {
-								"value": "{\n \"title\":\"PIPELINE RUN FOR BENEFITS DATA UPDATE FAILED IN Benefits_9a_9b_9c_9d_15\",\n \"color\":\"RED\",\n \"message\":\"@{activity('Benefits_9a_9b_9c').error.message}\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
-								"type": "Expression"
-							}
-						}
-					},
-					{
-						"name": "send email update for 1a_1b",
-						"type": "WebActivity",
-						"dependsOn": [
-							{
-								"activity": "Benefits_1a_1b_pbp_c_vt",
-								"dependencyConditions": [
-									"Failed"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
-							"method": "POST",
-							"headers": {},
-							"body": {
-								"value": "{\n \"title\":\"PIPELINE RUN FOR BENEFITS DATA UPDATE FAILED IN Benefits_1a_1b_19a_19b\",\n \"color\":\"RED\",\n \"message\":\"@{activity('Benefits_1a_1b_pbp_c_vt').error.message}\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
-								"type": "Expression"
-							}
-						}
-					},
-					{
-						"name": "send email update for OON",
-						"type": "WebActivity",
-						"dependsOn": [
-							{
-								"activity": "Benefits_data_OON",
-								"dependencyConditions": [
-									"Failed"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
-							"method": "POST",
-							"headers": {},
-							"body": {
-								"value": "{\n \"title\":\"PIPELINE RUN FOR BENEFITS DATA UPDATE FAILED IN Benefit_data_OON\",\n \"color\":\"RED\",\n \"message\":\"@{activity('Benefits_data_OON').error.message}\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
-								"type": "Expression"
-							}
-						}
-					},
-					{
-						"name": "Benefits_4a_4b_18a",
-						"type": "ExecutePipeline",
-						"dependsOn": [
-							{
-								"activity": "Benefits_data_OON",
-								"dependencyConditions": [
-									"Completed"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "Benefits_4a_4b_18a",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {}
-						}
-					},
-					{
-						"name": "Benefits_7d_7e_6",
-						"type": "ExecutePipeline",
-						"dependsOn": [
-							{
-								"activity": "Benefits_4a_4b_18a",
-								"dependencyConditions": [
-									"Completed"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "Benefits_7d_7e_6",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {}
-						}
-					},
-					{
-						"name": "Benefits_11a_11b_9d",
-						"type": "ExecutePipeline",
-						"dependsOn": [
-							{
-								"activity": "Benefits_7d_7e_6",
-								"dependencyConditions": [
-									"Completed"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "Benefits_11a_11b_9d",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {}
-						}
-					},
-					{
-						"name": "Benefits_14a_14d",
-						"type": "ExecutePipeline",
-						"dependsOn": [
-							{
-								"activity": "Benefits_11a_11b_9d",
-								"dependencyConditions": [
-									"Completed"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "Benefits_14a_14d",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {}
-						}
-					},
-					{
-						"name": "Benefits_15_8a_8b",
-						"type": "ExecutePipeline",
-						"dependsOn": [
-							{
-								"activity": "Benefits_14e_18b_5",
-								"dependencyConditions": [
-									"Completed"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "Benefits_15_8a_8b",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {}
-						}
-					},
-					{
-						"name": "Benefits_14e_18b_5",
-						"type": "ExecutePipeline",
-						"dependsOn": [
-							{
-								"activity": "Benefits_14a_14d",
-								"dependencyConditions": [
-									"Completed"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "Benefits_14e_18b_5",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {}
-						}
-					},
-					{
-						"name": "Benefits_17b_13b_13c",
-						"type": "ExecutePipeline",
-						"dependsOn": [
-							{
-								"activity": "Benefits_SSBCI",
-								"dependencyConditions": [
-									"Completed"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "Benefits_17b_13b_13c",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {}
-						}
-					},
-					{
-						"name": "Benefits_SSBCI",
-						"type": "ExecutePipeline",
-						"dependsOn": [
-							{
-								"activity": "Benefits_15_8a_8b",
-								"dependencyConditions": [
-									"Completed"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "Benefits_SSBCI",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {}
-						}
-					},
-					{
-						"name": "send email update for 4a_4b_18a",
-						"type": "WebActivity",
-						"dependsOn": [
-							{
-								"activity": "Benefits_4a_4b_18a",
-								"dependencyConditions": [
-									"Failed"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
-							"method": "POST",
-							"headers": {},
-							"body": {
-								"value": "{\n \"title\":\"PIPELINE RUN FOR BENEFITS DATA UPDATE FAILED IN Benefit_data_OON\",\n \"color\":\"RED\",\n \"message\":\"@{activity('Benefits_4a_4b_18a').error.message}\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
-								"type": "Expression"
-							}
-						}
-					},
-					{
-						"name": "send email update for 7d_7e_6",
-						"type": "WebActivity",
-						"dependsOn": [
-							{
-								"activity": "Benefits_7d_7e_6",
-								"dependencyConditions": [
-									"Failed"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
-							"method": "POST",
-							"headers": {},
-							"body": {
-								"value": "{\n \"title\":\"PIPELINE RUN FOR BENEFITS DATA UPDATE FAILED IN Benefit_data_OON\",\n \"color\":\"RED\",\n \"message\":\"@{activity('Benefits_7d_7e_6').error.message}\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
-								"type": "Expression"
-							}
-						}
-					},
-					{
-						"name": "send email update for 11a_11b_9d",
-						"type": "WebActivity",
-						"dependsOn": [
-							{
-								"activity": "Benefits_11a_11b_9d",
-								"dependencyConditions": [
-									"Failed"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
-							"method": "POST",
-							"headers": {},
-							"body": {
-								"value": "{\n \"title\":\"PIPELINE RUN FOR BENEFITS DATA UPDATE FAILED IN Benefit_data_OON\",\n \"color\":\"RED\",\n \"message\":\"@{activity('Benefits_11a_11b_9d').error.message}\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
-								"type": "Expression"
-							}
-						}
-					},
-					{
-						"name": "send email update for 14a_14d",
-						"type": "WebActivity",
-						"dependsOn": [
-							{
-								"activity": "Benefits_14a_14d",
-								"dependencyConditions": [
-									"Failed"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
-							"method": "POST",
-							"headers": {},
-							"body": {
-								"value": "{\n \"title\":\"PIPELINE RUN FOR BENEFITS DATA UPDATE FAILED IN Benefit_data_OON\",\n \"color\":\"RED\",\n \"message\":\"@{activity('Benefits_14a_14d').error.message}\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
-								"type": "Expression"
-							}
-						}
-					},
-					{
-						"name": "send email update for 14e_18b_5",
-						"type": "WebActivity",
-						"dependsOn": [
-							{
-								"activity": "Benefits_14e_18b_5",
-								"dependencyConditions": [
-									"Failed"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
-							"method": "POST",
-							"headers": {},
-							"body": {
-								"value": "{\n \"title\":\"PIPELINE RUN FOR BENEFITS DATA UPDATE FAILED IN Benefit_data_OON\",\n \"color\":\"RED\",\n \"message\":\"@{activity('Benefits_14e_18b_5').error.message}\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
-								"type": "Expression"
-							}
-						}
-					},
-					{
-						"name": "send email update for 15_8a_8b",
-						"type": "WebActivity",
-						"dependsOn": [
-							{
-								"activity": "Benefits_15_8a_8b",
-								"dependencyConditions": [
-									"Failed"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
-							"method": "POST",
-							"headers": {},
-							"body": {
-								"value": "{\n \"title\":\"PIPELINE RUN FOR BENEFITS DATA UPDATE FAILED IN Benefit_data_OON\",\n \"color\":\"RED\",\n \"message\":\"@{activity('Benefits_15_8a_8b').error.message}\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
-								"type": "Expression"
-							}
-						}
-					},
-					{
-						"name": "send email update for SSBCI",
-						"type": "WebActivity",
-						"dependsOn": [
-							{
-								"activity": "Benefits_SSBCI",
-								"dependencyConditions": [
-									"Failed"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
-							"method": "POST",
-							"headers": {},
-							"body": {
-								"value": "{\n \"title\":\"PIPELINE RUN FOR BENEFITS DATA UPDATE FAILED IN Benefit_data_OON\",\n \"color\":\"RED\",\n \"message\":\"@{activity('Benefits_SSBCI').error.message}\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
-								"type": "Expression"
-							}
-						}
-					},
-					{
-						"name": "send email update for 17b_13b_13c",
-						"type": "WebActivity",
-						"dependsOn": [
-							{
-								"activity": "Benefits_17b_13b_13c",
-								"dependencyConditions": [
-									"Failed"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
-							"method": "POST",
-							"headers": {},
-							"body": {
-								"value": "{\n \"title\":\"PIPELINE RUN FOR BENEFITS DATA UPDATE FAILED IN Benefit_data_OON\",\n \"color\":\"RED\",\n \"message\":\"@{activity('Benefits_17b_13b_13c').error.message}\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
-								"type": "Expression"
-							}
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
-				},
-				"folder": {
-					"name": "PF_Pipelines/AEP_Refresh"
-				},
-				"annotations": [],
-				"lastPublishTime": "2022-11-16T05:10:59Z"
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/Benefits_7f_7g_7h')]",
-				"[concat(variables('factoryId'), '/pipelines/Benefits_7a_7b_7c')]",
-				"[concat(variables('factoryId'), '/pipelines/Benefits_7i_7j_7k')]",
-				"[concat(variables('factoryId'), '/pipelines/Benefits_data_OON')]",
-				"[concat(variables('factoryId'), '/pipelines/Benefits_9a_9b_9c')]",
-				"[concat(variables('factoryId'), '/pipelines/Benefits_7d_7e_6')]",
-				"[concat(variables('factoryId'), '/pipelines/Benefits_SSBCI')]"
-			]
 		}
 	]
 }

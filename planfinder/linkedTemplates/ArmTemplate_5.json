@@ -479,6 +479,63 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/combined_benefits_sql_Table')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Linked_Service_SQL",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"sql_server": {
+							"value": "@dataset().sql_server_dataset",
+							"type": "Expression"
+						},
+						"db_name": {
+							"value": "@dataset().db_name_dataset",
+							"type": "Expression"
+						},
+						"user_name": {
+							"value": "@dataset().user_name_dataset",
+							"type": "Expression"
+						},
+						"password": {
+							"value": "@dataset().password_dataset",
+							"type": "Expression"
+						}
+					}
+				},
+				"parameters": {
+					"sql_server_dataset": {
+						"type": "string"
+					},
+					"db_name_dataset": {
+						"type": "string"
+					},
+					"user_name_dataset": {
+						"type": "string"
+					},
+					"password_dataset": {
+						"type": "string"
+					},
+					"sql_table_name": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": {
+						"value": "@dataset().sql_table_name",
+						"type": "Expression"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/dataset_sql')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -531,36 +588,6 @@
 						"value": "@dataset().sql_table_name",
 						"type": "Expression"
 					}
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/dummy_output')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureSqlDatabase1",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "ID",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "output",
-						"type": "float",
-						"precision": 15
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "QC_output"
 				}
 			},
 			"dependsOn": []
