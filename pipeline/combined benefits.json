@@ -1,6 +1,41 @@
 {
 	"name": "combined benefits",
 	"properties": {
+		"activities": [
+			{
+				"name": "start time update for combined benefits",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "INSERT INTO Audit(FileName, Operation, StartTime,Dashboard)\nValues('Combined Benefits', 'Combined_Benefits_Data_prep', (Select GETDATE()),'Combined Benefits');\nSelect * from Audit;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "combined_benefits_sql_Table",
+						"type": "DatasetReference",
+						"parameters": {
+							"sql_server_dataset": "hwpilot.database.windows.net",
+							"db_name_dataset": "pf_data",
+							"user_name_dataset": "pladmin",
+							"password_dataset": "Goteg@12345",
+							"sql_table_name": "dbo.Audit"
+						}
+					},
+					"firstRowOnly": true
+				}
+			}
+		],
 		"annotations": []
 	}
 }
