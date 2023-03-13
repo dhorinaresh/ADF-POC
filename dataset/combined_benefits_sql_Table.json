@@ -1,0 +1,54 @@
+{
+	"name": "combined_benefits_sql_Table",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Linked_Service_SQL",
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"sql_server": {
+					"value": "@dataset().sql_server_dataset",
+					"type": "Expression"
+				},
+				"db_name": {
+					"value": "@dataset().db_name_dataset",
+					"type": "Expression"
+				},
+				"user_name": {
+					"value": "@dataset().user_name_dataset",
+					"type": "Expression"
+				},
+				"password": {
+					"value": "@dataset().password_dataset",
+					"type": "Expression"
+				}
+			}
+		},
+		"parameters": {
+			"sql_server_dataset": {
+				"type": "string"
+			},
+			"db_name_dataset": {
+				"type": "string"
+			},
+			"user_name_dataset": {
+				"type": "string"
+			},
+			"password_dataset": {
+				"type": "string"
+			},
+			"sql_table_name": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": {
+				"value": "@dataset().sql_table_name",
+				"type": "Expression"
+			}
+		}
+	}
+}
