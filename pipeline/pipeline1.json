@@ -24,7 +24,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "select count(*) from [dbo].[parent_organization]\nwhere Case_value is null;",
+						"sqlReaderQuery": "select count(*) as value from [dbo].[parent_organization]\nwhere Case_value is null;",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -69,7 +69,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"expression": {
-						"value": "@greater(activity('Lookup1').output.value,0)",
+						"value": "@greater(activity('Lookup1').output.value[0]['value'],0)",
 						"type": "Expression"
 					},
 					"ifFalseActivities": [
@@ -86,13 +86,24 @@
 					],
 					"ifTrueActivities": [
 						{
-							"name": "Set variable1",
-							"type": "SetVariable",
+							"name": "send email update for Parent Oraganization",
+							"type": "WebActivity",
 							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
 							"userProperties": [],
 							"typeProperties": {
-								"variableName": "X",
-								"value": "send email"
+								"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+								"method": "POST",
+								"body": {
+									"value": "{\n \"title\":\"Pipeline run for Parent organization\",\n \"color\":\"RED\",\n \"message\":\"Update the values in cpsc contract file and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+									"type": "Expression"
+								}
 							}
 						}
 					]
