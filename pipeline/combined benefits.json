@@ -703,7 +703,7 @@
 						"partitionOption": "None"
 					},
 					"dataset": {
-						"referenceName": "dataset_sql",
+						"referenceName": "combined_benefits_sql_Table",
 						"type": "DatasetReference",
 						"parameters": {
 							"sql_server_dataset": {
@@ -749,12 +749,11 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'Fail'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
 					"dataset": {
-						"referenceName": "dataset_sql",
+						"referenceName": "combined_benefits_sql_Table",
 						"type": "DatasetReference",
 						"parameters": {
 							"sql_server_dataset": {
@@ -830,6 +829,90 @@
 					"method": "POST",
 					"body": {
 						"value": "{\n \"title\":\"PIPELINE RUN FOR crosswalk data load FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the Crosswalk Data Load and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "send email update for combined benefits code fail",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "End time update for combined benefits code fail",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+					"method": "POST",
+					"body": {
+						"value": "{\n \"title\":\"PIPELINE RUN FOR Combined Benefits UPDATE FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the Combined Benefits Code and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "send email update for data manupulation fail",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "Endtime update combined benefits data manupulation fail",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+					"method": "POST",
+					"body": {
+						"value": "{\n \"title\":\"PIPELINE RUN FOR Combined Benefits UPDATE FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the Combined Benefits Data Manupulation and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "send email update for column add fail",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "Endtime update combinedbenefits Columns Add fail",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+					"method": "POST",
+					"body": {
+						"value": "{\n \"title\":\"PIPELINE RUN FOR Combined Benefits UPDATE FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the Combined Benefits Columns Add in Benefit File and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
 						"type": "Expression"
 					}
 				}
