@@ -101,7 +101,7 @@
 								"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
 								"method": "POST",
 								"body": {
-									"value": "{\n \"title\":\"Pipeline run for Parent organization\",\n \"color\":\"RED\",\n \"message\":\"Update the values in cpsc contract file and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+									"value": "{\n \"title\":\"Pipeline run for Parent organization\",\n \"color\":\"GREEN\",\n \"message\":\"Update the values in cpsc contract file and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
 									"type": "Expression"
 								}
 							}
