@@ -475,6 +475,24 @@
 				}
 			}
 		],
+		"parameters": {
+			"sql_server_dataset_name": {
+				"type": "string",
+				"defaultValue": "hwpilot.database.windows.net"
+			},
+			"db_name": {
+				"type": "string",
+				"defaultValue": "pf_data"
+			},
+			"user_name": {
+				"type": "string",
+				"defaultValue": "pladmin"
+			},
+			"password": {
+				"type": "string",
+				"defaultValue": "Goteg@12345"
+			}
+		},
 		"folder": {
 			"name": "Hwai_Refresh/HWAI_enr_trends"
 		},
