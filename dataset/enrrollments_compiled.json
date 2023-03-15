@@ -48,7 +48,7 @@
 		],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "Enrollments_compiled"
+			"table": "HWAI_Enrollments"
 		}
 	}
 }
