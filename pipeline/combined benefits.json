@@ -632,7 +632,9 @@
 					"sink": {
 						"type": "AzureSqlSink",
 						"writeBehavior": "insert",
-						"sqlWriterUseTableLock": false
+						"sqlWriterUseTableLock": false,
+						"tableOption": "autoCreate",
+						"disableMetricsCollection": false
 					},
 					"enableStaging": false,
 					"translator": {
@@ -652,7 +654,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "dataset_sql",
+						"referenceName": "combined_benefits_sql_Table",
 						"type": "DatasetReference",
 						"parameters": {
 							"sql_server_dataset": {
@@ -670,8 +672,7 @@
 							"password_dataset": {
 								"value": "@pipeline().parameters.password",
 								"type": "Expression"
-							},
-							"sql_table_name": "Combined_Benefits_AllBenefits_Yes_No_Melted"
+							}
 						}
 					}
 				]
