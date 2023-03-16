@@ -479,6 +479,48 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/combined_benefits')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Linked_service_AzureDataLakeStorage2",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileSystem": "pfcontainer"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "bid_id",
+						"type": "String"
+					},
+					{
+						"name": "pbp_a_dsnp_zerodollar",
+						"type": "String"
+					},
+					{
+						"name": "pbp_a_snp_state_cvg_yn",
+						"type": "String"
+					},
+					{
+						"name": "plan_type_new_updated",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/combined_benefits_sql_Table')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -520,63 +562,6 @@
 					},
 					"sql_table_name": {
 						"type": "string"
-					}
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": {
-						"value": "@dataset().sql_table_name",
-						"type": "Expression"
-					}
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/dataset_sql')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "Linked_Service_SQL",
-					"type": "LinkedServiceReference",
-					"parameters": {
-						"sql_server": {
-							"value": "@dataset().sql_server_dataset",
-							"type": "Expression"
-						},
-						"db_name": {
-							"value": "@dataset().db_name_dataset",
-							"type": "Expression"
-						},
-						"user_name": {
-							"value": "@dataset().user_name_dataset",
-							"type": "Expression"
-						},
-						"password": {
-							"value": "@dataset().password_dataset",
-							"type": "Expression"
-						}
-					}
-				},
-				"parameters": {
-					"sql_server_dataset": {
-						"type": "String"
-					},
-					"db_name_dataset": {
-						"type": "String"
-					},
-					"user_name_dataset": {
-						"type": "String"
-					},
-					"password_dataset": {
-						"type": "String"
-					},
-					"sql_table_name": {
-						"type": "String"
 					}
 				},
 				"annotations": [],

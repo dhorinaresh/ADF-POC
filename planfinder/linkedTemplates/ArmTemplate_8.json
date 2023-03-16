@@ -13,6 +13,589 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('factoryName'), '/State_County_Org')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "State_Counrt_Org_Script",
+						"type": "DatabricksNotebook",
+						"dependsOn": [
+							{
+								"activity": "Start_time_update_geo",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Users/hwaitech@healthworksai.com/Plan_Finder/Geography_Scripts/State_County_Org_Id"
+						},
+						"linkedServiceName": {
+							"referenceName": "AzureDatabricks4_pfcluster3",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "Copy_State_data",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "Truncate_table",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"wildcardFolderPath": "Output_Id_Mappings/State_details_final",
+									"wildcardFileName": "p*",
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "State_data",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "State_table_sink",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "Start_time_update_geo",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "INSERT INTO Audit_plan(Operation, StartTime)\nValues('GeoIds_script', (Select GETDATE()));\nSelect * from Audit_plan;",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "Plan_details_Audit_table",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						}
+					},
+					{
+						"name": "Pass_status_update_geo",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "State_Counrt_Org_Script",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "Update Audit_plan\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit_plan);\n\nUpdate Audit_plan\nSET Status = 'pass'\nwhere Id = (select Count(*) from Audit_plan);\n\nUpdate Audit_plan\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit_plan);\n\nSelect * from Audit_plan;\n",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "Plan_details_Audit_table",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						}
+					},
+					{
+						"name": "Fail_status_update_geo",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "State_Counrt_Org_Script",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "Update Audit_plan\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit_plan);\n\nUpdate Audit_plan\nSET Status = 'Fail'\nwhere Id = (select Count(*) from Audit_plan);\n\nUpdate Audit_plan\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit_plan);\n\nSelect * from Audit_plan;",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "Plan_details_Audit_table",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						}
+					},
+					{
+						"name": "Start_time_update_geoCopy",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Pass_status_update_geo",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "INSERT INTO Audit_plan(Operation, StartTime)\nValues('GeoIds_copy', (Select GETDATE()));\nSelect * from Audit_plan;",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "Plan_details_Audit_table",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						}
+					},
+					{
+						"name": "Pass_status_geoIdCopy",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Copy_ParentOrgData",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "Update Audit_plan\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit_plan);\n\nUpdate Audit_plan\nSET Status = 'pass'\nwhere Id = (select Count(*) from Audit_plan);\n\nUpdate Audit_plan\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit_plan);\n\nSelect * from Audit_plan;",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "Plan_details_Audit_table",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						}
+					},
+					{
+						"name": "Fail_status_geoidCopy",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Copy_ParentOrgData",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "Update Audit_plan\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit_plan);\n\nUpdate Audit_plan\nSET Status = 'Fail'\nwhere Id = (select Count(*) from Audit_plan);\n\nUpdate Audit_plan\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit_plan);\n\nSelect * from Audit_plan;",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "Plan_details_Audit_table",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						}
+					},
+					{
+						"name": "send email update for geo script",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "Fail_status_update_geo",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+							"method": "POST",
+							"headers": {},
+							"body": {
+								"value": "{\n \"title\":\"PIPELINE RUN FOR GEOGRAPHY UPDATE FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the State_County_org Script and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "send email update for geo Id Copy",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "Fail_status_geoidCopy",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+							"method": "POST",
+							"headers": {},
+							"body": {
+								"value": "{\n \"title\":\"PIPELINE RUN FOR GEOGRAPHY UPDATE FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the Geography ID Copy to database and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "Truncate_table",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Start_time_update_geoCopy",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "Truncate table OrgState;\nselect * from OrgState;",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "OrgState",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						}
+					},
+					{
+						"name": "Copy_County_data",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "Truncate_table_parent_org",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"wildcardFolderPath": "Output_Id_Mappings/County_details_final",
+									"wildcardFileName": "p*",
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "County_data",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "County_table",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "Copy_ParentOrgData",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "Copy_County_data",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"wildcardFolderPath": "Output_Id_Mappings/ParentOrg_details_final",
+									"wildcardFileName": "p*",
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "Parent_Org_Data",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "Parent_org_table",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "Truncate_table_county",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Copy_State_data",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "Truncate table OrgCounty;\nselect * from OrgCounty;",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "County_table",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						}
+					},
+					{
+						"name": "Truncate_table_parent_org",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Truncate_table_county",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "Truncate table OrgParentOrganization;\nselect * from OrgParentOrganization;",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "Parent_org_table",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "PF_Pipelines/AEP_Refresh"
+				},
+				"annotations": [],
+				"lastPublishTime": "2022-11-23T08:54:33Z"
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/combined benefits')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -558,6 +1141,387 @@
 								}
 							},
 							"firstRowOnly": true
+						}
+					},
+					{
+						"name": "start time update copy data to sql database",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "End time update combined benefits Columns Add",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "INSERT INTO Audit(FileName, Operation, StartTime,Dashboard)\nValues('Combined Benefits', 'Combined_Benefits_Data Manupulation', (Select GETDATE()),'Combined Benefits');\nSelect * from Audit;",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "combined_benefits_sql_Table",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							},
+							"firstRowOnly": true
+						}
+					},
+					{
+						"name": "copy combined benefits to sql database",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "start time update copy data to sql database",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"wildcardFolderPath": "Output/Output_Benefit_combined/Combined_Benefits_AllBenefits_Yes_No_Melted_New.csv",
+									"wildcardFileName": "p*",
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false,
+								"tableOption": "autoCreate",
+								"disableMetricsCollection": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "combined_benefits",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "combined_benefits_sql_Table",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Combined_Benefits_Yes_No_Melted"
+								}
+							}
+						]
+					},
+					{
+						"name": "end time update for combined_benefits_load_to_db",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "copy combined benefits to sql database",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'pass'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "combined_benefits_sql_Table",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							}
+						}
+					},
+					{
+						"name": "end time update for combined benefits load to db fail",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "copy combined benefits to sql database",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "combined_benefits_sql_Table",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							}
+						}
+					},
+					{
+						"name": "send email for combined benefits pipeline success",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "end time update for combined_benefits_load_to_db",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+							"method": "POST",
+							"headers": {},
+							"body": {
+								"value": "{\n \"title\":\"PIPELINE RUN FOR combined benefits data SUCCESS\",\n \"color\":\"GREEN\",\n \"message\":\"Check the Output\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "send email update for combined benefits data load fail",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "end time update for combined benefits load to db fail",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+							"method": "POST",
+							"headers": {},
+							"body": {
+								"value": "{\n \"title\":\"PIPELINE RUN FOR crosswalk data load FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the Crosswalk Data Load and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "send email update for combined benefits code fail",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "End time update for combined benefits code fail",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+							"method": "POST",
+							"headers": {},
+							"body": {
+								"value": "{\n \"title\":\"PIPELINE RUN FOR Combined Benefits UPDATE FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the Combined Benefits Code and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "send email update for data manupulation fail",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "Endtime update combined benefits data manupulation fail",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+							"method": "POST",
+							"headers": {},
+							"body": {
+								"value": "{\n \"title\":\"PIPELINE RUN FOR Combined Benefits UPDATE FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the Combined Benefits Data Manupulation and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "send email update for column add fail",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "Endtime update combinedbenefits Columns Add fail",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+							"method": "POST",
+							"headers": {},
+							"body": {
+								"value": "{\n \"title\":\"PIPELINE RUN FOR Combined Benefits UPDATE FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the Combined Benefits Columns Add in Benefit File and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+								"type": "Expression"
+							}
 						}
 					}
 				],
@@ -1166,6 +2130,141 @@
 				},
 				"annotations": [],
 				"lastPublishTime": "2022-07-14T05:33:55Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pipeline1')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Lookup1",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Notebook1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "select count(*) as value from [dbo].[parent_organization]\nwhere Case_value is null;",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "Parent_org_table",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "Notebook1",
+						"type": "DatabricksNotebook",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/cpsc and hwai plan details"
+						},
+						"linkedServiceName": {
+							"referenceName": "AzureDatabricks4_pfcluster3",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "If Condition1",
+						"type": "IfCondition",
+						"dependsOn": [
+							{
+								"activity": "Lookup1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"expression": {
+								"value": "@greater(activity('Lookup1').output.value[0]['value'],0)",
+								"type": "Expression"
+							},
+							"ifFalseActivities": [
+								{
+									"name": "Set variable2",
+									"type": "SetVariable",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "Y",
+										"value": "proceed"
+									}
+								}
+							],
+							"ifTrueActivities": [
+								{
+									"name": "send email update for Parent Oraganization",
+									"type": "WebActivity",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+										"method": "POST",
+										"headers": {},
+										"body": {
+											"value": "{\n \"title\":\"Pipeline run for Parent organization\",\n \"color\":\"GREEN\",\n \"message\":\"Update the values in cpsc contract file and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"variables": {
+					"z": {
+						"type": "String"
+					},
+					"X": {
+						"type": "String"
+					},
+					"Y": {
+						"type": "String"
+					}
+				},
+				"annotations": []
 			},
 			"dependsOn": []
 		},
@@ -2283,7 +3382,9 @@
 				"annotations": [],
 				"lastPublishTime": "2022-11-22T01:44:16Z"
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/State_County_Org')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/Master_Pipeline_benefit_2')]",

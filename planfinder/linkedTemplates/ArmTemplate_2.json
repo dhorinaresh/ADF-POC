@@ -415,20 +415,10 @@
 				},
 				"annotations": [],
 				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "Parent_Organization",
-						"type": "varchar"
-					},
-					{
-						"name": "ParentOrganizationId",
-						"type": "int",
-						"precision": 10
-					}
-				],
+				"schema": [],
 				"typeProperties": {
 					"schema": "dbo",
-					"table": "OrgParentOrganization"
+					"table": "parent_organization"
 				}
 			},
 			"dependsOn": []
