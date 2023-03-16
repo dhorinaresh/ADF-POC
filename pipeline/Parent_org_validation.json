@@ -1,5 +1,5 @@
 {
-	"name": "pipeline1",
+	"name": "Parent_org_validation",
 	"properties": {
 		"activities": [
 			{
