@@ -1,0 +1,72 @@
+{
+	"name": "SNPEligibles",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "Eligibles/ Output/DSNP_Eligible",
+				"fileSystem": "hwaicontainer"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "Year_DSNP",
+				"type": "String"
+			},
+			{
+				"name": "Month_DSNP",
+				"type": "String"
+			},
+			{
+				"name": "County_DSNP",
+				"type": "String"
+			},
+			{
+				"name": "QMB only",
+				"type": "String"
+			},
+			{
+				"name": "QMB plus Full Medicaid Benefits",
+				"type": "String"
+			},
+			{
+				"name": "SLMB only",
+				"type": "String"
+			},
+			{
+				"name": "SLMB plus Full Medicaid Benefits",
+				"type": "String"
+			},
+			{
+				"name": "QDWI",
+				"type": "String"
+			},
+			{
+				"name": "QI",
+				"type": "String"
+			},
+			{
+				"name": "Other Dual Full Medicaid Benefit",
+				"type": "String"
+			},
+			{
+				"name": "SNP_Eligibles",
+				"type": "String"
+			},
+			{
+				"name": "state",
+				"type": "String"
+			}
+		]
+	}
+}

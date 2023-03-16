@@ -1,0 +1,2019 @@
+{
+	"name": "WinningPlans",
+	"properties": {
+		"activities": [
+			{
+				"name": "start time update",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "INSERT INTO Audit(FileName, Operation, StartTime,Dashboard)\nValues('WinningPlans_Script', 'WinningPlansScript_prep', (Select GETDATE()),'WinningPlans');\nSelect * from Audit;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "dataset_sql",
+						"type": "DatasetReference",
+						"parameters": {
+							"sql_server_dataset": {
+								"value": "@pipeline().parameters.sql_server_dataset_name",
+								"type": "Expression"
+							},
+							"db_name_dataset": {
+								"value": "@pipeline().parameters.db_name",
+								"type": "Expression"
+							},
+							"user_name_dataset": {
+								"value": "@pipeline().parameters.user_name",
+								"type": "Expression"
+							},
+							"password_dataset": {
+								"value": "@pipeline().parameters.password",
+								"type": "Expression"
+							},
+							"sql_table_name": "Audit"
+						}
+					}
+				}
+			},
+			{
+				"name": "Winning_Plans",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "start time update",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Winning_Plans/Winning_Plans"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks4_pfcluster3",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Pass_status_update_WinningPlans",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Winning_Plans",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'pass'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "dataset_sql",
+						"type": "DatasetReference",
+						"parameters": {
+							"sql_server_dataset": {
+								"value": "@pipeline().parameters.sql_server_dataset_name",
+								"type": "Expression"
+							},
+							"db_name_dataset": {
+								"value": "@pipeline().parameters.db_name",
+								"type": "Expression"
+							},
+							"user_name_dataset": {
+								"value": "@pipeline().parameters.user_name",
+								"type": "Expression"
+							},
+							"password_dataset": {
+								"value": "@pipeline().parameters.password",
+								"type": "Expression"
+							},
+							"sql_table_name": "Audit"
+						}
+					}
+				}
+			},
+			{
+				"name": "Fail_status_update_WinningPlans",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Winning_Plans",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'Fail'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "dataset_sql",
+						"type": "DatasetReference",
+						"parameters": {
+							"sql_server_dataset": {
+								"value": "@pipeline().parameters.sql_server_dataset_name",
+								"type": "Expression"
+							},
+							"db_name_dataset": {
+								"value": "@pipeline().parameters.db_name",
+								"type": "Expression"
+							},
+							"user_name_dataset": {
+								"value": "@pipeline().parameters.user_name",
+								"type": "Expression"
+							},
+							"password_dataset": {
+								"value": "@pipeline().parameters.password",
+								"type": "Expression"
+							},
+							"sql_table_name": "Audit"
+						}
+					}
+				}
+			},
+			{
+				"name": "start time update_data_upload_DB",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Pass_status_update_WinningPlans",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "INSERT INTO Audit(FileName, Operation, StartTime,Dashboard)\nValues('WinningPlans_Script', 'WinningPlans_upload_DB', (Select GETDATE()),'WinningPlans_base_data');\nSelect * from Audit;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "dataset_sql",
+						"type": "DatasetReference",
+						"parameters": {
+							"sql_server_dataset": {
+								"value": "@pipeline().parameters.sql_server_dataset_name",
+								"type": "Expression"
+							},
+							"db_name_dataset": {
+								"value": "@pipeline().parameters.db_name",
+								"type": "Expression"
+							},
+							"user_name_dataset": {
+								"value": "@pipeline().parameters.user_name",
+								"type": "Expression"
+							},
+							"password_dataset": {
+								"value": "@pipeline().parameters.password",
+								"type": "Expression"
+							},
+							"sql_table_name": "Audit"
+						}
+					}
+				}
+			},
+			{
+				"name": "send email update for Eligibles script",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "Fail_status_update_WinningPlans",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+					"method": "POST",
+					"body": {
+						"value": "{\n \"title\":\"PIPELINE RUN FOR WinningPlans_Script FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the WinningPlans_Script and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Delete Existing record from DB",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "start time update_data_upload_DB",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "Truncate table WinningPlans;\nSELECT TOP 10 * FROM WinningPlans;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "dataset_sql",
+						"type": "DatasetReference",
+						"parameters": {
+							"sql_server_dataset": {
+								"value": "@pipeline().parameters.sql_server_dataset_name",
+								"type": "Expression"
+							},
+							"db_name_dataset": {
+								"value": "@pipeline().parameters.db_name",
+								"type": "Expression"
+							},
+							"user_name_dataset": {
+								"value": "@pipeline().parameters.user_name",
+								"type": "Expression"
+							},
+							"password_dataset": {
+								"value": "@pipeline().parameters.password",
+								"type": "Expression"
+							},
+							"sql_table_name": "WinningPlans"
+						}
+					}
+				}
+			},
+			{
+				"name": "Copy WinningPlans to Db",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Delete Existing record from DB",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [
+					{
+						"name": "Source",
+						"value": "hwaicontainer/WinningPlans/Output/enr_final2.csv"
+					},
+					{
+						"name": "Destination",
+						"value": "dbo.@{'WinningPlans'}"
+					}
+				],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"modifiedDatetimeStart": "2023-03-07T00:00:00.000Z",
+							"wildcardFolderPath": "WinningPlans/Output",
+							"wildcardFileName": "enr_final2.csv",
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "State",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "State",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "County",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "County",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Statecode",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Statecode",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Plan_Name",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Plan_Name",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Plan_Type",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Plan_Type",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Bid_ID",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Bid_ID",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Special_Needs_Plan_Type",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Special_Needs_Plan_Type",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Key_Segment",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Key_Segment",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Parent_Organization",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Parent_Organization",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Monthly_Consolidated_Premium_C_D",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Monthly_Consolidated_Premium_C_D",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Annual_Drug_Deductible",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Annual_Drug_Deductible",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Deductible_Health",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Deductible_Health",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "MOOP",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "MOOP",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Star_rating",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Star_rating",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Inpatient Hospital-Acute Copay Tier 1",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Inpatient Hospital-Acute Copay Tier 1",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "SNF MC stay Tier1 Copay",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SNF MC stay Tier1 Copay",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Cardiac and Pulmonary Rehabilitation Services Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Cardiac and Pulmonary Rehabilitation Services Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Emergency Care Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Emergency Care Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Transport Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Transport Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "OTC Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "OTC Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "OTC Max Coverage Amt",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "OTC Max Coverage Amt",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Meal Benefit Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Meal Benefit Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Preventive Dental Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Preventive Dental Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Comprehensive Dental Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Comprehensive Dental Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Eye Exams Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Eye Exams Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Eyewear Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Eyewear Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Hearing Aids Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Hearing Aids Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Hearing Exams Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Hearing Exams Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Chiropractic Services Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Chiropractic Services Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Podiatry Services Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Podiatry Services Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Acupuncture Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Acupuncture Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Annual Physical Exam Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Annual Physical Exam Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Outpatient Blood Services Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Outpatient Blood Services Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Alternative Therapy Coins/Copay",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Alternative Therapy Coins/Copay",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "PERS Coins/Copay",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PERS Coins/Copay",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Grand_Total",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Grand_Total",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Inpatient_Hospital_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Inpatient_Hospital_YN",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Snf_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Snf_YN",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Cardiac_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Cardiac_YN",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Emergency_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Emergency_YN",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Chiropractor_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Chiropractor_YN",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Podiatry_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Podiatry_YN",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Outpatient_Blood_Services_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Outpatient_Blood_Services_YN",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Transportation_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Transportation_YN",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Accupuncture_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Accupuncture_YN",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Over_the_Counter_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Over_the_Counter_YN",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Meal_Services_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Meal_Services_YN",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Annual_Physical_Exam_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Annual_Physical_Exam_YN",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Pre_Dental_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Pre_Dental_YN",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Comp_Dental_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Comp_Dental_YN",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Eye_Exam_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Eye_Exam_YN",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Eye_Wear_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Eye_Wear_YN",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Hear_Exam_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Hear_Exam_YN",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Hear_Aid_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Hear_Aid_YN",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Giveback_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Giveback_YN",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Alternative_Therapy_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Alternative_Therapy_YN",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "PERS_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PERS_YN",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "PDSS_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PDSS_YN",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "DESCRIPTION",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "DESCRIPTION",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "pbp_d_mco_pay_reduct_amt",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "pbp_d_mco_pay_reduct_amt",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "April_2019",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "April_2019",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "August_2019",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "August_2019",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "December_2019",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "December_2019",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "February_2019",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "February_2019",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "January_2019",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "January_2019",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "July_2019",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "July_2019",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "June_2019",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "June_2019",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "March_2019",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "March_2019",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "May_2019",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "May_2019",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "November_2019",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "November_2019",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "October_2019",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "October_2019",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "September_2019",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "September_2019",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "January_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "January_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "February_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "February_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "March_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "March_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "April_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "April_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "May_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "May_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "June_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "June_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "July_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "July_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "August_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "August_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "September_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "September_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "October_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "October_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "November_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "November_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "December_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "December_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "January_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "January_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "February_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "February_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "March_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "March_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "April_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "April_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "May_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "May_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "June_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "June_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "July_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "July_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "August_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "August_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "September_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "September_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "October_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "October_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "November_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "November_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "December_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "December_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "January_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "January_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "February_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "February_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "March_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "March_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "April_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "April_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "May_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "May_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "June_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "June_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "July_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "July_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "August_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "August_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "September_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "September_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "October_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "October_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "November_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "November_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "December_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "December_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "January_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "January_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "February_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "February_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "March_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "March_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "April_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "April_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "May_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "May_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "June_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "June_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "July_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "July_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "August_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "August_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "September_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "September_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "October_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "October_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "November_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "November_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "December_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "December_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "WinningPlans",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "dataset_sql",
+						"type": "DatasetReference",
+						"parameters": {
+							"sql_server_dataset": {
+								"value": "@pipeline().parameters.sql_server_dataset_name",
+								"type": "Expression"
+							},
+							"db_name_dataset": {
+								"value": "@pipeline().parameters.db_name",
+								"type": "Expression"
+							},
+							"user_name_dataset": {
+								"value": "@pipeline().parameters.user_name",
+								"type": "Expression"
+							},
+							"password_dataset": {
+								"value": "@pipeline().parameters.password",
+								"type": "Expression"
+							},
+							"sql_table_name": "WinningPlans"
+						}
+					}
+				]
+			},
+			{
+				"name": "Pass_status_update_WinningPlans_to_DB",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Copy WinningPlans to Db",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'pass'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "dataset_sql",
+						"type": "DatasetReference",
+						"parameters": {
+							"sql_server_dataset": {
+								"value": "@pipeline().parameters.sql_server_dataset_name",
+								"type": "Expression"
+							},
+							"db_name_dataset": {
+								"value": "@pipeline().parameters.db_name",
+								"type": "Expression"
+							},
+							"user_name_dataset": {
+								"value": "@pipeline().parameters.user_name",
+								"type": "Expression"
+							},
+							"password_dataset": {
+								"value": "@pipeline().parameters.password",
+								"type": "Expression"
+							},
+							"sql_table_name": "Audit"
+						}
+					}
+				}
+			},
+			{
+				"name": "Fail_status_update_WinningPlans_to_DB",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Copy WinningPlans to Db",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'Fail'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "dataset_sql",
+						"type": "DatasetReference",
+						"parameters": {
+							"sql_server_dataset": {
+								"value": "@pipeline().parameters.sql_server_dataset_name",
+								"type": "Expression"
+							},
+							"db_name_dataset": {
+								"value": "@pipeline().parameters.db_name",
+								"type": "Expression"
+							},
+							"user_name_dataset": {
+								"value": "@pipeline().parameters.user_name",
+								"type": "Expression"
+							},
+							"password_dataset": {
+								"value": "@pipeline().parameters.password",
+								"type": "Expression"
+							},
+							"sql_table_name": "Audit"
+						}
+					}
+				}
+			},
+			{
+				"name": "WinningPlans pipeline run successfully",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "Pass_status_update_WinningPlans_to_DB",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+					"method": "POST",
+					"body": {
+						"value": "{\n \"title\":\"PIPELINE RUN FOR WinningPlans_to_DB IS SUCCESS\",\n \"color\":\"GREEN\",\n \"message\":\"WinningPlans_to_DB completed sccessfully\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "send email update for fail WinningPlans to DB",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "Fail_status_update_WinningPlans_to_DB",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+					"method": "POST",
+					"body": {
+						"value": "{\n \"title\":\"PIPELINE RUN FOR WinningPlans_to_DB FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the WinningPlans_to_DB and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"sql_server_dataset_name": {
+				"type": "String",
+				"defaultValue": "hwpilot.database.windows.net"
+			},
+			"db_name": {
+				"type": "String",
+				"defaultValue": "pf_data"
+			},
+			"user_name": {
+				"type": "String",
+				"defaultValue": "pladmin"
+			},
+			"password": {
+				"type": "String",
+				"defaultValue": "Goteg@12345"
+			}
+		},
+		"annotations": []
+	}
+}

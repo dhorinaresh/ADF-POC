@@ -1,0 +1,69 @@
+{
+	"name": "Eligible",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "State Name",
+				"type": "varchar"
+			},
+			{
+				"name": "County Name",
+				"type": "varchar"
+			},
+			{
+				"name": "FIPSST",
+				"type": "varchar"
+			},
+			{
+				"name": "FIPSCNTY",
+				"type": "varchar"
+			},
+			{
+				"name": "FIPS",
+				"type": "varchar"
+			},
+			{
+				"name": "SSAST",
+				"type": "varchar"
+			},
+			{
+				"name": "SSACNTY",
+				"type": "varchar"
+			},
+			{
+				"name": "SSA",
+				"type": "varchar"
+			},
+			{
+				"name": "Eligibles",
+				"type": "varchar"
+			},
+			{
+				"name": "Enrolled",
+				"type": "varchar"
+			},
+			{
+				"name": "Penetration",
+				"type": "varchar"
+			},
+			{
+				"name": "Month",
+				"type": "varchar"
+			},
+			{
+				"name": "Year",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "Eligible"
+		}
+	}
+}
