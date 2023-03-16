@@ -12869,6 +12869,141 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/Parent_org_validation')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Lookup1",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Notebook1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "select count(*) as value from [dbo].[parent_organization]\nwhere Case_value is null;",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "Parent_org_table",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "Notebook1",
+						"type": "DatabricksNotebook",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/cpsc and hwai plan details"
+						},
+						"linkedServiceName": {
+							"referenceName": "AzureDatabricks4_pfcluster3",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "If Condition1",
+						"type": "IfCondition",
+						"dependsOn": [
+							{
+								"activity": "Lookup1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"expression": {
+								"value": "@greater(activity('Lookup1').output.value[0]['value'],0)",
+								"type": "Expression"
+							},
+							"ifFalseActivities": [
+								{
+									"name": "Set variable2",
+									"type": "SetVariable",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "Y",
+										"value": "proceed"
+									}
+								}
+							],
+							"ifTrueActivities": [
+								{
+									"name": "send email update for Parent Oraganization",
+									"type": "WebActivity",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+										"method": "POST",
+										"headers": {},
+										"body": {
+											"value": "{\n \"title\":\"Pipeline run for Parent organization\",\n \"color\":\"GREEN\",\n \"message\":\"Update the values in cpsc contract file and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"variables": {
+					"z": {
+						"type": "String"
+					},
+					"X": {
+						"type": "String"
+					},
+					"Y": {
+						"type": "String"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/Plan_data')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -14368,175 +14503,6 @@
 				},
 				"annotations": [],
 				"lastPublishTime": "2022-06-17T05:38:41Z"
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/QC_dummy')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Lookup1",
-						"type": "Lookup",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"sqlReaderQuery": "select Test_Script_type,Test_Script_location from QC_files_table;",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"dataset": {
-								"referenceName": "QC_dummy_table",
-								"type": "DatasetReference",
-								"parameters": {}
-							},
-							"firstRowOnly": false
-						}
-					},
-					{
-						"name": "ForEach1",
-						"type": "ForEach",
-						"dependsOn": [
-							{
-								"activity": "Notebook1",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"items": {
-								"value": "@activity('Lookup1').output.value",
-								"type": "Expression"
-							},
-							"isSequential": true,
-							"activities": [
-								{
-									"name": "If Condition1",
-									"type": "IfCondition",
-									"dependsOn": [],
-									"userProperties": [],
-									"typeProperties": {
-										"expression": {
-											"value": "@bool(if(equals(item().Test_Script_type,'1'), True,False))",
-											"type": "Expression"
-										},
-										"ifTrueActivities": [
-											{
-												"name": "Python1",
-												"type": "DatabricksSparkPython",
-												"dependsOn": [],
-												"policy": {
-													"timeout": "7.00:00:00",
-													"retry": 0,
-													"retryIntervalInSeconds": 30,
-													"secureOutput": false,
-													"secureInput": false
-												},
-												"userProperties": [],
-												"typeProperties": {
-													"pythonFile": {
-														"value": "@item().Test_Script_location",
-														"type": "Expression"
-													},
-													"parameters": []
-												},
-												"linkedServiceName": {
-													"referenceName": "AzureDatabricks4_pfcluster3",
-													"type": "LinkedServiceReference"
-												}
-											},
-											{
-												"name": "Lookup2",
-												"type": "Lookup",
-												"dependsOn": [
-													{
-														"activity": "Python1",
-														"dependencyConditions": [
-															"Succeeded"
-														]
-													}
-												],
-												"policy": {
-													"timeout": "7.00:00:00",
-													"retry": 0,
-													"retryIntervalInSeconds": 30,
-													"secureOutput": false,
-													"secureInput": false
-												},
-												"userProperties": [],
-												"typeProperties": {
-													"source": {
-														"type": "AzureSqlSource",
-														"sqlReaderQuery": {
-															"value": "insert into QC_dummy_output(Output)\nvalues(@activity('Python1').output);",
-															"type": "Expression"
-														},
-														"queryTimeout": "02:00:00",
-														"partitionOption": "None"
-													},
-													"dataset": {
-														"referenceName": "QC_dummy_output",
-														"type": "DatasetReference",
-														"parameters": {}
-													}
-												}
-											}
-										]
-									}
-								}
-							]
-						}
-					},
-					{
-						"name": "Notebook1",
-						"type": "DatabricksNotebook",
-						"dependsOn": [
-							{
-								"activity": "Lookup1",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"notebookPath": "/Users/hwaitech@healthworksai.com/QC_dummy"
-						},
-						"linkedServiceName": {
-							"referenceName": "AzureDatabricks4_pfcluster3",
-							"type": "LinkedServiceReference"
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
-				},
-				"folder": {
-					"name": "Unused_Pipelines"
-				},
-				"annotations": [],
-				"lastPublishTime": "2022-07-22T13:15:57Z"
 			},
 			"dependsOn": []
 		}
