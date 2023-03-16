@@ -1,0 +1,40 @@
+{
+	"name": "Ben_data_prev_yrs",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileSystem": "pfcontainer"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "bid_id",
+				"type": "String"
+			},
+			{
+				"name": "pbp_a_dsnp_zerodollar",
+				"type": "String"
+			},
+			{
+				"name": "pbp_a_snp_state_cvg_yn",
+				"type": "String"
+			},
+			{
+				"name": "plan_type_new_updated",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

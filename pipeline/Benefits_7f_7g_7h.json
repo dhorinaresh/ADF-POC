@@ -1,0 +1,1090 @@
+{
+	"name": "Benefits_7f_7g_7h",
+	"properties": {
+		"activities": [
+			{
+				"name": "Data_cleaning_b7f",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "b7f_Start_time_update",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/hwaitech@healthworksai.com/Plan_Finder/Benefit_Scripts/b7f_data_cleaning"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks4_pfcluster3",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Blank_Interpretation_b7f",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "b7f_data_cleaning_update",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/hwaitech@healthworksai.com/Plan_Finder/Benefit_Scripts/b7f_BI"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks4_pfcluster3",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Final_changes_b7f",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "b7f_blank_interpretation",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/hwaitech@healthworksai.com/Plan_Finder/Benefit_Scripts/b7f_drop_melt_final"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks4_pfcluster3",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Data_cleaning_b7g",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "b7g_Start_time_update",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/hwaitech@healthworksai.com/Plan_Finder/Benefit_Scripts/b7g_data_cleaning"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks4_pfcluster3",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Blank_Interpretation_b7g",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "b7g_data_cleaning_update",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/hwaitech@healthworksai.com/Plan_Finder/Benefit_Scripts/b7g_blank_interpretation"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks4_pfcluster3",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Final_changes_b7g",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "b7g_blank_interpretation",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/hwaitech@healthworksai.com/Plan_Finder/Benefit_Scripts/b7g_drop_melt_final"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks4_pfcluster3",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Data_cleaning_b7h",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "b7h_Start_time_update",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/hwaitech@healthworksai.com/Plan_Finder/Benefit_Scripts/b7h_data_cleaning"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks4_pfcluster3",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Blank_Interpretation_b7h",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "b7h_data_cleaning_update",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/hwaitech@healthworksai.com/Plan_Finder/Benefit_Scripts/b7h_blank_interpretation"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks4_pfcluster3",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Final_changes_b7h",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "b7h_blank_interpretation",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/hwaitech@healthworksai.com/Plan_Finder/Benefit_Scripts/b7h_drop_melt_final"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks4_pfcluster3",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "b7f_Start_time_update",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "INSERT INTO Audit_benefits(FileName, Operation, StartTime)\nValues('b7f', 'Data_Cleaning', (Select GETDATE()));\nSelect * from Audit_benefits;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "Audit_benefits_table",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "b7g_Start_time_update",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "INSERT INTO Audit_benefits(FileName, Operation, StartTime)\nValues('b7g', 'Data_Cleaning', (Select GETDATE()));\nSelect * from Audit_benefits;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "Audit_benefits_table",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "b7h_Start_time_update",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "INSERT INTO Audit_benefits(FileName, Operation, StartTime)\nValues('b7h', 'Data_Cleaning', (Select GETDATE()));\nSelect * from Audit_benefits;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "Audit_benefits_table",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "b7f_data_cleaning_update",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Data_cleaning_b7f",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "DECLARE @file as NVARCHAR(MAX)\nset @file = 'b7f';\n\nUpdate Audit_benefits\nset EndTime = (Select GETDATE())\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Data_Cleaning'));\n\nUpdate Audit_benefits\nSET Status = 'pass'\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Data_Cleaning'));\n\nUpdate Audit_benefits\nset Timetaken = EndTime-StartTime\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Data_Cleaning'));\n\nINSERT INTO Audit_benefits(FileName, Operation, StartTime)\nValues(@file, 'Blanks_Interpretation', (Select GETDATE()));\n\nSelect * from Audit_benefits;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "Audit_benefits_table",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "b7g_data_cleaning_update",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Data_cleaning_b7g",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "DECLARE @file as NVARCHAR(MAX)\nset @file = 'b7g';\n\nUpdate Audit_benefits\nset EndTime = (Select GETDATE())\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Data_Cleaning'));\n\nUpdate Audit_benefits\nSET Status = 'pass'\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Data_Cleaning'));\n\nUpdate Audit_benefits\nset Timetaken = EndTime-StartTime\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Data_Cleaning'));\n\nINSERT INTO Audit_benefits(FileName, Operation, StartTime)\nValues(@file, 'Blanks_Interpretation', (Select GETDATE()));\n\nSelect * from Audit_benefits;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "Audit_benefits_table",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "b7h_data_cleaning_update",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Data_cleaning_b7h",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "DECLARE @file as NVARCHAR(MAX)\nset @file = 'b7h';\n\nUpdate Audit_benefits\nset EndTime = (Select GETDATE())\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Data_Cleaning'));\n\nUpdate Audit_benefits\nSET Status = 'pass'\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Data_Cleaning'));\n\nUpdate Audit_benefits\nset Timetaken = EndTime-StartTime\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Data_Cleaning'));\n\nINSERT INTO Audit_benefits(FileName, Operation, StartTime)\nValues(@file, 'Blanks_Interpretation', (Select GETDATE()));\n\nSelect * from Audit_benefits;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "Audit_benefits_table",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "b7f_blank_interpretation",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Blank_Interpretation_b7f",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "DECLARE @file as NVARCHAR(MAX)\nset @file = 'b7f';\n\nUpdate Audit_benefits\nset EndTime = (Select GETDATE())\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Blanks_Interpretation'));\n\nUpdate Audit_benefits\nSET Status = 'pass'\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Blanks_Interpretation'));\n\nUpdate Audit_benefits\nset Timetaken = EndTime-StartTime\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Blanks_Interpretation'));\n\nINSERT INTO Audit_benefits(FileName, Operation, StartTime)\nValues(@file, 'Final_data_changes', (Select GETDATE()));\n\nSelect * from Audit_benefits;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "Audit_benefits_table",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "b7g_blank_interpretation",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Blank_Interpretation_b7g",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "DECLARE @file as NVARCHAR(MAX)\nset @file = 'b7g';\n\nUpdate Audit_benefits\nset EndTime = (Select GETDATE())\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Blanks_Interpretation'));\n\nUpdate Audit_benefits\nSET Status = 'pass'\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Blanks_Interpretation'));\n\nUpdate Audit_benefits\nset Timetaken = EndTime-StartTime\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Blanks_Interpretation'));\n\nINSERT INTO Audit_benefits(FileName, Operation, StartTime)\nValues(@file, 'Final_data_changes', (Select GETDATE()));\n\nSelect * from Audit_benefits;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "Audit_benefits_table",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "b7h_blank_interpretation",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Blank_Interpretation_b7h",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "DECLARE @file as NVARCHAR(MAX)\nset @file = 'b7h';\n\nUpdate Audit_benefits\nset EndTime = (Select GETDATE())\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Blanks_Interpretation'));\n\nUpdate Audit_benefits\nSET Status = 'pass'\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Blanks_Interpretation'));\n\nUpdate Audit_benefits\nset Timetaken = EndTime-StartTime\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Blanks_Interpretation'));\n\nINSERT INTO Audit_benefits(FileName, Operation, StartTime)\nValues(@file, 'Final_data_changes', (Select GETDATE()));\n\nSelect * from Audit_benefits;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "Audit_benefits_table",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "b7f_Final_changes_update",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Final_changes_b7f",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "DECLARE @file as NVARCHAR(MAX)\nset @file = 'b7f';\n\nUpdate Audit_benefits\nset EndTime = (Select GETDATE())\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Final_data_changes'));\n\nUpdate Audit_benefits\nSET Status = 'pass'\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Final_data_changes'));\n\nUpdate Audit_benefits\nset Timetaken = EndTime-StartTime\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Final_data_changes'));\n\nSelect * from Audit_benefits;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "Audit_benefits_table",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "b7g_Final_changes_update",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Final_changes_b7g",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "DECLARE @file as NVARCHAR(MAX)\nset @file = 'b7g';\n\nUpdate Audit_benefits\nset EndTime = (Select GETDATE())\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Final_data_changes'));\n\nUpdate Audit_benefits\nSET Status = 'pass'\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Final_data_changes'));\n\nUpdate Audit_benefits\nset Timetaken = EndTime-StartTime\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Final_data_changes'));\n\nSelect * from Audit_benefits;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "Audit_benefits_table",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "b7h_Final_changes_update",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Final_changes_b7h",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "DECLARE @file as NVARCHAR(MAX)\nset @file = 'b7h';\n\nUpdate Audit_benefits\nset EndTime = (Select GETDATE())\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Final_data_changes'));\n\nUpdate Audit_benefits\nSET Status = 'pass'\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Final_data_changes'));\n\nUpdate Audit_benefits\nset Timetaken = EndTime-StartTime\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Final_data_changes'));\n\nSelect * from Audit_benefits;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "Audit_benefits_table",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "Copy_b7f_data_to_db",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "b7f_Final_changes_update",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"wildcardFolderPath": "Output_final/b7f_final",
+							"wildcardFileName": "p*",
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "b7f_final_data",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Benefits_data",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "Copy_b7g_data_to_db",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "b7g_Final_changes_update",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"wildcardFolderPath": "Output_final/b7g_final",
+							"wildcardFileName": "p*",
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "b7g_final_data",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Benefits_data",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "Copy_b7h_data_to_db",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "b7h_Final_changes_update",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"wildcardFolderPath": "Output_final/b7h_final",
+							"wildcardFileName": "p*",
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "b7h_final_data",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Benefits_data",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "b7f_data_cleaning_update_1",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Data_cleaning_b7f",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "DECLARE @file as NVARCHAR(MAX)\nset @file = 'b7f';\n\nUpdate Audit_benefits\nset EndTime = (Select GETDATE())\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Data_Cleaning'));\n\nUpdate Audit_benefits\nSET Status = 'failed'\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Data_Cleaning'));\n\nUpdate Audit_benefits\nset Timetaken = EndTime-StartTime\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Data_Cleaning'));\n\nSelect * from Audit_benefits;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "Audit_benefits_table",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "b7f_blank_interpretation_1",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Blank_Interpretation_b7f",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "DECLARE @file as NVARCHAR(MAX)\nset @file = 'b7f';\n\nUpdate Audit_benefits\nset EndTime = (Select GETDATE())\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Blanks_Interpretation'));\n\nUpdate Audit_benefits\nSET Status = 'failed'\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Blanks_Interpretation'));\n\nUpdate Audit_benefits\nset Timetaken = EndTime-StartTime\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Blanks_Interpretation'));\n\nSelect * from Audit_benefits;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "Audit_benefits_table",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "b7f_Final_changes_update_1",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Final_changes_b7f",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "DECLARE @file as NVARCHAR(MAX)\nset @file = 'b7f';\n\nUpdate Audit_benefits\nset EndTime = (Select GETDATE())\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Final_data_changes'));\n\nUpdate Audit_benefits\nSET Status = 'failed'\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Final_data_changes'));\n\nUpdate Audit_benefits\nset Timetaken = EndTime-StartTime\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Final_data_changes'));\n\nSelect * from Audit_benefits;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "Audit_benefits_table",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "b7g_data_cleaning_update_1",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Data_cleaning_b7g",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "DECLARE @file as NVARCHAR(MAX)\nset @file = 'b7g';\n\nUpdate Audit_benefits\nset EndTime = (Select GETDATE())\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Data_Cleaning'));\n\nUpdate Audit_benefits\nSET Status = 'failed'\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Data_Cleaning'));\n\nUpdate Audit_benefits\nset Timetaken = EndTime-StartTime\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Data_Cleaning'));\n\nSelect * from Audit_benefits;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "Audit_benefits_table",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "b7g_blank_interpretation_1",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Blank_Interpretation_b7g",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "DECLARE @file as NVARCHAR(MAX)\nset @file = 'b7g';\n\nUpdate Audit_benefits\nset EndTime = (Select GETDATE())\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Blanks_Interpretation'));\n\nUpdate Audit_benefits\nSET Status = 'failed'\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Blanks_Interpretation'));\n\nUpdate Audit_benefits\nset Timetaken = EndTime-StartTime\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Blanks_Interpretation'));\n\nSelect * from Audit_benefits;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "Audit_benefits_table",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "b7g_Final_changes_update_1",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Final_changes_b7g",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "DECLARE @file as NVARCHAR(MAX)\nset @file = 'b7g';\n\nUpdate Audit_benefits\nset EndTime = (Select GETDATE())\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Final_data_changes'));\n\nUpdate Audit_benefits\nSET Status = 'failed'\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Final_data_changes'));\n\nUpdate Audit_benefits\nset Timetaken = EndTime-StartTime\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Final_data_changes'));\n\nSelect * from Audit_benefits;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "Audit_benefits_table",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "b7h_data_cleaning_update_1",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Data_cleaning_b7h",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "DECLARE @file as NVARCHAR(MAX)\nset @file = 'b7h';\n\nUpdate Audit_benefits\nset EndTime = (Select GETDATE())\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Data_Cleaning'));\n\nUpdate Audit_benefits\nSET Status = 'failed'\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Data_Cleaning'));\n\nUpdate Audit_benefits\nset Timetaken = EndTime-StartTime\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Data_Cleaning'));\n\nSelect * from Audit_benefits;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "Audit_benefits_table",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "b7h_blank_interpretation_1",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Blank_Interpretation_b7h",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "DECLARE @file as NVARCHAR(MAX)\nset @file = 'b7h';\n\nUpdate Audit_benefits\nset EndTime = (Select GETDATE())\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Blanks_Interpretation'));\n\nUpdate Audit_benefits\nSET Status = 'failed'\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Blanks_Interpretation'));\n\nUpdate Audit_benefits\nset Timetaken = EndTime-StartTime\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Blanks_Interpretation'));\n\nSelect * from Audit_benefits;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "Audit_benefits_table",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "b7h_Final_changes_update_1",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Final_changes_b7h",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "DECLARE @file as NVARCHAR(MAX)\nset @file = 'b7h';\n\nUpdate Audit_benefits\nset EndTime = (Select GETDATE())\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Final_data_changes'));\n\nUpdate Audit_benefits\nSET Status = 'failed'\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Final_data_changes'));\n\nUpdate Audit_benefits\nset Timetaken = EndTime-StartTime\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Final_data_changes'));\n\nSelect * from Audit_benefits;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "Audit_benefits_table",
+						"type": "DatasetReference"
+					}
+				}
+			}
+		],
+		"folder": {
+			"name": "PF_Pipelines/AEP_Refresh"
+		},
+		"annotations": [],
+		"lastPublishTime": "2022-11-15T06:51:59Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

@@ -1,0 +1,501 @@
+{
+	"name": "enrollment_trends",
+	"properties": {
+		"activities": [
+			{
+				"name": "start time update",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "INSERT INTO Audit(FileName, Operation, StartTime,Dashboard)\nValues('enr_trends_pre_broadcasting', 'enr_trends_data_prep', (Select GETDATE()),'enr_trends');\nSelect * from Audit;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "dataset_sql",
+						"type": "DatasetReference",
+						"parameters": {
+							"sql_server_dataset": {
+								"value": "@pipeline().parameters.sql_server_dataset_name",
+								"type": "Expression"
+							},
+							"db_name_dataset": {
+								"value": "@pipeline().parameters.db_name",
+								"type": "Expression"
+							},
+							"user_name_dataset": {
+								"value": "@pipeline().parameters.user_name",
+								"type": "Expression"
+							},
+							"password_dataset": {
+								"value": "@pipeline().parameters.password",
+								"type": "Expression"
+							},
+							"sql_table_name": "Audit"
+						}
+					}
+				}
+			},
+			{
+				"name": "pre_broadcasting_data_prep",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "start time update",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Enrollment_trends/Enr_trends_pre_broadcasting_step1"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks4_pfcluster3",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "end time update for enr pre broadcasting success",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "pre_broadcasting_data_prep",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'pass'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "dataset_sql",
+						"type": "DatasetReference",
+						"parameters": {
+							"sql_server_dataset": {
+								"value": "@pipeline().parameters.sql_server_dataset_name",
+								"type": "Expression"
+							},
+							"db_name_dataset": {
+								"value": "@pipeline().parameters.db_name",
+								"type": "Expression"
+							},
+							"user_name_dataset": {
+								"value": "@pipeline().parameters.user_name",
+								"type": "Expression"
+							},
+							"password_dataset": {
+								"value": "@pipeline().parameters.password",
+								"type": "Expression"
+							},
+							"sql_table_name": "Audit"
+						}
+					}
+				}
+			},
+			{
+				"name": "end time update for enr pre broadcasting failure",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "pre_broadcasting_data_prep",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'Fail'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "dataset_sql",
+						"type": "DatasetReference",
+						"parameters": {
+							"sql_server_dataset": {
+								"value": "@pipeline().parameters.sql_server_dataset_name",
+								"type": "Expression"
+							},
+							"db_name_dataset": {
+								"value": "@pipeline().parameters.db_name",
+								"type": "Expression"
+							},
+							"user_name_dataset": {
+								"value": "@pipeline().parameters.user_name",
+								"type": "Expression"
+							},
+							"password_dataset": {
+								"value": "@pipeline().parameters.password",
+								"type": "Expression"
+							},
+							"sql_table_name": "Audit"
+						}
+					}
+				}
+			},
+			{
+				"name": "send email update for enr pre broadcasting script fail",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "end time update for enr pre broadcasting failure",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+					"method": "POST",
+					"body": {
+						"value": "{\n \"title\":\"PIPELINE RUN FOR ENR PRE-BROADCASTING FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the enr trends pre-broadcasting script and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "start time of broadcasting steps",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "end time update for enr pre broadcasting success",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "INSERT INTO Audit(FileName, Operation, StartTime,Dashboard)\nValues('trends_landscape', 'broadcasting_step2a', (Select GETDATE()),'enr_trends');\nSelect * from Audit;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "dataset_sql",
+						"type": "DatasetReference",
+						"parameters": {
+							"sql_server_dataset": {
+								"value": "@pipeline().parameters.sql_server_dataset_name",
+								"type": "Expression"
+							},
+							"db_name_dataset": {
+								"value": "@pipeline().parameters.db_name",
+								"type": "Expression"
+							},
+							"user_name_dataset": {
+								"value": "@pipeline().parameters.user_name",
+								"type": "Expression"
+							},
+							"password_dataset": {
+								"value": "@pipeline().parameters.password",
+								"type": "Expression"
+							},
+							"sql_table_name": "Audit"
+						}
+					}
+				}
+			},
+			{
+				"name": "Broadcasting step 2a",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "start time of broadcasting steps",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Enrollment_trends/Enr_trends_broadcasting_step_2a"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks4_pfcluster3",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "send email update for enr  broadcasting step 2b",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "Broadcasting step 2a",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+					"method": "POST",
+					"body": {
+						"value": "{\n \"title\":\"PIPELINE RUN FOR ENR BROADCASTING FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the enr trends broadcasting step 2a script and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Broadcasting step 2b",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Broadcasting step 2a",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Enrollment_trends/enr_trends_broadcasting_step2b"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks4_pfcluster3",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "send email update for enr  broadcasting step 2b failed",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "Broadcasting step 2b",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+					"method": "POST",
+					"body": {
+						"value": "{\n \"title\":\"PIPELINE RUN FOR ENR BROADCASTING FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the enr trends broadcasting step 2b script and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Broadcasting step 2c",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Broadcasting step 2b",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Enrollment_trends/enr_trends_broadcasting_step2c"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks4_pfcluster3",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "send email update for enr  broadcasting step2c failed",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "Broadcasting step 2c",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+					"method": "POST",
+					"body": {
+						"value": "{\n \"title\":\"PIPELINE RUN FOR ENR BROADCASTING FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the enr trends broadcasting step 2c script and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "enr_trends_post_broadcasting_step3",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Broadcasting step 2c",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Enrollment_trends/enr_trends_broadcasting_step3_rectification"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks4_pfcluster3",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Email update for succesfull execution of step3",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "enr_trends_post_broadcasting_step3",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+					"method": "POST",
+					"body": {
+						"value": "{\n \"title\":\"PIPELINE RUN FOR ENR FINAL STEP SUCCEDED\",\n \"color\":\"GREEN\",\n \"message\":\"Debug the enr trends broadcasting step 2c script and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"sql_server_dataset_name": {
+				"type": "string",
+				"defaultValue": "hwpilot.database.windows.net"
+			},
+			"db_name": {
+				"type": "string",
+				"defaultValue": "pf_data"
+			},
+			"user_name": {
+				"type": "string",
+				"defaultValue": "pladmin"
+			},
+			"password": {
+				"type": "string",
+				"defaultValue": "Goteg@12345"
+			}
+		},
+		"folder": {
+			"name": "Hwai_Refresh/HWAI_enr_trends"
+		},
+		"annotations": []
+	}
+}

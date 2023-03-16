@@ -1,0 +1,406 @@
+{
+	"name": "Org_Plan_data",
+	"properties": {
+		"activities": [
+			{
+				"name": "Org_Plan_script",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "start time update",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/hwaitech@healthworksai.com/Plan_Finder/Extra_tables_scripts/Org_Plan_Script"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks4_pfcluster3",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Copy_Plan_data",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Truncate_table",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"wildcardFolderPath": "Output_final/org_plan_data",
+							"wildcardFileName": "p*",
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Org_Plans_data",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Org_Plan_table",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "start time update",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "INSERT INTO Audit_plan(Operation, StartTime)\nValues('Org_Plan_script', (Select GETDATE()));\nSelect * from Audit_plan;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "Plan_details_Audit_table",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "Pass_status_update_plan",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Org_Plan_script",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "Update Audit_plan\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit_plan);\n\nUpdate Audit_plan\nSET Status = 'pass'\nwhere Id = (select Count(*) from Audit_plan);\n\nUpdate Audit_plan\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit_plan);\n\nSelect * from Audit_plan;\n",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "Plan_details_Audit_table",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "Fail_status_update_plan",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Org_Plan_script",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "Update Audit_plan\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit_plan);\n\nUpdate Audit_plan\nSET Status = 'Fail'\nwhere Id = (select Count(*) from Audit_plan);\n\nUpdate Audit_plan\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit_plan);\n\nSelect * from Audit_plan;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "Plan_details_Audit_table",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "Start_time_update_planCopy",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Pass_status_update_plan",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "INSERT INTO Audit_plan(Operation, StartTime)\nValues('plan_copy', (Select GETDATE()));\nSelect * from Audit_plan;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "Plan_details_Audit_table",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "Pass_status_planCopy",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Update_GeographyID",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "Update Audit_plan\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit_plan);\n\nUpdate Audit_plan\nSET Status = 'pass'\nwhere Id = (select Count(*) from Audit_plan);\n\nUpdate Audit_plan\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit_plan);\n\nSelect * from Audit_plan;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "Plan_details_Audit_table",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "Fail_status_planCopy",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Copy_Plan_data",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "Update Audit_plan\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit_plan);\n\nUpdate Audit_plan\nSET Status = 'Fail'\nwhere Id = (select Count(*) from Audit_plan);\n\nUpdate Audit_plan\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit_plan);\n\nSelect * from Audit_plan;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "Plan_details_Audit_table",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "send email update for plan script",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "Fail_status_update_plan",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+					"method": "POST",
+					"body": {
+						"value": "{\n \"title\":\"PIPELINE RUN FOR Plan UPDATE FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the org plan Script and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "send email update for plan Copy",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "Fail_status_planCopy",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+					"method": "POST",
+					"body": {
+						"value": "{\n \"title\":\"PIPELINE RUN FOR PLAN UPDATE FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the Org Plan Copy to database and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Update_GeographyID",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Copy_Plan_data",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "Update [dbo].[OrgPlans] Set GeographyPlanFilterID = (\n        SELECT Plan_Id\n        FROM [dbo].[Plan_Table]\n        WHERE Plan_Table.BidId = OrgPlans.BidId and Plan_Table.StateId = OrgPlans.StateId and Plan_Table.CountyId = OrgPlans.CountyId);\nUpdate [dbo].[OrgPlans] set MOOP = '' where MOOP = 999999;\nUpdate [dbo].[OrgPlans] set AnnualDrugDeductible = '' where AnnualDrugDeductible = 999999;\nselect distinct BidId from [dbo].[OrgPlans];",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "Plan_table_sink",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "Truncate_table",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Start_time_update_planCopy",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "Truncate table [dbo].[OrgPlans];\nselect * from [dbo].[OrgPlans];",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "Org_Plan_table",
+						"type": "DatasetReference"
+					}
+				}
+			}
+		],
+		"folder": {
+			"name": "PF_Pipelines/AEP_Refresh"
+		},
+		"annotations": [],
+		"lastPublishTime": "2022-12-21T12:35:56Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

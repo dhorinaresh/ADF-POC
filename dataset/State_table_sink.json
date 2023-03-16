@@ -1,0 +1,31 @@
+{
+	"name": "State_table_sink",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "StateId",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "State",
+				"type": "varchar"
+			},
+			{
+				"name": "Statecode",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "OrgState"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

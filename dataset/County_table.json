@@ -1,0 +1,27 @@
+{
+	"name": "County_table",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "CountyId",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "County",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "OrgCounty"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

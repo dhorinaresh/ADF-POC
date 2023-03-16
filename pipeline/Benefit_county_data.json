@@ -1,0 +1,374 @@
+{
+	"name": "Benefit_county_data",
+	"properties": {
+		"activities": [
+			{
+				"name": "ben_county_script",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Start_time_update_ben",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/hwaitech@healthworksai.com/Plan_Finder/Benefit_Scripts/Benefit_county_table"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks4_pfcluster3",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Copy_ben_county_data",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Start_time_update_benCopy",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"wildcardFolderPath": "Output_final/Benefit_Lscape_final",
+							"wildcardFileName": "p*",
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Benefit_county_table",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Benefits_data",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "Start_time_update_ben",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "INSERT INTO Audit_benefits(FileName, Operation, StartTime)\nValues('Lscape_benefits', 'ben_county_script', (Select GETDATE()));\nSelect * from Audit_benefits;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "Audit_benefits_table",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "Pass_status_update_ben",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "ben_county_script",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "Update Audit_benefits\nset EndTime = (Select GETDATE())\nwhere ID = (select Count(*) from Audit_benefits);\n\nUpdate Audit_benefits\nSET Status = 'pass'\nwhere ID = (select Count(*) from Audit_benefits);\n\nUpdate Audit_benefits\nset Timetaken = EndTime-StartTime\nwhere ID = (select Count(*) from Audit_benefits);\n\nSelect * from Audit_benefits;\n",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "Audit_benefits_table",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "Fail_status_update_ben",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "ben_county_script",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "Update Audit_benefits\nset EndTime = (Select GETDATE())\nwhere ID = (select Count(*) from Audit_benefits);\n\nUpdate Audit_benefits\nSET Status = 'Fail'\nwhere ID = (select Count(*) from Audit_benefits);\n\nUpdate Audit_benefits\nset Timetaken = EndTime-StartTime\nwhere ID = (select Count(*) from Audit_benefits);\n\nSelect * from Audit_benefits;\n",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "Audit_benefits_table",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "Start_time_update_benCopy",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Delete Existing Ben_LScape benefits",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "INSERT INTO Audit_benefits(FileName, Operation, StartTime)\nValues('Lscape_benefits', 'ben_county_table_copy', (Select GETDATE()));\nSelect * from Audit_benefits;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "Audit_benefits_table",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "Pass_status_benCopy",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Copy_ben_county_data",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "Update Audit_benefits\nset EndTime = (Select GETDATE())\nwhere ID = (select Count(*) from Audit_benefits);\n\nUpdate Audit_benefits\nSET Status = 'pass'\nwhere ID = (select Count(*) from Audit_benefits);\n\nUpdate Audit_benefits\nset Timetaken = EndTime-StartTime\nwhere ID = (select Count(*) from Audit_benefits);\n\nSelect * from Audit_benefits;\n",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "Audit_benefits_table",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "Fail_status_benCopy",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Copy_ben_county_data",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "Update Audit_benefits\nset EndTime = (Select GETDATE())\nwhere ID = (select Count(*) from Audit_benefits);\n\nUpdate Audit_benefits\nSET Status = 'Fail'\nwhere ID = (select Count(*) from Audit_benefits);\n\nUpdate Audit_benefits\nset Timetaken = EndTime-StartTime\nwhere ID = (select Count(*) from Audit_benefits);\n\nSelect * from Audit_benefits;\n",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "Audit_benefits_table",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "send email update for ben script",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "Fail_status_update_ben",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+					"method": "POST",
+					"body": {
+						"value": "{\n \"title\":\"PIPELINE RUN FOR Benefit UPDATE FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the Benefit Script and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "send email update for ben Copy",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "Fail_status_benCopy",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+					"method": "POST",
+					"body": {
+						"value": "{\n \"title\":\"PIPELINE RUN FOR BENEFIT UPDATE FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the Benefit Copy to database and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Delete Existing Ben_LScape benefits",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Pass_status_update_ben",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "Delete from Benefits_data where Year=(Select YEAR(GETDATE())+1) and Benefits in ('PremiumCD','PlanCoverage','OverallStarRating','PartD','Part C','OOPC','RichPlans',\r\n'LeanPlans','WinningPlans','SbAmbulance','SbWorldWideEmegency','SbHearing','SbVision','SbOTC',\r\n'SbCompDental','SbChiropractor','SbMeal','Health Deductible','INN_Health Deductible',\r\n'ONN_Health Deductible','Combined_Health Deductible','INN_Plan_Ded','PartB_INN_Ded',\r\n'OON_Plan_Ded','PartB_OON_Ded','Comb_Plan_Ded','PartB_Comb_Ded','Drug_Deductible',\r\n'Part B Premium Reduction Amt','INN MOOP','ONN MOOP','Combined MOOP','Comb_MOOP','MOOP_type');\r\n\r\nSELECT TOP (10) [Bid_Id] FROM [dbo].[Benefits_data];\r\n",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "Benefits_data",
+						"type": "DatasetReference"
+					}
+				}
+			}
+		],
+		"folder": {
+			"name": "PF_Pipelines/AEP_Refresh"
+		},
+		"annotations": [],
+		"lastPublishTime": "2022-11-24T03:38:36Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}
