@@ -2014,6 +2014,9 @@
 				"defaultValue": "Goteg@12345"
 			}
 		},
+		"folder": {
+			"name": "Hwai_Refresh/Hwai_Winning_Plans"
+		},
 		"annotations": []
 	}
 }
