@@ -1,6 +1,41 @@
 {
 	"name": "Hwai_refresh_Master",
 	"properties": {
+		"activities": [
+			{
+				"name": "Enr_golden_layer_table",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Enr_golden_layer_table",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "Eligible_golden_layer_table",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Enr_golden_layer_table",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Eligibles",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
 		"folder": {
 			"name": "Hwai_Refresh/Hwai_Master"
 		},
