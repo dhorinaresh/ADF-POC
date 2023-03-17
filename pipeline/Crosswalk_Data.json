@@ -514,6 +514,8 @@
 		"folder": {
 			"name": "Hwai_Refresh/Hwai_Crosswalk"
 		},
-		"annotations": []
-	}
+		"annotations": [],
+		"lastPublishTime": "2023-02-20T05:12:53Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
 }

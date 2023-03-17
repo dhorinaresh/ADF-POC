@@ -658,6 +658,8 @@
 		"folder": {
 			"name": "Monthly_Refresh/All_State_All_Years"
 		},
-		"annotations": []
-	}
+		"annotations": [],
+		"lastPublishTime": "2023-02-20T05:12:52Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
 }
