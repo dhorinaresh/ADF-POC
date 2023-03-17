@@ -499,7 +499,7 @@
 				"type": "DatabricksNotebook",
 				"dependsOn": [
 					{
-						"activity": "ASAY_Crosswalk_MS",
+						"activity": "enr_all_script",
 						"dependencyConditions": [
 							"Completed"
 						]
@@ -515,6 +515,33 @@
 				"userProperties": [],
 				"typeProperties": {
 					"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Market_Snapshot/Market_Snapshot_final"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks4_pfcluster3",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "enr_all_script",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "ASAY_Crosswalk_MS",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Enr_all_file/Enr_all_new"
 				},
 				"linkedServiceName": {
 					"referenceName": "AzureDatabricks4_pfcluster3",
