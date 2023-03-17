@@ -88,6 +88,10 @@
 				],
 				"userProperties": [],
 				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Competitor_analysis",
+						"type": "PipelineReference"
+					},
 					"waitOnCompletion": true
 				}
 			},
@@ -104,6 +108,10 @@
 				],
 				"userProperties": [],
 				"typeProperties": {
+					"pipeline": {
+						"referenceName": "enrollment_trends",
+						"type": "PipelineReference"
+					},
 					"waitOnCompletion": true
 				}
 			}
