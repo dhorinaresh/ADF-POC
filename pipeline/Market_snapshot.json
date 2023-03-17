@@ -541,6 +541,8 @@
 		"folder": {
 			"name": "Hwai_Refresh/Hwai_Market_Snapshot"
 		},
-		"annotations": []
-	}
+		"annotations": [],
+		"lastPublishTime": "2023-03-17T03:43:08Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
 }
