@@ -252,7 +252,7 @@
 								"value": "@pipeline().parameters.password",
 								"type": "Expression"
 							},
-							"sql_table_name": "Crosswalk_Master_Data"
+							"sql_table_name": "ms_allstatesallyears"
 						}
 					}
 				]
