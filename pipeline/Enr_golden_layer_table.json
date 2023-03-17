@@ -259,7 +259,7 @@
 				"type": "Copy",
 				"dependsOn": [
 					{
-						"activity": "start time update_copy_enr_data",
+						"activity": "Delete Existing record from DB",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -470,6 +470,57 @@
 					"body": {
 						"value": "{\n \"title\":\"SCRIPT RUN FOR MONTHLY ENR TABLE POPULATION FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the enr table Script and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
 						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Delete Existing record from DB",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "start time update_copy_enr_data",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "DELETE FROM HWAI_Enrollments where Month = (SELECT DATENAME(month,GETDATE())) and Year = (SELECT YEAR(GETDATE()));\nSELECT TOP 10 * FROM HWAI_Enrollments;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "dataset_sql",
+						"type": "DatasetReference",
+						"parameters": {
+							"sql_server_dataset": {
+								"value": "@pipeline().parameters.sql_server_dataset_name",
+								"type": "Expression"
+							},
+							"db_name_dataset": {
+								"value": "@pipeline().parameters.db_name",
+								"type": "Expression"
+							},
+							"user_name_dataset": {
+								"value": "@pipeline().parameters.user_name",
+								"type": "Expression"
+							},
+							"password_dataset": {
+								"value": "@pipeline().parameters.password",
+								"type": "Expression"
+							},
+							"sql_table_name": "HWAI_Eligibles"
+						}
 					}
 				}
 			}
