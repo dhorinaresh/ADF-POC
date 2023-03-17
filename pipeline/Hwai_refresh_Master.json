@@ -36,7 +36,47 @@
 				}
 			},
 			{
-				"name": "Execute Pipeline1",
+				"name": "Market_Snapshot",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Eligible_golden_layer_table",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Market_snapshot",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "Winning_Plans",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Market_Snapshot",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "WinningPlans",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "Competitor_Analysis",
 				"type": "ExecutePipeline",
 				"dependsOn": [],
 				"userProperties": [],
