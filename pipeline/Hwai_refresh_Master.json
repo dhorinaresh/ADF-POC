@@ -78,7 +78,30 @@
 			{
 				"name": "Competitor_Analysis",
 				"type": "ExecutePipeline",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "Winning_Plans",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "Enrollment_Trends",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Competitor_Analysis",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
 				"userProperties": [],
 				"typeProperties": {
 					"waitOnCompletion": true
