@@ -7,10 +7,6 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "planfinder"
 		},
-		"AzureBlobStorage1_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorage1'"
-		},
 		"AzureDataLakeStorage1_accountKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'AzureDataLakeStorage1'"
@@ -35,15 +31,945 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureSqlDatabase1'"
 		},
+		"Linked_Service_SQL_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'Linked_Service_SQL'",
+			"defaultValue": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=@{linkedService().sql_server};Initial Catalog=@{linkedService().db_name};User ID=@{linkedService().user_name};Password=@{linkedService().password}"
+		},
+		"Linked_service_AzureDataLakeStorage2_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'Linked_service_AzureDataLakeStorage2'"
+		},
 		"AzureDataLakeStorage1_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://planfinderstorage.dfs.core.windows.net"
+		},
+		"Linked_service_AzureDataLakeStorage2_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://planfinderstorage.dfs.core.windows.net/"
 		}
 	},
 	"variables": {
 		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
 	},
 	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/ASAL_monthly_refresh')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "start time update",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "INSERT INTO Audit(FileName, Operation, StartTime,Dashboard)\nValues('ASAY', 'org_name_repo_data_copy', (Select GETDATE()),'ASAY');\nSelect * from Audit;",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "dataset_sql",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							}
+						}
+					},
+					{
+						"name": "Copy org name repo",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "start time update",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "Parent Organization"
+										},
+										"sink": {
+											"name": "Raw_Parent_Org_Name"
+										}
+									},
+									{
+										"source": {
+											"name": "Final Parent Organization"
+										},
+										"sink": {
+											"name": "Final_Parent_Org_Name"
+										}
+									}
+								],
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "org_name_repo",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "dataset_sql",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Org_Name_Repo"
+								}
+							}
+						]
+					},
+					{
+						"name": "end time update for copy",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Update Org Name repo",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'pass'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "dataset_sql",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							}
+						}
+					},
+					{
+						"name": "Update Org Name repo",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Copy org name repo",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "Update Org_Name_Repo\nset Created_Time = (Select GETDATE())\nwhere Id = (select Count(*) from Org_Name_Repo);\n\nUpdate Org_Name_Repo\nSET Is_Active_Ind = 1\nwhere Id = (select Count(*) from Org_Name_Repo);\n\n\nSelect * from Org_Name_Repo;\n",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "dataset_sql",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							}
+						}
+					},
+					{
+						"name": "start time update for ASAY",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "end time update for copy",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "INSERT INTO Audit(FileName, Operation, StartTime,Dashboard)\nValues('ASAY', 'ASAY Script', (Select GETDATE()),'ASAY');\nSelect * from Audit;",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "dataset_sql",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							}
+						}
+					},
+					{
+						"name": "ASAY Script",
+						"type": "DatabricksNotebook",
+						"dependsOn": [
+							{
+								"activity": "start time update for ASAY",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/All_State_All_Years/All_State_All_Years"
+						},
+						"linkedServiceName": {
+							"referenceName": "AzureDatabricks4_pfcluster3",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "send email update for ASAY script success",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "Copy QC Output",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+							"method": "POST",
+							"headers": {},
+							"body": {
+								"value": "{\n \"title\":\"PIPELINE RUN FOR ASAY DATA PREP SUCCESS\",\n \"color\":\"GREEN\",\n \"message\":\"Check the QC Output\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "send email update for plan script fail",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "end time update for ASAY script fail",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+							"method": "POST",
+							"headers": {},
+							"body": {
+								"value": "{\n \"title\":\"PIPELINE RUN FOR ASAY Script UPDATE FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the ASAY Script and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "end time update for ASAY script",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "ASAY Script",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'pass'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "dataset_sql",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							}
+						}
+					},
+					{
+						"name": "end time update for ASAY script fail",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "ASAY Script",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'Fail'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "dataset_sql",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							}
+						}
+					},
+					{
+						"name": "Copy QC Output",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "end time update for ASAY script",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"wildcardFolderPath": "hwaicontainer/AllStateAllYears/Output/Output_QC",
+									"wildcardFileName": "p*",
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "ASAY_QC",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "dataset_sql",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Summary_QC"
+								}
+							}
+						]
+					},
+					{
+						"name": "Copy ASAY pdb file",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "send email update for ASAY script success",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"wildcardFolderPath": "hwaicontainer/AllStateAllYears/Output/Output_QC",
+									"wildcardFileName": "p*",
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "ASAY_QC",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "dataset_sql",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Summary_QC"
+								}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"sql_server_dataset_name": {
+						"type": "String"
+					},
+					"db_name": {
+						"type": "String"
+					},
+					"user_name": {
+						"type": "String"
+					},
+					"password": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "Monthly_Refresh/All_State_All_Years"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/dataset_sql')]",
+				"[concat(variables('factoryId'), '/datasets/org_name_repo')]",
+				"[concat(variables('factoryId'), '/linkedServices/AzureDatabricks4_pfcluster3')]",
+				"[concat(variables('factoryId'), '/datasets/ASAY_QC')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ASAY_PO')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "start time update",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "INSERT INTO Audit(FileName, Operation, StartTime,Dashboard)\nValues('ASAY', 'PO_script', (Select GETDATE()),'ASAY');\nSelect * from Audit;",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "dataset_sql",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							}
+						}
+					},
+					{
+						"name": "Parent org repo",
+						"type": "DatabricksNotebook",
+						"dependsOn": [
+							{
+								"activity": "start time update",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/All_State_All_Years/Parent_Org_Repo"
+						},
+						"linkedServiceName": {
+							"referenceName": "AzureDatabricks4_pfcluster3",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "end time update",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Parent org repo",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'pass'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "dataset_sql",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							}
+						}
+					},
+					{
+						"name": "end time update fail",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Parent org repo",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'Fail'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "dataset_sql",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							}
+						}
+					},
+					{
+						"name": "send email update for PO script fail",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "end time update fail",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+							"method": "POST",
+							"headers": {},
+							"body": {
+								"value": "{\n \"title\":\"PIPELINE RUN FOR ASAY PO Script UPDATE FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the ASAY PO Script and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"sql_server_dataset_name": {
+						"type": "String"
+					},
+					"db_name": {
+						"type": "String"
+					},
+					"user_name": {
+						"type": "String"
+					},
+					"password": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "Monthly_Refresh/All_State_All_Years"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/dataset_sql')]",
+				"[concat(variables('factoryId'), '/linkedServices/AzureDatabricks4_pfcluster3')]"
+			]
+		},
 		{
 			"name": "[concat(parameters('factoryName'), '/Ben_b2_b3_b20')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
@@ -21902,6 +22828,9 @@
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
 				},
+				"folder": {
+					"name": "PF_Pipelines/Jan_Refresh"
+				},
 				"annotations": [],
 				"lastPublishTime": "2022-07-19T07:39:10Z"
 			},
@@ -21912,1133 +22841,6 @@
 				"[concat(variables('factoryId'), '/datasets/Benefits_data')]",
 				"[concat(variables('factoryId'), '/datasets/b19a_final_data')]",
 				"[concat(variables('factoryId'), '/datasets/b19b_final_data')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Benefits_b2_b3_b20')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Data_cleaning_b20",
-						"type": "DatabricksNotebook",
-						"dependsOn": [
-							{
-								"activity": "b20_Start_time_update",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"notebookPath": "/Users/hwaitech@healthworksai.com/b20_data_cleaning"
-						},
-						"linkedServiceName": {
-							"referenceName": "AzureDatabricks4_pfcluster3",
-							"type": "LinkedServiceReference"
-						}
-					},
-					{
-						"name": "Blank_Interpretation_b20",
-						"type": "DatabricksNotebook",
-						"dependsOn": [
-							{
-								"activity": "b20_data_cleaning_update",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"notebookPath": "/Users/hwaitech@healthworksai.com/b20_blank_interpretation"
-						},
-						"linkedServiceName": {
-							"referenceName": "AzureDatabricks4_pfcluster3",
-							"type": "LinkedServiceReference"
-						}
-					},
-					{
-						"name": "Final_changes_b20",
-						"type": "DatabricksNotebook",
-						"dependsOn": [
-							{
-								"activity": "b20_blank_interpretation",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"notebookPath": "/Users/hwaitech@healthworksai.com/b20_drop_melt_final"
-						},
-						"linkedServiceName": {
-							"referenceName": "AzureDatabricks4_pfcluster3",
-							"type": "LinkedServiceReference"
-						}
-					},
-					{
-						"name": "Data_cleaning_b2",
-						"type": "DatabricksNotebook",
-						"dependsOn": [
-							{
-								"activity": "b2_Start_time_update",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"notebookPath": "/Users/hwaitech@healthworksai.com/b2_data_cleaning"
-						},
-						"linkedServiceName": {
-							"referenceName": "AzureDatabricks4_pfcluster3",
-							"type": "LinkedServiceReference"
-						}
-					},
-					{
-						"name": "Blank_Interpretation_b2",
-						"type": "DatabricksNotebook",
-						"dependsOn": [
-							{
-								"activity": "b2_data_cleaning_update",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"notebookPath": "/Users/hwaitech@healthworksai.com/b2_blank_interpretation"
-						},
-						"linkedServiceName": {
-							"referenceName": "AzureDatabricks4_pfcluster3",
-							"type": "LinkedServiceReference"
-						}
-					},
-					{
-						"name": "Final_changes_b2",
-						"type": "DatabricksNotebook",
-						"dependsOn": [
-							{
-								"activity": "b2_blank_interpretation",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"notebookPath": "/Users/hwaitech@healthworksai.com/b2_drop_melt_final"
-						},
-						"linkedServiceName": {
-							"referenceName": "AzureDatabricks4_pfcluster3",
-							"type": "LinkedServiceReference"
-						}
-					},
-					{
-						"name": "Data_cleaning_b3",
-						"type": "DatabricksNotebook",
-						"dependsOn": [
-							{
-								"activity": "b3_Start_time_update",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"notebookPath": "/Users/hwaitech@healthworksai.com/b3_data_cleaning"
-						},
-						"linkedServiceName": {
-							"referenceName": "AzureDatabricks4_pfcluster3",
-							"type": "LinkedServiceReference"
-						}
-					},
-					{
-						"name": "Blank_Interpretation_b3",
-						"type": "DatabricksNotebook",
-						"dependsOn": [
-							{
-								"activity": "b3_data_cleaning_update",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"notebookPath": "/Users/hwaitech@healthworksai.com/b3_blank_interpretation"
-						},
-						"linkedServiceName": {
-							"referenceName": "AzureDatabricks4_pfcluster3",
-							"type": "LinkedServiceReference"
-						}
-					},
-					{
-						"name": "Final_changes_b3",
-						"type": "DatabricksNotebook",
-						"dependsOn": [
-							{
-								"activity": "b3_blank_interpretation",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"notebookPath": "/Users/hwaitech@healthworksai.com/b3_drop_melt_final"
-						},
-						"linkedServiceName": {
-							"referenceName": "AzureDatabricks4_pfcluster3",
-							"type": "LinkedServiceReference"
-						}
-					},
-					{
-						"name": "b20_Start_time_update",
-						"type": "Lookup",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"sqlReaderQuery": "INSERT INTO Audit_benefits(FileName, Operation, StartTime)\nValues('b20', 'Data_Cleaning', (Select GETDATE()));\nSelect * from Audit_benefits;",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"dataset": {
-								"referenceName": "Audit_benefits_table",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						}
-					},
-					{
-						"name": "b20_data_cleaning_update",
-						"type": "Lookup",
-						"dependsOn": [
-							{
-								"activity": "Data_cleaning_b20",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"sqlReaderQuery": "DECLARE @file as NVARCHAR(MAX)\nset @file = 'b20';\n\nUpdate Audit_benefits\nset EndTime = (Select GETDATE())\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Data_Cleaning'));\n\nUpdate Audit_benefits\nSET Status = 'pass'\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Data_Cleaning'));\n\nUpdate Audit_benefits\nset Timetaken = EndTime-StartTime\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Data_Cleaning'));\n\nINSERT INTO Audit_benefits(FileName, Operation, StartTime)\nValues(@file, 'Blanks_Interpretation', (Select GETDATE()));\n\nSelect * from Audit_benefits;",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"dataset": {
-								"referenceName": "Audit_benefits_table",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						}
-					},
-					{
-						"name": "b20_blank_interpretation",
-						"type": "Lookup",
-						"dependsOn": [
-							{
-								"activity": "Blank_Interpretation_b20",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"sqlReaderQuery": "DECLARE @file as NVARCHAR(MAX)\nset @file = 'b20';\n\nUpdate Audit_benefits\nset EndTime = (Select GETDATE())\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Blanks_Interpretation'));\n\nUpdate Audit_benefits\nSET Status = 'pass'\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Blanks_Interpretation'));\n\nUpdate Audit_benefits\nset Timetaken = EndTime-StartTime\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Blanks_Interpretation'));\n\nINSERT INTO Audit_benefits(FileName, Operation, StartTime)\nValues(@file, 'Final_data_changes', (Select GETDATE()));\n\nSelect * from Audit_benefits;",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"dataset": {
-								"referenceName": "Audit_benefits_table",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						}
-					},
-					{
-						"name": "b20_Final_changes_update",
-						"type": "Lookup",
-						"dependsOn": [
-							{
-								"activity": "Final_changes_b20",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"sqlReaderQuery": "DECLARE @file as NVARCHAR(MAX)\nset @file = 'b20';\n\nUpdate Audit_benefits\nset EndTime = (Select GETDATE())\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Final_data_changes'));\n\nUpdate Audit_benefits\nSET Status = 'pass'\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Final_data_changes'));\n\nUpdate Audit_benefits\nset Timetaken = EndTime-StartTime\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Final_data_changes'));\n\nSelect * from Audit_benefits;",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"dataset": {
-								"referenceName": "Audit_benefits_table",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						}
-					},
-					{
-						"name": "Copy_b20_data_to_db",
-						"type": "Copy",
-						"dependsOn": [
-							{
-								"activity": "b20_Final_changes_update",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "DelimitedTextSource",
-								"storeSettings": {
-									"type": "AzureBlobFSReadSettings",
-									"recursive": true,
-									"wildcardFolderPath": "Output_final/b20_final",
-									"wildcardFileName": "p*",
-									"enablePartitionDiscovery": false
-								},
-								"formatSettings": {
-									"type": "DelimitedTextReadSettings"
-								}
-							},
-							"sink": {
-								"type": "AzureSqlSink",
-								"writeBehavior": "insert",
-								"sqlWriterUseTableLock": false
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "b20_final_data",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "Benefits_data",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					},
-					{
-						"name": "b2_Start_time_update",
-						"type": "Lookup",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"sqlReaderQuery": "INSERT INTO Audit_benefits(FileName, Operation, StartTime)\nValues('b2', 'Data_Cleaning', (Select GETDATE()));\nSelect * from Audit_benefits;",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"dataset": {
-								"referenceName": "Audit_benefits_table",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						}
-					},
-					{
-						"name": "b2_data_cleaning_update",
-						"type": "Lookup",
-						"dependsOn": [
-							{
-								"activity": "Data_cleaning_b2",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"sqlReaderQuery": "DECLARE @file as NVARCHAR(MAX)\nset @file = 'b2';\n\nUpdate Audit_benefits\nset EndTime = (Select GETDATE())\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Data_Cleaning'));\n\nUpdate Audit_benefits\nSET Status = 'pass'\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Data_Cleaning'));\n\nUpdate Audit_benefits\nset Timetaken = EndTime-StartTime\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Data_Cleaning'));\n\nINSERT INTO Audit_benefits(FileName, Operation, StartTime)\nValues(@file, 'Blanks_Interpretation', (Select GETDATE()));\n\nSelect * from Audit_benefits;",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"dataset": {
-								"referenceName": "Audit_benefits_table",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						}
-					},
-					{
-						"name": "b2_blank_interpretation",
-						"type": "Lookup",
-						"dependsOn": [
-							{
-								"activity": "Blank_Interpretation_b2",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"sqlReaderQuery": "DECLARE @file as NVARCHAR(MAX)\nset @file = 'b2';\n\nUpdate Audit_benefits\nset EndTime = (Select GETDATE())\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Blanks_Interpretation'));\n\nUpdate Audit_benefits\nSET Status = 'pass'\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Blanks_Interpretation'));\n\nUpdate Audit_benefits\nset Timetaken = EndTime-StartTime\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Blanks_Interpretation'));\n\nINSERT INTO Audit_benefits(FileName, Operation, StartTime)\nValues(@file, 'Final_data_changes', (Select GETDATE()));\n\nSelect * from Audit_benefits;",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"dataset": {
-								"referenceName": "Audit_benefits_table",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						}
-					},
-					{
-						"name": "b2_Final_changes_update",
-						"type": "Lookup",
-						"dependsOn": [
-							{
-								"activity": "Final_changes_b2",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"sqlReaderQuery": "DECLARE @file as NVARCHAR(MAX)\nset @file = 'b2';\n\nUpdate Audit_benefits\nset EndTime = (Select GETDATE())\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Final_data_changes'));\n\nUpdate Audit_benefits\nSET Status = 'pass'\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Final_data_changes'));\n\nUpdate Audit_benefits\nset Timetaken = EndTime-StartTime\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Final_data_changes'));\n\nSelect * from Audit_benefits;",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"dataset": {
-								"referenceName": "Audit_benefits_table",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						}
-					},
-					{
-						"name": "Copy_b2_data_to_db",
-						"type": "Copy",
-						"dependsOn": [
-							{
-								"activity": "b2_Final_changes_update",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "DelimitedTextSource",
-								"storeSettings": {
-									"type": "AzureBlobFSReadSettings",
-									"recursive": true,
-									"wildcardFolderPath": "Output_final/b2_final",
-									"wildcardFileName": "p*",
-									"enablePartitionDiscovery": false
-								},
-								"formatSettings": {
-									"type": "DelimitedTextReadSettings"
-								}
-							},
-							"sink": {
-								"type": "AzureSqlSink",
-								"writeBehavior": "insert",
-								"sqlWriterUseTableLock": false
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "b2_final_data",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "Benefits_data",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					},
-					{
-						"name": "b3_Start_time_update",
-						"type": "Lookup",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"sqlReaderQuery": "INSERT INTO Audit_benefits(FileName, Operation, StartTime)\nValues('b3', 'Data_Cleaning', (Select GETDATE()));\nSelect * from Audit_benefits;",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"dataset": {
-								"referenceName": "Audit_benefits_table",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						}
-					},
-					{
-						"name": "b3_data_cleaning_update",
-						"type": "Lookup",
-						"dependsOn": [
-							{
-								"activity": "Data_cleaning_b3",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"sqlReaderQuery": "DECLARE @file as NVARCHAR(MAX)\nset @file = 'b3';\n\nUpdate Audit_benefits\nset EndTime = (Select GETDATE())\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Data_Cleaning'));\n\nUpdate Audit_benefits\nSET Status = 'pass'\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Data_Cleaning'));\n\nUpdate Audit_benefits\nset Timetaken = EndTime-StartTime\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Data_Cleaning'));\n\nINSERT INTO Audit_benefits(FileName, Operation, StartTime)\nValues(@file, 'Blanks_Interpretation', (Select GETDATE()));\n\nSelect * from Audit_benefits;",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"dataset": {
-								"referenceName": "Audit_benefits_table",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						}
-					},
-					{
-						"name": "b3_blank_interpretation",
-						"type": "Lookup",
-						"dependsOn": [
-							{
-								"activity": "Blank_Interpretation_b3",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"sqlReaderQuery": "DECLARE @file as NVARCHAR(MAX)\nset @file = 'b3';\n\nUpdate Audit_benefits\nset EndTime = (Select GETDATE())\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Blanks_Interpretation'));\n\nUpdate Audit_benefits\nSET Status = 'pass'\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Blanks_Interpretation'));\n\nUpdate Audit_benefits\nset Timetaken = EndTime-StartTime\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Blanks_Interpretation'));\n\nINSERT INTO Audit_benefits(FileName, Operation, StartTime)\nValues(@file, 'Final_data_changes', (Select GETDATE()));\n\nSelect * from Audit_benefits;",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"dataset": {
-								"referenceName": "Audit_benefits_table",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						}
-					},
-					{
-						"name": "b3_Final_changes_update",
-						"type": "Lookup",
-						"dependsOn": [
-							{
-								"activity": "Final_changes_b3",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"sqlReaderQuery": "DECLARE @file as NVARCHAR(MAX)\nset @file = 'b3';\n\nUpdate Audit_benefits\nset EndTime = (Select GETDATE())\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Final_data_changes'));\n\nUpdate Audit_benefits\nSET Status = 'pass'\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Final_data_changes'));\n\nUpdate Audit_benefits\nset Timetaken = EndTime-StartTime\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Final_data_changes'));\n\nSelect * from Audit_benefits;",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"dataset": {
-								"referenceName": "Audit_benefits_table",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						}
-					},
-					{
-						"name": "Copy_b3_data_to_db",
-						"type": "Copy",
-						"dependsOn": [
-							{
-								"activity": "b3_Final_changes_update",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "DelimitedTextSource",
-								"storeSettings": {
-									"type": "AzureBlobFSReadSettings",
-									"recursive": true,
-									"wildcardFolderPath": "Output_final/b3_final",
-									"wildcardFileName": "p*",
-									"enablePartitionDiscovery": false
-								},
-								"formatSettings": {
-									"type": "DelimitedTextReadSettings"
-								}
-							},
-							"sink": {
-								"type": "AzureSqlSink",
-								"writeBehavior": "insert",
-								"sqlWriterUseTableLock": false
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "b3_final_data",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "Benefits_data",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					},
-					{
-						"name": "b20_data_cleaning_update_1",
-						"type": "Lookup",
-						"dependsOn": [
-							{
-								"activity": "Data_cleaning_b20",
-								"dependencyConditions": [
-									"Failed"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"sqlReaderQuery": "DECLARE @file as NVARCHAR(MAX)\nset @file = 'b20';\n\nUpdate Audit_benefits\nset EndTime = (Select GETDATE())\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Data_Cleaning'));\n\nUpdate Audit_benefits\nSET Status = 'failed'\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Data_Cleaning'));\n\nUpdate Audit_benefits\nset Timetaken = EndTime-StartTime\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Data_Cleaning'));\n\nSelect * from Audit_benefits;",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"dataset": {
-								"referenceName": "Audit_benefits_table",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						}
-					},
-					{
-						"name": "b20_blank_interpretation_1",
-						"type": "Lookup",
-						"dependsOn": [
-							{
-								"activity": "Blank_Interpretation_b20",
-								"dependencyConditions": [
-									"Failed"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"sqlReaderQuery": "DECLARE @file as NVARCHAR(MAX)\nset @file = 'b20';\n\nUpdate Audit_benefits\nset EndTime = (Select GETDATE())\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Blanks_Interpretation'));\n\nUpdate Audit_benefits\nSET Status = 'failed'\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Blanks_Interpretation'));\n\nUpdate Audit_benefits\nset Timetaken = EndTime-StartTime\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Blanks_Interpretation'));\n\nSelect * from Audit_benefits;",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"dataset": {
-								"referenceName": "Audit_benefits_table",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						}
-					},
-					{
-						"name": "b20_Final_changes_update_1",
-						"type": "Lookup",
-						"dependsOn": [
-							{
-								"activity": "Final_changes_b20",
-								"dependencyConditions": [
-									"Failed"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"sqlReaderQuery": "DECLARE @file as NVARCHAR(MAX)\nset @file = 'b20';\n\nUpdate Audit_benefits\nset EndTime = (Select GETDATE())\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Final_data_changes'));\n\nUpdate Audit_benefits\nSET Status = 'failed'\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Final_data_changes'));\n\nUpdate Audit_benefits\nset Timetaken = EndTime-StartTime\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Final_data_changes'));\n\nSelect * from Audit_benefits;",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"dataset": {
-								"referenceName": "Audit_benefits_table",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						}
-					},
-					{
-						"name": "b2_data_cleaning_update_1",
-						"type": "Lookup",
-						"dependsOn": [
-							{
-								"activity": "Data_cleaning_b2",
-								"dependencyConditions": [
-									"Failed"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"sqlReaderQuery": "DECLARE @file as NVARCHAR(MAX)\nset @file = 'b2';\n\nUpdate Audit_benefits\nset EndTime = (Select GETDATE())\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Data_Cleaning'));\n\nUpdate Audit_benefits\nSET Status = 'failed'\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Data_Cleaning'));\n\nUpdate Audit_benefits\nset Timetaken = EndTime-StartTime\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Data_Cleaning'));\n\nSelect * from Audit_benefits;",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"dataset": {
-								"referenceName": "Audit_benefits_table",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						}
-					},
-					{
-						"name": "b2_blank_interpretation_1",
-						"type": "Lookup",
-						"dependsOn": [
-							{
-								"activity": "Blank_Interpretation_b2",
-								"dependencyConditions": [
-									"Failed"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"sqlReaderQuery": "DECLARE @file as NVARCHAR(MAX)\nset @file = 'b2';\n\nUpdate Audit_benefits\nset EndTime = (Select GETDATE())\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Blanks_Interpretation'));\n\nUpdate Audit_benefits\nSET Status = 'failed'\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Blanks_Interpretation'));\n\nUpdate Audit_benefits\nset Timetaken = EndTime-StartTime\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Blanks_Interpretation'));\n\nSelect * from Audit_benefits;",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"dataset": {
-								"referenceName": "Audit_benefits_table",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						}
-					},
-					{
-						"name": "b2_Final_changes_update_1",
-						"type": "Lookup",
-						"dependsOn": [
-							{
-								"activity": "Final_changes_b2",
-								"dependencyConditions": [
-									"Failed"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"sqlReaderQuery": "DECLARE @file as NVARCHAR(MAX)\nset @file = 'b2';\n\nUpdate Audit_benefits\nset EndTime = (Select GETDATE())\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Final_data_changes'));\n\nUpdate Audit_benefits\nSET Status = 'failed'\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Final_data_changes'));\n\nUpdate Audit_benefits\nset Timetaken = EndTime-StartTime\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Final_data_changes'));\n\nSelect * from Audit_benefits;",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"dataset": {
-								"referenceName": "Audit_benefits_table",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						}
-					},
-					{
-						"name": "b3_data_cleaning_update_1",
-						"type": "Lookup",
-						"dependsOn": [
-							{
-								"activity": "Data_cleaning_b3",
-								"dependencyConditions": [
-									"Failed"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"sqlReaderQuery": "DECLARE @file as NVARCHAR(MAX)\nset @file = 'b3';\n\nUpdate Audit_benefits\nset EndTime = (Select GETDATE())\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Data_Cleaning'));\n\nUpdate Audit_benefits\nSET Status = 'failed'\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Data_Cleaning'));\n\nUpdate Audit_benefits\nset Timetaken = EndTime-StartTime\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Data_Cleaning'));\n\nSelect * from Audit_benefits;",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"dataset": {
-								"referenceName": "Audit_benefits_table",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						}
-					},
-					{
-						"name": "b3_blank_interpretation_1",
-						"type": "Lookup",
-						"dependsOn": [
-							{
-								"activity": "Blank_Interpretation_b3",
-								"dependencyConditions": [
-									"Failed"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"sqlReaderQuery": "DECLARE @file as NVARCHAR(MAX)\nset @file = 'b3';\n\nUpdate Audit_benefits\nset EndTime = (Select GETDATE())\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Blanks_Interpretation'));\n\nUpdate Audit_benefits\nSET Status = 'failed'\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Blanks_Interpretation'));\n\nUpdate Audit_benefits\nset Timetaken = EndTime-StartTime\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Blanks_Interpretation'));\n\nSelect * from Audit_benefits;",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"dataset": {
-								"referenceName": "Audit_benefits_table",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						}
-					},
-					{
-						"name": "b3_Final_changes_update_1",
-						"type": "Lookup",
-						"dependsOn": [
-							{
-								"activity": "Final_changes_b3",
-								"dependencyConditions": [
-									"Failed"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"sqlReaderQuery": "DECLARE @file as NVARCHAR(MAX)\nset @file = 'b3';\n\nUpdate Audit_benefits\nset EndTime = (Select GETDATE())\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Final_data_changes'));\n\nUpdate Audit_benefits\nSET Status = 'failed'\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Final_data_changes'));\n\nUpdate Audit_benefits\nset Timetaken = EndTime-StartTime\nwhere Id = (select Max(Id) from Audit_benefits \nwhere (CONVERT(VARCHAR, FileName)= @file and Operation = 'Final_data_changes'));\n\nSelect * from Audit_benefits;",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"dataset": {
-								"referenceName": "Audit_benefits_table",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
-				},
-				"annotations": [],
-				"lastPublishTime": "2022-07-19T07:35:30Z"
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AzureDatabricks4_pfcluster3')]",
-				"[concat(variables('factoryId'), '/datasets/Audit_benefits_table')]",
-				"[concat(variables('factoryId'), '/datasets/b20_final_data')]",
-				"[concat(variables('factoryId'), '/datasets/Benefits_data')]",
-				"[concat(variables('factoryId'), '/datasets/b2_final_data')]",
-				"[concat(variables('factoryId'), '/datasets/b3_final_data')]"
 			]
 		},
 		{
@@ -25298,6 +25100,777 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/Crosswalk_Data')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "start time update",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "INSERT INTO Audit(FileName, Operation, StartTime,Dashboard)\nValues('Crosswalk', 'Crosswalk_data_prep', (Select GETDATE()),'Crosswalk');\nSelect * from Audit;",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "dataset_sql",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							}
+						}
+					},
+					{
+						"name": "Crosswalk_raw_file_processing",
+						"type": "DatabricksNotebook",
+						"dependsOn": [
+							{
+								"activity": "start time update",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Crosswalk/Crosswalk_rawFileTo_GoldenLayer"
+						},
+						"linkedServiceName": {
+							"referenceName": "AzureDatabricks4_pfcluster3",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "end time update for Crosswalk_raw_file_processing",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Crosswalk_raw_file_processing",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'pass'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "dataset_sql",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							}
+						}
+					},
+					{
+						"name": "end time update for crosswalk fail",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Crosswalk_raw_file_processing",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'Fail'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "dataset_sql",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							}
+						}
+					},
+					{
+						"name": "Copy Crosswalk to Db",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "start time update_copy_crosswalk_data",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"wildcardFolderPath": "Crosswalk/Output/crosswalk_2023",
+									"wildcardFileName": "p*",
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "Crosswalk",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "dataset_sql",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Crosswalk_Master_Data"
+								}
+							}
+						]
+					},
+					{
+						"name": "start time update_copy_crosswalk_data",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "end time update for Crosswalk_raw_file_processing",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "INSERT INTO Audit(FileName, Operation, StartTime,Dashboard)\nValues('Crosswalk', 'Crosswalk_data_load_to_db', (Select GETDATE()),'Crosswalk');\nSelect * from Audit;",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "dataset_sql",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							}
+						}
+					},
+					{
+						"name": "end time update for Crosswalk_load_to_db",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Copy Crosswalk to Db",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'pass'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "dataset_sql",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							}
+						}
+					},
+					{
+						"name": "end time update for crosswalk load to db fail",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Copy Crosswalk to Db",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'Fail'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "dataset_sql",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							}
+						}
+					},
+					{
+						"name": "send email update for crosswalk script fail",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "end time update for crosswalk fail",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+							"method": "POST",
+							"headers": {},
+							"body": {
+								"value": "{\n \"title\":\"PIPELINE RUN FOR Crosswalk Update Script UPDATE FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the ASAY Script and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "send email update for crosswalk data load fail",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "end time update for crosswalk load to db fail",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+							"method": "POST",
+							"headers": {},
+							"body": {
+								"value": "{\n \"title\":\"PIPELINE RUN FOR crosswalk data load FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the Crosswalk Data Load and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "send email update for ACrosswalk pipeline success",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "end time update for Crosswalk_load_to_db",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+							"method": "POST",
+							"headers": {},
+							"body": {
+								"value": "{\n \"title\":\"PIPELINE RUN FOR Crosswalk data SUCCESS\",\n \"color\":\"GREEN\",\n \"message\":\"Check the QC Output\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"sql_server_dataset_name": {
+						"type": "String",
+						"defaultValue": "hwpilot.database.windows.net"
+					},
+					"db_name": {
+						"type": "String",
+						"defaultValue": "pf_data"
+					},
+					"user_name": {
+						"type": "String",
+						"defaultValue": "pladmin"
+					},
+					"password": {
+						"type": "String",
+						"defaultValue": "Goteg@12345"
+					}
+				},
+				"folder": {
+					"name": "Hwai_Refresh/Hwai_Crosswalk"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/dataset_sql')]",
+				"[concat(variables('factoryId'), '/linkedServices/AzureDatabricks4_pfcluster3')]",
+				"[concat(variables('factoryId'), '/datasets/Crosswalk')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Enr_all_monthly_refresh')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "start time update",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "INSERT INTO Audit(FileName, Operation, StartTime,Dashboard)\nValues('Enr_all', 'Enr_all_script', (Select GETDATE()),'ASAY');\nSelect * from Audit;",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "dataset_sql",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							}
+						}
+					},
+					{
+						"name": "Enr_all_script",
+						"type": "DatabricksNotebook",
+						"dependsOn": [
+							{
+								"activity": "start time update",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Enr_all_file/Enr_all_script"
+						},
+						"linkedServiceName": {
+							"referenceName": "AzureDatabricks4_pfcluster3",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "end time update for Enr_all script",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Enr_all_script",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'pass'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "dataset_sql",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							}
+						}
+					},
+					{
+						"name": "end time update for ASAY script fail",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Enr_all_script",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'Fail'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "dataset_sql",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							}
+						}
+					},
+					{
+						"name": "send email update for Enr_all script fail",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "end time update for ASAY script fail",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+							"method": "POST",
+							"headers": {},
+							"body": {
+								"value": "{\n \"title\":\"PIPELINE RUN FOR ASAY Script UPDATE FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the ASAY Script and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"sql_server_dataset_name": {
+						"type": "String"
+					},
+					"db_name": {
+						"type": "String"
+					},
+					"user_name": {
+						"type": "String"
+					},
+					"password": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "Monthly_Refresh/Enr_all_file"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/dataset_sql')]",
+				"[concat(variables('factoryId'), '/linkedServices/AzureDatabricks4_pfcluster3')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/Geography_data')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -25771,6 +26344,567 @@
 				"[concat(variables('factoryId'), '/pipelines/Master_Pipeline_Geo_Plans')]",
 				"[concat(variables('factoryId'), '/pipelines/Master_pipeline_benefit')]",
 				"[concat(variables('factoryId'), '/pipelines/Master_Pipeline_benefit_2')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Market_snapshot')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "start time update",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "INSERT INTO Audit(FileName, Operation, StartTime,Dashboard)\nValues('ASAY_Crosswalk_MS', 'ASAY_Crosswalk_MS', (Select GETDATE()),'Market_Snapshot');\nSelect * from Audit;",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "dataset_sql",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							}
+						}
+					},
+					{
+						"name": "ASAY_Crosswalk_MS",
+						"type": "DatabricksNotebook",
+						"dependsOn": [
+							{
+								"activity": "start time update",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Market_Snapshot/ASAY_Crosswalk_Market_Snapshot"
+						},
+						"linkedServiceName": {
+							"referenceName": "AzureDatabricks4_pfcluster3",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "end time update for MS Script",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Market_Snapshot_final",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'pass'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "dataset_sql",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							}
+						}
+					},
+					{
+						"name": "end time update for MS script fail",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Market_Snapshot_final",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'Fail'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "dataset_sql",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							}
+						}
+					},
+					{
+						"name": "Copy MS data to Db",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "start time update_copy_MS_data",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"wildcardFolderPath": "Crosswalk/Output/crosswalk_2023",
+									"wildcardFileName": "p*",
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "Crosswalk",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "dataset_sql",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Crosswalk_Master_Data"
+								}
+							}
+						]
+					},
+					{
+						"name": "start time update_copy_MS_data",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "end time update for MS Script",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "INSERT INTO Audit(FileName, Operation, StartTime,Dashboard)\nValues('Market_Snapshot', 'MS_data_load_to_db', (Select GETDATE()),'Market_Snapshot');\nSelect * from Audit;",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "dataset_sql",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							}
+						}
+					},
+					{
+						"name": "end time update for MS_data_load_to_db",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Copy MS data to Db",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'pass'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "dataset_sql",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							}
+						}
+					},
+					{
+						"name": "end time update for MS_data_load to db fail",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Copy MS data to Db",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'Fail'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "dataset_sql",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							}
+						}
+					},
+					{
+						"name": "send email update forMarket snapshot script fail",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "end time update for MS script fail",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+							"method": "POST",
+							"headers": {},
+							"body": {
+								"value": "{\n \"title\":\"PIPELINE RUN FOR MS Update Script UPDATE FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the MS Script and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "send email update for MS data load fail",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "end time update for MS_data_load to db fail",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+							"method": "POST",
+							"headers": {},
+							"body": {
+								"value": "{\n \"title\":\"PIPELINE RUN FOR MS data load FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the MS Data Load and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "send email update for Market_Snapshot pipeline success",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "end time update for MS_data_load_to_db",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+							"method": "POST",
+							"headers": {},
+							"body": {
+								"value": "{\n \"title\":\"PIPELINE RUN FOR Market Snapshot data refresh SUCCESS\",\n \"color\":\"GREEN\",\n \"message\":\"Check the QC Output\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "Market_Snapshot_final",
+						"type": "DatabricksNotebook",
+						"dependsOn": [
+							{
+								"activity": "ASAY_Crosswalk_MS",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Market_Snapshot/Market_Snapshot_final"
+						},
+						"linkedServiceName": {
+							"referenceName": "AzureDatabricks4_pfcluster3",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"sql_server_dataset_name": {
+						"type": "String",
+						"defaultValue": "hwpilot.database.windows.net"
+					},
+					"db_name": {
+						"type": "String",
+						"defaultValue": "pf_data"
+					},
+					"user_name": {
+						"type": "String",
+						"defaultValue": "pladmin"
+					},
+					"password": {
+						"type": "String",
+						"defaultValue": "Goteg@12345"
+					}
+				},
+				"folder": {
+					"name": "Hwai_Refresh/Hwai_Market_Snapshot"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/dataset_sql')]",
+				"[concat(variables('factoryId'), '/linkedServices/AzureDatabricks4_pfcluster3')]",
+				"[concat(variables('factoryId'), '/datasets/Crosswalk')]"
 			]
 		},
 		{
@@ -27983,6 +29117,144 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/Parent_org_validation')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Lookup1",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Notebook1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "select count(*) as value from [dbo].[parent_organization]\nwhere Case_value is null;",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "Parent_org_table",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "Notebook1",
+						"type": "DatabricksNotebook",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/cpsc and hwai plan details"
+						},
+						"linkedServiceName": {
+							"referenceName": "AzureDatabricks4_pfcluster3",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "If Condition1",
+						"type": "IfCondition",
+						"dependsOn": [
+							{
+								"activity": "Lookup1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"expression": {
+								"value": "@greater(activity('Lookup1').output.value[0]['value'],0)",
+								"type": "Expression"
+							},
+							"ifFalseActivities": [
+								{
+									"name": "Set variable2",
+									"type": "SetVariable",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "Y",
+										"value": "proceed"
+									}
+								}
+							],
+							"ifTrueActivities": [
+								{
+									"name": "send email update for Parent Oraganization",
+									"type": "WebActivity",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+										"method": "POST",
+										"headers": {},
+										"body": {
+											"value": "{\n \"title\":\"Pipeline run for Parent organization\",\n \"color\":\"GREEN\",\n \"message\":\"Update the values in cpsc contract file and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"variables": {
+					"z": {
+						"type": "String"
+					},
+					"X": {
+						"type": "String"
+					},
+					"Y": {
+						"type": "String"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/Parent_org_table')]",
+				"[concat(variables('factoryId'), '/linkedServices/AzureDatabricks4_pfcluster3')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/Plan_data')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -29218,6 +30490,9 @@
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
 				},
+				"folder": {
+					"name": "Unused_Pipelines"
+				},
 				"annotations": [],
 				"lastPublishTime": "2022-12-27T07:48:55Z"
 			},
@@ -29486,6 +30761,9 @@
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
 				},
+				"folder": {
+					"name": "Unused_Pipelines"
+				},
 				"annotations": [],
 				"lastPublishTime": "2022-06-17T05:38:41Z"
 			},
@@ -29657,6 +30935,9 @@
 				"policy": {
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "Unused_Pipelines"
 				},
 				"annotations": [],
 				"lastPublishTime": "2022-07-22T13:15:57Z"
@@ -30261,17 +31542,17 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/enr_details_data')]",
+			"name": "[concat(parameters('factoryName'), '/combined benefits')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"activities": [
 					{
-						"name": "Start_time_audit_update",
+						"name": "start time update for combined benefits",
 						"type": "Lookup",
 						"dependsOn": [],
 						"policy": {
-							"timeout": "7.00:00:00",
+							"timeout": "0.12:00:00",
 							"retry": 0,
 							"retryIntervalInSeconds": 30,
 							"secureOutput": false,
@@ -30281,23 +31562,775 @@
 						"typeProperties": {
 							"source": {
 								"type": "AzureSqlSource",
-								"sqlReaderQuery": "INSERT INTO dbo.Audit_enr(Operation, StartTime)\nValues('Enrollment_update', (Select GETDATE()));\nSelect * from Audit_enr",
+								"sqlReaderQuery": "INSERT INTO Audit(FileName, Operation, StartTime,Dashboard)\nValues('Combined Benefits', 'Combined_Benefits_Code', (Select GETDATE()),'Combined Benefits');\nSelect * from Audit;",
 								"queryTimeout": "02:00:00",
 								"partitionOption": "None"
 							},
 							"dataset": {
-								"referenceName": "AzureSqlTable7",
+								"referenceName": "combined_benefits_sql_Table",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							},
+							"firstRowOnly": true
+						}
+					},
+					{
+						"name": "Combined Benefits Code",
+						"type": "DatabricksNotebook",
+						"dependsOn": [
+							{
+								"activity": "start time update for combined benefits",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Users/hwaitech@healthworksai.com/Plan_Finder/Combined Benefits/Combined Benefits Code"
+						},
+						"linkedServiceName": {
+							"referenceName": "AzureDatabricks4_pfcluster3",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "End time update for combined benefits code",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Combined Benefits Code",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'pass'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "combined_benefits_sql_Table",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							},
+							"firstRowOnly": true
+						}
+					},
+					{
+						"name": "End time update for combined benefits code fail",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Combined Benefits Code",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'Fail'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "combined_benefits_sql_Table",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							},
+							"firstRowOnly": true
+						}
+					},
+					{
+						"name": "start time update  Combined Benefits Data Manupulation",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "End time update for combined benefits code",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "INSERT INTO Audit(FileName, Operation, StartTime,Dashboard)\nValues('Combined Benefits', 'Combined_Benefits_Data Manupulation', (Select GETDATE()),'Combined Benefits');\nSelect * from Audit;",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "combined_benefits_sql_Table",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							},
+							"firstRowOnly": true
+						}
+					},
+					{
+						"name": "Combined Benefits Data Manupulation",
+						"type": "DatabricksNotebook",
+						"dependsOn": [
+							{
+								"activity": "start time update  Combined Benefits Data Manupulation",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Users/hwaitech@healthworksai.com/Plan_Finder/Combined Benefits/Combined Benefits Data Manupulation"
+						},
+						"linkedServiceName": {
+							"referenceName": "AzureDatabricks4_pfcluster3",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "End time update  combined benefits data manupulation",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Combined Benefits Data Manupulation",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'pass'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "combined_benefits_sql_Table",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							},
+							"firstRowOnly": true
+						}
+					},
+					{
+						"name": "Endtime update combined benefits data manupulation fail",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Combined Benefits Data Manupulation",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'Fail'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "combined_benefits_sql_Table",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							},
+							"firstRowOnly": true
+						}
+					},
+					{
+						"name": "start time update Columns Add",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "End time update  combined benefits data manupulation",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "INSERT INTO Audit(FileName, Operation, StartTime,Dashboard)\nValues('Combined Benefits', 'Combined_Benefits_Data Manupulation', (Select GETDATE()),'Combined Benefits');\nSelect * from Audit;",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "combined_benefits_sql_Table",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							},
+							"firstRowOnly": true
+						}
+					},
+					{
+						"name": "Columns Add in Benefit File",
+						"type": "DatabricksNotebook",
+						"dependsOn": [
+							{
+								"activity": "start time update Columns Add",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Users/hwaitech@healthworksai.com/Plan_Finder/Combined Benefits/Combined Benefits Columns Add in Benefit File"
+						},
+						"linkedServiceName": {
+							"referenceName": "AzureDatabricks4_pfcluster3",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "End time update combined benefits Columns Add",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Columns Add in Benefit File",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'pass'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "combined_benefits_sql_Table",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							},
+							"firstRowOnly": true
+						}
+					},
+					{
+						"name": "Endtime update combinedbenefits Columns Add fail",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Columns Add in Benefit File",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'Fail'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "combined_benefits_sql_Table",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							},
+							"firstRowOnly": true
+						}
+					},
+					{
+						"name": "start time update copy data to sql database",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "End time update combined benefits Columns Add",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "INSERT INTO Audit(FileName, Operation, StartTime,Dashboard)\nValues('Combined Benefits', 'Combined_Benefits_Data Manupulation', (Select GETDATE()),'Combined Benefits');\nSelect * from Audit;",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "combined_benefits_sql_Table",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							},
+							"firstRowOnly": true
+						}
+					},
+					{
+						"name": "copy combined benefits to sql database",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "start time update copy data to sql database",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"wildcardFolderPath": "Output/Output_Benefit_combined/Combined_Benefits_AllBenefits_Yes_No_Melted_New.csv",
+									"wildcardFileName": "p*",
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false,
+								"tableOption": "autoCreate",
+								"disableMetricsCollection": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "combined_benefits",
 								"type": "DatasetReference",
 								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "combined_benefits_sql_Table",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Combined_Benefits_Yes_No_Melted"
+								}
+							}
+						]
+					},
+					{
+						"name": "end time update for combined_benefits_load_to_db",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "copy combined benefits to sql database",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'pass'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "combined_benefits_sql_Table",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
 							}
 						}
 					},
 					{
-						"name": "Enr_script",
-						"type": "DatabricksNotebook",
+						"name": "end time update for combined benefits load to db fail",
+						"type": "Lookup",
 						"dependsOn": [
 							{
-								"activity": "Start_time_audit_update",
+								"activity": "copy combined benefits to sql database",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "combined_benefits_sql_Table",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							}
+						}
+					},
+					{
+						"name": "send email for combined benefits pipeline success",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "end time update for combined_benefits_load_to_db",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -30312,7 +32345,189 @@
 						},
 						"userProperties": [],
 						"typeProperties": {
-							"notebookPath": "/Users/hwaitech@healthworksai.com/Enrollment_data"
+							"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+							"method": "POST",
+							"headers": {},
+							"body": {
+								"value": "{\n \"title\":\"PIPELINE RUN FOR combined benefits data SUCCESS\",\n \"color\":\"GREEN\",\n \"message\":\"Check the Output\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "send email update for combined benefits data load fail",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "end time update for combined benefits load to db fail",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+							"method": "POST",
+							"headers": {},
+							"body": {
+								"value": "{\n \"title\":\"PIPELINE RUN FOR crosswalk data load FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the Crosswalk Data Load and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "send email update for combined benefits code fail",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "End time update for combined benefits code fail",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+							"method": "POST",
+							"headers": {},
+							"body": {
+								"value": "{\n \"title\":\"PIPELINE RUN FOR Combined Benefits UPDATE FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the Combined Benefits Code and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "send email update for data manupulation fail",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "Endtime update combined benefits data manupulation fail",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+							"method": "POST",
+							"headers": {},
+							"body": {
+								"value": "{\n \"title\":\"PIPELINE RUN FOR Combined Benefits UPDATE FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the Combined Benefits Data Manupulation and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "send email update for column add fail",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "Endtime update combinedbenefits Columns Add fail",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+							"method": "POST",
+							"headers": {},
+							"body": {
+								"value": "{\n \"title\":\"PIPELINE RUN FOR Combined Benefits UPDATE FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the Combined Benefits Columns Add in Benefit File and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"sql_server_dataset_name": {
+						"type": "string",
+						"defaultValue": "hwpilot.database.windows.net"
+					},
+					"db_name": {
+						"type": "string",
+						"defaultValue": "pf_data"
+					},
+					"user_name": {
+						"type": "string",
+						"defaultValue": "pladmin"
+					},
+					"password": {
+						"type": "string",
+						"defaultValue": "Goteg@12345"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/combined_benefits_sql_Table')]",
+				"[concat(variables('factoryId'), '/linkedServices/AzureDatabricks4_pfcluster3')]",
+				"[concat(variables('factoryId'), '/datasets/combined_benefits')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/enr_details_data')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Enr_script",
+						"type": "DatabricksNotebook",
+						"dependsOn": [
+							{
+								"activity": "start time update",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Users/hwaitech@healthworksai.com/Plan_Finder/Enrollment_Scripts/Enrollment_data"
 						},
 						"linkedServiceName": {
 							"referenceName": "AzureDatabricks4_pfcluster3",
@@ -30324,7 +32539,7 @@
 						"type": "Copy",
 						"dependsOn": [
 							{
-								"activity": "Enr_script",
+								"activity": "Delete data if exists",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -30376,51 +32591,36 @@
 						],
 						"outputs": [
 							{
-								"referenceName": "Enrollment_table_new",
+								"referenceName": "dataset_sql",
 								"type": "DatasetReference",
-								"parameters": {}
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "OrgEnrollment"
+								}
 							}
 						]
-					},
-					{
-						"name": "End_time_audit_update",
-						"type": "Lookup",
-						"dependsOn": [
-							{
-								"activity": "Copy_enr_data_to_database",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"sqlReaderQuery": "Update Audit_enr\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit_enr);\n\nUpdate Audit_enr\nSET Status = 'pass'\nwhere Id = (select Count(*) from Audit_enr);\n\nUpdate Audit_enr\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit_enr);\n\nSelect * from Audit_enr;",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"dataset": {
-								"referenceName": "AzureSqlTable7",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						}
 					},
 					{
 						"name": "Send email update",
 						"type": "WebActivity",
 						"dependsOn": [
 							{
-								"activity": "End_time_audit_update",
+								"activity": "end time update for enr data load",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -30501,20 +32701,418 @@
 								"type": "Expression"
 							}
 						}
+					},
+					{
+						"name": "start time update",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "INSERT INTO Audit(FileName, Operation, StartTime,Dashboard)\nValues('Enrolment', 'Enrolment_monthly_refresh', (Select GETDATE()),'Plan Finder');\nSelect * from Audit;",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "dataset_sql",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							}
+						}
+					},
+					{
+						"name": "end time update for Crosswalk_raw_file_processing",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Enr_script",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'pass'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "dataset_sql",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							}
+						}
+					},
+					{
+						"name": "end time update for crosswalk fail",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "send email update for failure",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'Fail'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "dataset_sql",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							}
+						}
+					},
+					{
+						"name": "start time update_enr_data_load_to_db",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "end time update for Crosswalk_raw_file_processing",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "INSERT INTO Audit(FileName, Operation, StartTime,Dashboard)\nValues('Enrolment', 'Enrolment_data_load_to_db', (Select GETDATE()),'Plan Finder');\nSelect * from Audit;",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "dataset_sql",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							}
+						}
+					},
+					{
+						"name": "end time update for enr data load",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Copy_enr_data_to_database",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'pass'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "dataset_sql",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							}
+						}
+					},
+					{
+						"name": "end time update for cenr data load fail",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "send email update for failure in copy files",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'Fail'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "dataset_sql",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							}
+						}
+					},
+					{
+						"name": "Delete data if exists",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "start time update_enr_data_load_to_db",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "DELETE FROM OrgEnrollment where Month = (SELECT DATENAME(month,GETDATE())) and Year = (SELECT YEAR(GETDATE()));\nSELECT TOP 10 * FROM OrgEnrollment;\n",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "dataset_sql",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "OrgEnrollment"
+								}
+							}
+						}
 					}
 				],
 				"policy": {
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
 				},
+				"parameters": {
+					"sql_server_dataset_name": {
+						"type": "String",
+						"defaultValue": "teghws.database.windows.net"
+					},
+					"db_name": {
+						"type": "String",
+						"defaultValue": "pf_data_prod"
+					},
+					"user_name": {
+						"type": "String",
+						"defaultValue": "hwstegadmin"
+					},
+					"password": {
+						"type": "String",
+						"defaultValue": "Goteg@12345"
+					}
+				},
+				"folder": {
+					"name": "PF_Pipelines/Monthly_Refresh"
+				},
 				"annotations": [],
 				"lastPublishTime": "2022-07-14T05:33:55Z"
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/AzureSqlTable7')]",
 				"[concat(variables('factoryId'), '/linkedServices/AzureDatabricks4_pfcluster3')]",
 				"[concat(variables('factoryId'), '/datasets/Enr_Output')]",
-				"[concat(variables('factoryId'), '/datasets/Enrollment_table_new')]"
+				"[concat(variables('factoryId'), '/datasets/dataset_sql')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ASAY_QC')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "AllStateAllYears/Output/Output_QC",
+						"fileSystem": "hwaicontainer"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
 			]
 		},
 		{
@@ -31682,6 +34280,95 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabase1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Crosswalk')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Linked_service_AzureDataLakeStorage2",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "Crosswalk/Output/crosswalk_2023",
+						"fileSystem": "hwaicontainer"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "PREVIOUS_CONTRACT_ID",
+						"type": "String"
+					},
+					{
+						"name": "PREVIOUS_PLAN_ID",
+						"type": "String"
+					},
+					{
+						"name": "PREVIOUS_PLAN_NAME",
+						"type": "String"
+					},
+					{
+						"name": "PREVIOUS_SNP_TYPE",
+						"type": "String"
+					},
+					{
+						"name": "PREVIOUS_SNP_INSTITUTIONAL",
+						"type": "String"
+					},
+					{
+						"name": "CURRENT_CONTRACT_ID",
+						"type": "String"
+					},
+					{
+						"name": "CURRENT_PLAN_ID",
+						"type": "String"
+					},
+					{
+						"name": "CURRENT_PLAN_NAME",
+						"type": "String"
+					},
+					{
+						"name": "CURRENT_SNP_TYPE",
+						"type": "String"
+					},
+					{
+						"name": "CURRENT_SNP_INSTITUTIONAL",
+						"type": "String"
+					},
+					{
+						"name": "DESCRIPTION",
+						"type": "String"
+					},
+					{
+						"name": "CP_ID_prev",
+						"type": "String"
+					},
+					{
+						"name": "CP_ID_curr",
+						"type": "String"
+					},
+					{
+						"name": "flag",
+						"type": "String"
+					},
+					{
+						"name": "Year",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/Linked_service_AzureDataLakeStorage2')]"
 			]
 		},
 		{
@@ -32908,20 +35595,10 @@
 				},
 				"annotations": [],
 				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "Parent_Organization",
-						"type": "varchar"
-					},
-					{
-						"name": "ParentOrganizationId",
-						"type": "int",
-						"precision": 10
-					}
-				],
+				"schema": [],
 				"typeProperties": {
 					"schema": "dbo",
-					"table": "OrgParentOrganization"
+					"table": "parent_organization"
 				}
 			},
 			"dependsOn": [
@@ -35354,6 +38031,168 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/combined_benefits')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Linked_service_AzureDataLakeStorage2",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileSystem": "pfcontainer"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "bid_id",
+						"type": "String"
+					},
+					{
+						"name": "pbp_a_dsnp_zerodollar",
+						"type": "String"
+					},
+					{
+						"name": "pbp_a_snp_state_cvg_yn",
+						"type": "String"
+					},
+					{
+						"name": "plan_type_new_updated",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/Linked_service_AzureDataLakeStorage2')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/combined_benefits_sql_Table')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Linked_Service_SQL",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"sql_server": {
+							"value": "@dataset().sql_server_dataset",
+							"type": "Expression"
+						},
+						"db_name": {
+							"value": "@dataset().db_name_dataset",
+							"type": "Expression"
+						},
+						"user_name": {
+							"value": "@dataset().user_name_dataset",
+							"type": "Expression"
+						},
+						"password": {
+							"value": "@dataset().password_dataset",
+							"type": "Expression"
+						}
+					}
+				},
+				"parameters": {
+					"sql_server_dataset": {
+						"type": "string"
+					},
+					"db_name_dataset": {
+						"type": "string"
+					},
+					"user_name_dataset": {
+						"type": "string"
+					},
+					"password_dataset": {
+						"type": "string"
+					},
+					"sql_table_name": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": {
+						"value": "@dataset().sql_table_name",
+						"type": "Expression"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/Linked_Service_SQL')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/dataset_sql')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Linked_Service_SQL",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"sql_server": {
+							"value": "@dataset().sql_server_dataset",
+							"type": "Expression"
+						},
+						"db_name": {
+							"value": "@dataset().db_name_dataset",
+							"type": "Expression"
+						},
+						"user_name": {
+							"value": "@dataset().user_name_dataset",
+							"type": "Expression"
+						},
+						"password": {
+							"value": "@dataset().password_dataset",
+							"type": "Expression"
+						}
+					}
+				},
+				"parameters": {
+					"sql_server_dataset": {
+						"type": "String"
+					},
+					"db_name_dataset": {
+						"type": "String"
+					},
+					"user_name_dataset": {
+						"type": "String"
+					},
+					"password_dataset": {
+						"type": "String"
+					},
+					"sql_table_name": {
+						"type": "String"
+					}
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": {
+						"value": "@dataset().sql_table_name",
+						"type": "Expression"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/Linked_Service_SQL')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/dummy_output')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -35462,6 +38301,48 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/org_name_repo')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "Org_Name_Repo.csv",
+						"folderPath": "AllStateAllYears/Output/Output_Parent_Org/Org_Name_Repo",
+						"fileSystem": "hwaicontainer"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "Parent Organization",
+						"type": "String"
+					},
+					{
+						"name": "Prev Parent Organization",
+						"type": "String"
+					},
+					{
+						"name": "Final Parent Organization",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/pbp_c_vt_final_data')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -35501,19 +38382,6 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
 			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/AzureBlobStorage1')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureBlobStorage",
-				"typeProperties": {
-					"connectionString": "[parameters('AzureBlobStorage1_connectionString')]"
-				}
-			},
-			"dependsOn": []
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/AzureDataLakeStorage1')]",
@@ -35614,12 +38482,12 @@
 						"type": "SecureString",
 						"value": "[parameters('AzureDatabricks4_pfcluster3_accessToken')]"
 					},
-					"newClusterNodeType": "Standard_D4s_v3",
+					"newClusterNodeType": "Standard_D64s_v3",
 					"newClusterNumOfWorker": "2",
 					"newClusterSparkEnvVars": {
 						"PYSPARK_PYTHON": "/databricks/python3/bin/python3"
 					},
-					"newClusterVersion": "10.4.x-scala2.12",
+					"newClusterVersion": "11.3.x-cpu-ml-scala2.12",
 					"newClusterInitScripts": [],
 					"clusterOption": "Fixed"
 				}
@@ -35635,6 +38503,50 @@
 				"type": "AzureSqlDatabase",
 				"typeProperties": {
 					"connectionString": "[parameters('AzureSqlDatabase1_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Linked_Service_SQL')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"parameters": {
+					"sql_server": {
+						"type": "string"
+					},
+					"db_name": {
+						"type": "string"
+					},
+					"user_name": {
+						"type": "string"
+					},
+					"password": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"connectionString": "[parameters('Linked_Service_SQL_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Linked_service_AzureDataLakeStorage2')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('Linked_service_AzureDataLakeStorage2_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "SecureString",
+						"value": "[parameters('Linked_service_AzureDataLakeStorage2_accountKey')]"
+					}
 				}
 			},
 			"dependsOn": []

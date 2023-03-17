@@ -7,10 +7,6 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "planfinder"
 		},
-		"AzureBlobStorage1_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorage1'"
-		},
 		"AzureDataLakeStorage1_accountKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'AzureDataLakeStorage1'"
@@ -35,9 +31,22 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureSqlDatabase1'"
 		},
+		"Linked_Service_SQL_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'Linked_Service_SQL'",
+			"defaultValue": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=@{linkedService().sql_server};Initial Catalog=@{linkedService().db_name};User ID=@{linkedService().user_name};Password=@{linkedService().password}"
+		},
+		"Linked_service_AzureDataLakeStorage2_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'Linked_service_AzureDataLakeStorage2'"
+		},
 		"AzureDataLakeStorage1_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://planfinderstorage.dfs.core.windows.net"
+		},
+		"Linked_service_AzureDataLakeStorage2_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://planfinderstorage.dfs.core.windows.net/"
 		},
 		"containerUri": {
 			"type": "string",
@@ -66,9 +75,6 @@
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
 					},
-					"AzureBlobStorage1_connectionString": {
-						"value": "[parameters('AzureBlobStorage1_connectionString')]"
-					},
 					"AzureDataLakeStorage1_accountKey": {
 						"value": "[parameters('AzureDataLakeStorage1_accountKey')]"
 					},
@@ -87,8 +93,17 @@
 					"AzureSqlDatabase1_connectionString": {
 						"value": "[parameters('AzureSqlDatabase1_connectionString')]"
 					},
+					"Linked_Service_SQL_connectionString": {
+						"value": "[parameters('Linked_Service_SQL_connectionString')]"
+					},
+					"Linked_service_AzureDataLakeStorage2_accountKey": {
+						"value": "[parameters('Linked_service_AzureDataLakeStorage2_accountKey')]"
+					},
 					"AzureDataLakeStorage1_properties_typeProperties_url": {
 						"value": "[parameters('AzureDataLakeStorage1_properties_typeProperties_url')]"
+					},
+					"Linked_service_AzureDataLakeStorage2_properties_typeProperties_url": {
+						"value": "[parameters('Linked_service_AzureDataLakeStorage2_properties_typeProperties_url')]"
 					}
 				}
 			},
@@ -232,6 +247,26 @@
 			},
 			"dependsOn": [
 				"[resourceId('Microsoft.Resources/deployments', 'planfinder_ArmTemplate_6')]"
+			]
+		},
+		{
+			"name": "planfinder_ArmTemplate_8",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_8.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'planfinder_ArmTemplate_7')]"
 			]
 		}
 	]
