@@ -151,8 +151,11 @@
 				}
 			}
 		],
+		"folder": {
+			"name": "Unused_Pipelines"
+		},
 		"annotations": [],
-		"lastPublishTime": "2022-07-22T13:15:57Z"
+		"lastPublishTime": "2023-03-17T04:36:00Z"
 	},
 	"type": "Microsoft.DataFactory/factories/pipelines"
 }

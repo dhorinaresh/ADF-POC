@@ -1,9 +1,53 @@
 {
-	"name": "enr_details_data",
+	"name": "Market_snapshot",
 	"properties": {
 		"activities": [
 			{
-				"name": "Enr_script",
+				"name": "start time update",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "INSERT INTO Audit(FileName, Operation, StartTime,Dashboard)\nValues('ASAY_Crosswalk_MS', 'ASAY_Crosswalk_MS', (Select GETDATE()),'Market_Snapshot');\nSelect * from Audit;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "dataset_sql",
+						"type": "DatasetReference",
+						"parameters": {
+							"sql_server_dataset": {
+								"value": "@pipeline().parameters.sql_server_dataset_name",
+								"type": "Expression"
+							},
+							"db_name_dataset": {
+								"value": "@pipeline().parameters.db_name",
+								"type": "Expression"
+							},
+							"user_name_dataset": {
+								"value": "@pipeline().parameters.user_name",
+								"type": "Expression"
+							},
+							"password_dataset": {
+								"value": "@pipeline().parameters.password",
+								"type": "Expression"
+							},
+							"sql_table_name": "Audit"
+						}
+					}
+				}
+			},
+			{
+				"name": "ASAY_Crosswalk_MS",
 				"type": "DatabricksNotebook",
 				"dependsOn": [
 					{
@@ -14,7 +58,7 @@
 					}
 				],
 				"policy": {
-					"timeout": "7.00:00:00",
+					"timeout": "0.12:00:00",
 					"retry": 0,
 					"retryIntervalInSeconds": 30,
 					"secureOutput": false,
@@ -22,7 +66,7 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"notebookPath": "/Users/hwaitech@healthworksai.com/Plan_Finder/Enrollment_Scripts/Enrollment_data"
+					"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Market_Snapshot/ASAY_Crosswalk_Market_Snapshot"
 				},
 				"linkedServiceName": {
 					"referenceName": "AzureDatabricks4_pfcluster3",
@@ -30,18 +74,120 @@
 				}
 			},
 			{
-				"name": "Copy_enr_data_to_database",
-				"type": "Copy",
+				"name": "end time update for MS Script",
+				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "Delete data if exists",
+						"activity": "Market_Snapshot_final",
 						"dependencyConditions": [
 							"Succeeded"
 						]
 					}
 				],
 				"policy": {
-					"timeout": "7.00:00:00",
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'pass'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "dataset_sql",
+						"type": "DatasetReference",
+						"parameters": {
+							"sql_server_dataset": {
+								"value": "@pipeline().parameters.sql_server_dataset_name",
+								"type": "Expression"
+							},
+							"db_name_dataset": {
+								"value": "@pipeline().parameters.db_name",
+								"type": "Expression"
+							},
+							"user_name_dataset": {
+								"value": "@pipeline().parameters.user_name",
+								"type": "Expression"
+							},
+							"password_dataset": {
+								"value": "@pipeline().parameters.password",
+								"type": "Expression"
+							},
+							"sql_table_name": "Audit"
+						}
+					}
+				}
+			},
+			{
+				"name": "end time update for MS script fail",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Market_Snapshot_final",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'Fail'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "dataset_sql",
+						"type": "DatasetReference",
+						"parameters": {
+							"sql_server_dataset": {
+								"value": "@pipeline().parameters.sql_server_dataset_name",
+								"type": "Expression"
+							},
+							"db_name_dataset": {
+								"value": "@pipeline().parameters.db_name",
+								"type": "Expression"
+							},
+							"user_name_dataset": {
+								"value": "@pipeline().parameters.user_name",
+								"type": "Expression"
+							},
+							"password_dataset": {
+								"value": "@pipeline().parameters.password",
+								"type": "Expression"
+							},
+							"sql_table_name": "Audit"
+						}
+					}
+				}
+			},
+			{
+				"name": "Copy MS data to Db",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "start time update_copy_MS_data",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
 					"retry": 0,
 					"retryIntervalInSeconds": 30,
 					"secureOutput": false,
@@ -54,7 +200,7 @@
 						"storeSettings": {
 							"type": "AzureBlobFSReadSettings",
 							"recursive": true,
-							"wildcardFolderPath": "Output_enrollment/Enrollment_final_data",
+							"wildcardFolderPath": "Crosswalk/Output/crosswalk_2023",
 							"wildcardFileName": "p*",
 							"enablePartitionDiscovery": false
 						},
@@ -79,7 +225,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "Enr_Output",
+						"referenceName": "Crosswalk",
 						"type": "DatasetReference"
 					}
 				],
@@ -104,99 +250,22 @@
 								"value": "@pipeline().parameters.password",
 								"type": "Expression"
 							},
-							"sql_table_name": "OrgEnrollment"
+							"sql_table_name": "Crosswalk_Master_Data"
 						}
 					}
 				]
 			},
 			{
-				"name": "Send email update",
-				"type": "WebActivity",
+				"name": "start time update_copy_MS_data",
+				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "end time update for enr data load",
+						"activity": "end time update for MS Script",
 						"dependencyConditions": [
 							"Succeeded"
 						]
 					}
 				],
-				"policy": {
-					"timeout": "7.00:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
-					"method": "POST",
-					"body": {
-						"value": "{\n \"title\":\"PIPELINE RUN FOR ENROLLMENT REFRESH COMPLETED\",\n \"color\":\"Green\",\n \"message\":\"monthly refresh of enrollment completed\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
-						"type": "Expression"
-					}
-				}
-			},
-			{
-				"name": "send email update for failure",
-				"type": "WebActivity",
-				"dependsOn": [
-					{
-						"activity": "Enr_script",
-						"dependencyConditions": [
-							"Failed"
-						]
-					}
-				],
-				"policy": {
-					"timeout": "7.00:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
-					"method": "POST",
-					"body": {
-						"value": "{\n \"title\":\"PIPELINE RUN FOR ENROLLMENT REFRESH FAILED\",\n \"color\":\"RED\",\n \"message\":\"@{activity('Enr_script').error.message}\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
-						"type": "Expression"
-					}
-				}
-			},
-			{
-				"name": "send email update for failure in copy files",
-				"type": "WebActivity",
-				"dependsOn": [
-					{
-						"activity": "Copy_enr_data_to_database",
-						"dependencyConditions": [
-							"Failed"
-						]
-					}
-				],
-				"policy": {
-					"timeout": "7.00:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
-					"method": "POST",
-					"body": {
-						"value": "{\n \"title\":\"PIPELINE RUN FOR ENROLLMENT REFRESH FAILED\",\n \"color\":\"RED\",\n \"message\":\"monthly refresh of enrollment pipeline gave an error in copying the table to database. plz check it in the pipeline and resolve the error\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
-						"type": "Expression"
-					}
-				}
-			},
-			{
-				"name": "start time update",
-				"type": "Lookup",
-				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
@@ -208,7 +277,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "INSERT INTO Audit(FileName, Operation, StartTime,Dashboard)\nValues('Enrolment', 'Enrolment_monthly_refresh', (Select GETDATE()),'Plan Finder');\nSelect * from Audit;",
+						"sqlReaderQuery": "INSERT INTO Audit(FileName, Operation, StartTime,Dashboard)\nValues('Market_Snapshot', 'MS_data_load_to_db', (Select GETDATE()),'Market_Snapshot');\nSelect * from Audit;",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -238,11 +307,11 @@
 				}
 			},
 			{
-				"name": "end time update for Crosswalk_raw_file_processing",
+				"name": "end time update for MS_data_load_to_db",
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "Enr_script",
+						"activity": "Copy MS data to Db",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -289,13 +358,13 @@
 				}
 			},
 			{
-				"name": "end time update for crosswalk fail",
+				"name": "end time update for MS_data_load to db fail",
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "send email update for failure",
+						"activity": "Copy MS data to Db",
 						"dependencyConditions": [
-							"Succeeded"
+							"Failed"
 						]
 					}
 				],
@@ -340,18 +409,18 @@
 				}
 			},
 			{
-				"name": "start time update_enr_data_load_to_db",
-				"type": "Lookup",
+				"name": "send email update forMarket snapshot script fail",
+				"type": "WebActivity",
 				"dependsOn": [
 					{
-						"activity": "end time update for Crosswalk_raw_file_processing",
+						"activity": "end time update for MS script fail",
 						"dependencyConditions": [
 							"Succeeded"
 						]
 					}
 				],
 				"policy": {
-					"timeout": "0.12:00:00",
+					"timeout": "7.00:00:00",
 					"retry": 0,
 					"retryIntervalInSeconds": 30,
 					"secureOutput": false,
@@ -359,50 +428,27 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"source": {
-						"type": "AzureSqlSource",
-						"sqlReaderQuery": "INSERT INTO Audit(FileName, Operation, StartTime,Dashboard)\nValues('Enrolment', 'Enrolment_data_load_to_db', (Select GETDATE()),'Plan Finder');\nSelect * from Audit;",
-						"queryTimeout": "02:00:00",
-						"partitionOption": "None"
-					},
-					"dataset": {
-						"referenceName": "dataset_sql",
-						"type": "DatasetReference",
-						"parameters": {
-							"sql_server_dataset": {
-								"value": "@pipeline().parameters.sql_server_dataset_name",
-								"type": "Expression"
-							},
-							"db_name_dataset": {
-								"value": "@pipeline().parameters.db_name",
-								"type": "Expression"
-							},
-							"user_name_dataset": {
-								"value": "@pipeline().parameters.user_name",
-								"type": "Expression"
-							},
-							"password_dataset": {
-								"value": "@pipeline().parameters.password",
-								"type": "Expression"
-							},
-							"sql_table_name": "Audit"
-						}
+					"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+					"method": "POST",
+					"body": {
+						"value": "{\n \"title\":\"PIPELINE RUN FOR MS Update Script UPDATE FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the MS Script and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+						"type": "Expression"
 					}
 				}
 			},
 			{
-				"name": "end time update for enr data load",
-				"type": "Lookup",
+				"name": "send email update for MS data load fail",
+				"type": "WebActivity",
 				"dependsOn": [
 					{
-						"activity": "Copy_enr_data_to_database",
+						"activity": "end time update for MS_data_load to db fail",
 						"dependencyConditions": [
 							"Succeeded"
 						]
 					}
 				],
 				"policy": {
-					"timeout": "0.12:00:00",
+					"timeout": "7.00:00:00",
 					"retry": 0,
 					"retryIntervalInSeconds": 30,
 					"secureOutput": false,
@@ -410,50 +456,27 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"source": {
-						"type": "AzureSqlSource",
-						"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'pass'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
-						"queryTimeout": "02:00:00",
-						"partitionOption": "None"
-					},
-					"dataset": {
-						"referenceName": "dataset_sql",
-						"type": "DatasetReference",
-						"parameters": {
-							"sql_server_dataset": {
-								"value": "@pipeline().parameters.sql_server_dataset_name",
-								"type": "Expression"
-							},
-							"db_name_dataset": {
-								"value": "@pipeline().parameters.db_name",
-								"type": "Expression"
-							},
-							"user_name_dataset": {
-								"value": "@pipeline().parameters.user_name",
-								"type": "Expression"
-							},
-							"password_dataset": {
-								"value": "@pipeline().parameters.password",
-								"type": "Expression"
-							},
-							"sql_table_name": "Audit"
-						}
+					"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+					"method": "POST",
+					"body": {
+						"value": "{\n \"title\":\"PIPELINE RUN FOR MS data load FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the MS Data Load and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+						"type": "Expression"
 					}
 				}
 			},
 			{
-				"name": "end time update for cenr data load fail",
-				"type": "Lookup",
+				"name": "send email update for Market_Snapshot pipeline success",
+				"type": "WebActivity",
 				"dependsOn": [
 					{
-						"activity": "send email update for failure in copy files",
+						"activity": "end time update for MS_data_load_to_db",
 						"dependencyConditions": [
 							"Succeeded"
 						]
 					}
 				],
 				"policy": {
-					"timeout": "0.12:00:00",
+					"timeout": "7.00:00:00",
 					"retry": 0,
 					"retryIntervalInSeconds": 30,
 					"secureOutput": false,
@@ -461,45 +484,22 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"source": {
-						"type": "AzureSqlSource",
-						"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'Fail'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
-						"queryTimeout": "02:00:00",
-						"partitionOption": "None"
-					},
-					"dataset": {
-						"referenceName": "dataset_sql",
-						"type": "DatasetReference",
-						"parameters": {
-							"sql_server_dataset": {
-								"value": "@pipeline().parameters.sql_server_dataset_name",
-								"type": "Expression"
-							},
-							"db_name_dataset": {
-								"value": "@pipeline().parameters.db_name",
-								"type": "Expression"
-							},
-							"user_name_dataset": {
-								"value": "@pipeline().parameters.user_name",
-								"type": "Expression"
-							},
-							"password_dataset": {
-								"value": "@pipeline().parameters.password",
-								"type": "Expression"
-							},
-							"sql_table_name": "Audit"
-						}
+					"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+					"method": "POST",
+					"body": {
+						"value": "{\n \"title\":\"PIPELINE RUN FOR Market Snapshot data refresh SUCCESS\",\n \"color\":\"GREEN\",\n \"message\":\"Check the QC Output\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+						"type": "Expression"
 					}
 				}
 			},
 			{
-				"name": "Delete data if exists",
-				"type": "Lookup",
+				"name": "Market_Snapshot_final",
+				"type": "DatabricksNotebook",
 				"dependsOn": [
 					{
-						"activity": "start time update_enr_data_load_to_db",
+						"activity": "ASAY_Crosswalk_MS",
 						"dependencyConditions": [
-							"Succeeded"
+							"Completed"
 						]
 					}
 				],
@@ -512,50 +512,26 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"source": {
-						"type": "AzureSqlSource",
-						"sqlReaderQuery": "DELETE FROM OrgEnrollment where Month = (SELECT DATENAME(month,GETDATE())) and Year = (SELECT YEAR(GETDATE()));\nSELECT TOP 10 * FROM OrgEnrollment;\n",
-						"queryTimeout": "02:00:00",
-						"partitionOption": "None"
-					},
-					"dataset": {
-						"referenceName": "dataset_sql",
-						"type": "DatasetReference",
-						"parameters": {
-							"sql_server_dataset": {
-								"value": "@pipeline().parameters.sql_server_dataset_name",
-								"type": "Expression"
-							},
-							"db_name_dataset": {
-								"value": "@pipeline().parameters.db_name",
-								"type": "Expression"
-							},
-							"user_name_dataset": {
-								"value": "@pipeline().parameters.user_name",
-								"type": "Expression"
-							},
-							"password_dataset": {
-								"value": "@pipeline().parameters.password",
-								"type": "Expression"
-							},
-							"sql_table_name": "OrgEnrollment"
-						}
-					}
+					"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Market_Snapshot/Market_Snapshot_final"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks4_pfcluster3",
+					"type": "LinkedServiceReference"
 				}
 			}
 		],
 		"parameters": {
 			"sql_server_dataset_name": {
 				"type": "String",
-				"defaultValue": "teghws.database.windows.net"
+				"defaultValue": "hwpilot.database.windows.net"
 			},
 			"db_name": {
 				"type": "String",
-				"defaultValue": "pf_data_prod"
+				"defaultValue": "pf_data"
 			},
 			"user_name": {
 				"type": "String",
-				"defaultValue": "hwstegadmin"
+				"defaultValue": "pladmin"
 			},
 			"password": {
 				"type": "String",
@@ -563,10 +539,10 @@
 			}
 		},
 		"folder": {
-			"name": "PF_Pipelines/Monthly_Refresh"
+			"name": "Hwai_Refresh/Hwai_Market_Snapshot"
 		},
 		"annotations": [],
-		"lastPublishTime": "2023-03-17T04:36:12Z"
+		"lastPublishTime": "2023-03-17T04:36:04Z"
 	},
 	"type": "Microsoft.DataFactory/factories/pipelines"
 }

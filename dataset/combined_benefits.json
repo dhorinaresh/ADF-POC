@@ -1,8 +1,8 @@
 {
-	"name": "org_name_repo",
+	"name": "combined_benefits",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "AzureDataLakeStorage1",
+			"referenceName": "Linked_service_AzureDataLakeStorage2",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
@@ -10,9 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "Org_Name_Repo.csv",
-				"folderPath": "AllStateAllYears/Output/Output_Parent_Org/Org_Name_Repo",
-				"fileSystem": "hwaicontainer"
+				"fileSystem": "pfcontainer"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
@@ -21,15 +19,19 @@
 		},
 		"schema": [
 			{
-				"name": "Parent Organization",
+				"name": "bid_id",
 				"type": "String"
 			},
 			{
-				"name": "Prev Parent Organization",
+				"name": "pbp_a_dsnp_zerodollar",
 				"type": "String"
 			},
 			{
-				"name": "Final Parent Organization",
+				"name": "pbp_a_snp_state_cvg_yn",
+				"type": "String"
+			},
+			{
+				"name": "plan_type_new_updated",
 				"type": "String"
 			}
 		]

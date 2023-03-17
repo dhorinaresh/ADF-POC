@@ -1,5 +1,5 @@
 {
-	"name": "dataset_sql",
+	"name": "combined_benefits_sql_Table",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "Linked_Service_SQL",
@@ -25,19 +25,19 @@
 		},
 		"parameters": {
 			"sql_server_dataset": {
-				"type": "String"
+				"type": "string"
 			},
 			"db_name_dataset": {
-				"type": "String"
+				"type": "string"
 			},
 			"user_name_dataset": {
-				"type": "String"
+				"type": "string"
 			},
 			"password_dataset": {
-				"type": "String"
+				"type": "string"
 			},
 			"sql_table_name": {
-				"type": "String"
+				"type": "string"
 			}
 		},
 		"annotations": [],

@@ -221,6 +221,8 @@
 		"folder": {
 			"name": "Monthly_Refresh/Enr_all_file"
 		},
-		"annotations": []
-	}
+		"annotations": [],
+		"lastPublishTime": "2023-03-17T04:36:00Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
 }
