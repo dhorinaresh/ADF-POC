@@ -204,11 +204,11 @@
 				}
 			},
 			{
-				"name": "Copy pi_pivot to Db",
+				"name": "Copy pi_pivot_2023 to Db",
 				"type": "Copy",
 				"dependsOn": [
 					{
-						"activity": "Delete Existing record from pi_pivot",
+						"activity": "Delete Existing record from pi_landscape_pivot",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -224,11 +224,11 @@
 				"userProperties": [
 					{
 						"name": "Source",
-						"value": "hwaicontainer/Eligibles/ Output/Eligibles/p*"
+						"value": "hwaicontainer/Product_Insights/Output/pi_lscape_pivot/p*"
 					},
 					{
 						"name": "Destination",
-						"value": "dbo.@{'Eligibles'}"
+						"value": "dbo.@{'pi_pivot_2023'}"
 					}
 				],
 				"typeProperties": {
@@ -237,7 +237,7 @@
 						"storeSettings": {
 							"type": "AzureBlobFSReadSettings",
 							"recursive": true,
-							"wildcardFolderPath": "Eligibles/ Output/Eligibles",
+							"wildcardFolderPath": "Product_Insights/Output/pi_lscape_pivot",
 							"wildcardFileName": "p*",
 							"enablePartitionDiscovery": false
 						},
@@ -480,7 +480,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "Eligibles",
+						"referenceName": "pi_pivot",
 						"type": "DatasetReference"
 					}
 				],
@@ -505,7 +505,7 @@
 								"value": "@pipeline().parameters.password",
 								"type": "Expression"
 							},
-							"sql_table_name": "HWAI_Eligibles"
+							"sql_table_name": "pi_pivot_2023"
 						}
 					}
 				]
@@ -562,11 +562,11 @@
 				}
 			},
 			{
-				"name": "Pass_status_update_Eligibles_to_DB",
+				"name": "Pass_status_update_pi_pivot_to_DB",
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "Copy pi_pivot to Db",
+						"activity": "Copy pi_pivot_2023 to Db",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -613,11 +613,11 @@
 				}
 			},
 			{
-				"name": "Fail_status_update_Eligibles_to_DB",
+				"name": "Fail_status_update_pi_pivot_to_DB",
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "Copy pi_pivot to Db",
+						"activity": "Copy pi_pivot_2023 to Db",
 						"dependencyConditions": [
 							"Failed"
 						]
@@ -664,11 +664,11 @@
 				}
 			},
 			{
-				"name": "send email update for fail Eligibles to DB",
+				"name": "send email update for fail pi_pivot to DB",
 				"type": "WebActivity",
 				"dependsOn": [
 					{
-						"activity": "Fail_status_update_Eligibles_to_DB",
+						"activity": "Fail_status_update_pi_pivot_to_DB",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -686,17 +686,17 @@
 					"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
 					"method": "POST",
 					"body": {
-						"value": "{\n \"title\":\"PIPELINE RUN FOR Eligibles_to_DB FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the Eligibles_to_DB and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+						"value": "{\n \"title\":\"PIPELINE RUN FOR pi_pivot_to_DB FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the pi_pivot_to_DB and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
 						"type": "Expression"
 					}
 				}
 			},
 			{
-				"name": "Eligibles pipeline run successfully",
+				"name": "pi_pivot pipeline run successfully",
 				"type": "WebActivity",
 				"dependsOn": [
 					{
-						"activity": "Pass_status_update_Eligibles_to_DB",
+						"activity": "Pass_status_update_pi_pivot_to_DB",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -714,15 +714,22 @@
 					"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
 					"method": "POST",
 					"body": {
-						"value": "{\n \"title\":\"PIPELINE RUN FOR Eligibles_to_DB IS SUCCESS\",\n \"color\":\"GREEN\",\n \"message\":\"Eligibles_to_DB completed sccessfully\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+						"value": "{\n \"title\":\"PIPELINE RUN FOR pi_pivot_to_DB IS SUCCESS\",\n \"color\":\"GREEN\",\n \"message\":\"pi_pivot_to_DB completed sccessfully\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
 						"type": "Expression"
 					}
 				}
 			},
 			{
-				"name": "Delete Existing record from pi_pivot",
+				"name": "Delete Existing record from pi_landscape_pivot",
 				"type": "Lookup",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "start time update_data_upload_DB",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
@@ -758,7 +765,7 @@
 								"value": "@pipeline().parameters.password",
 								"type": "Expression"
 							},
-							"sql_table_name": "HWAI_Eligibles"
+							"sql_table_name": "pi_pivot_2023"
 						}
 					}
 				}
@@ -835,7 +842,7 @@
 				"userProperties": [
 					{
 						"name": "Source",
-						"value": "hwaicontainer/Product_Insights / Output / pi_trends/p*"
+						"value": "hwaicontainer/Product_Insights/Output/pi_trends/p*"
 					},
 					{
 						"name": "Destination",
@@ -848,7 +855,7 @@
 						"storeSettings": {
 							"type": "AzureBlobFSReadSettings",
 							"recursive": true,
-							"wildcardFolderPath": "Product_Insights / Output / pi_trends",
+							"wildcardFolderPath": "Product_Insights/Output/pi_trends",
 							"wildcardFileName": "p*",
 							"enablePartitionDiscovery": false
 						},
@@ -864,6 +871,956 @@
 					"enableStaging": false,
 					"translator": {
 						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "State",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "State",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "County",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "County",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "bid_id",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "bid_id",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "key_segment2",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "key_segment2",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CP_ID_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "CP_ID_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "statecode",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "statecode",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "plan_name",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "plan_name",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "plan_type",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "plan_type",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "parent_organization",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "parent_organization",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "SNP",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SNP",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Special_Needs_Plan_Type",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Special_Needs_Plan_Type",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "cp_id_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "cp_id_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "cp_id_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "cp_id_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "cp_id_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "cp_id_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "contract_id",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "contract_id",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "plan_id",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "plan_id",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "segment_id",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "segment_id",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Monthly_Consolidated_Premium_C_D",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Monthly_Consolidated_Premium_C_D",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Annual_drug_deductible",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Annual_drug_deductible",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Overall_Star_Rating",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Overall_Star_Rating",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "partc_premium2",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "partc_premium2",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "PartD_Total_Premium5",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PartD_Total_Premium5",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "star_rating",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "star_rating",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Premium_C_new",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Premium_C_new",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Premium_D_new",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Premium_D_new",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Year",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Year",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "April_2019",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "April_2019",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "August_2019",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "August_2019",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "December_2019",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "December_2019",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "February_2019",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "February_2019",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "January_2019",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "January_2019",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "July_2019",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "July_2019",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "June_2019",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "June_2019",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "March_2019",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "March_2019",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "May_2019",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "May_2019",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "November_2019",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "November_2019",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "October_2019",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "October_2019",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "September_2019",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "September_2019",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "January_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "January_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "February_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "February_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "March_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "March_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "April_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "April_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "May_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "May_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "June_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "June_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "July_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "July_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "August_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "August_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "September_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "September_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "October_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "October_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "November_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "November_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "December_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "December_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "January_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "January_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "February_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "February_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "March_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "March_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "April_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "April_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "May_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "May_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "June_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "June_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "July_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "July_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "August_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "August_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "September_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "September_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "October_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "October_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "November_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "November_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "December_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "December_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "January_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "January_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "February_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "February_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "March_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "March_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "April_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "April_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "May_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "May_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "June_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "June_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "July_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "July_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "August_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "August_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "September_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "September_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "October_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "October_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "November_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "November_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "December_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "December_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "January_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "January_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "February_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "February_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "March_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "March_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "In_network_MOOP_Amount",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "In_network_MOOP_Amount",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "enr_latest",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "enr_latest",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							}
+						],
 						"typeConversion": true,
 						"typeConversionSettings": {
 							"allowDataTruncation": true,
@@ -937,7 +1894,7 @@
 						"storeSettings": {
 							"type": "AzureBlobFSReadSettings",
 							"recursive": true,
-							"wildcardFolderPath": "Product_Insights / Output / pi_lscape",
+							"wildcardFolderPath": "Product_Insights/Output/pi_lscape",
 							"wildcardFileName": "p*",
 							"enablePartitionDiscovery": false
 						},
@@ -953,6 +1910,3632 @@
 					"enableStaging": false,
 					"translator": {
 						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "bid_id",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "bid_id",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "State",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "State",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "County",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "County",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CP_ID_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "CP_ID_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CP_ID_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "CP_ID_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CP_ID_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "CP_ID_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CP_ID_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "CP_ID_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "statecode",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "statecode",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Contract_ID",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Contract_ID",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Plan_ID",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Plan_ID",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Segment_ID",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Segment_ID",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Organization_Name",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Organization_Name",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Plan_Name",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Plan_Name",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "plan_type",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "plan_type",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Monthly_Consolidated_Premium_C_D",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Monthly_Consolidated_Premium_C_D",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Drug_Benefit_Type",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Drug_Benefit_Type",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Add_Cvrg_Offrd_in_Gap",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Add_Cvrg_Offrd_in_Gap",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Drug_Benefit_Type_Detail",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Drug_Benefit_Type_Detail",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "In_network_MOOP_Amount",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "In_network_MOOP_Amount",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Overall_Star_Rating",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Overall_Star_Rating",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "MMP",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "MMP",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Organization_Type",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Organization_Type",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "plan_type_p",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "plan_type_p",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "PartD_Basic_Prm_Blw_Rgnl_bnchmrk",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PartD_Basic_Prm_Blw_Rgnl_bnchmrk",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "partc_premium2",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "partc_premium2",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "PartD_Basic_Premium3",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PartD_Basic_Premium3",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "PartD_Supplemental_Premium4",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PartD_Supplemental_Premium4",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "PartD_Total_Premium5",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PartD_Total_Premium5",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "PartD_Prm_oblgtn_Full_prm_assist",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PartD_Prm_oblgtn_Full_prm_assist",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "PartD_Prm_oblgtn_75_prm_assist",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PartD_Prm_oblgtn_75_prm_assist",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "PartD_Prm_oblgtn_50_prm_assist",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PartD_Prm_oblgtn_50_prm_assist",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "PartD_Prm_oblgtn_25_prm_assist",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PartD_Prm_oblgtn_25_prm_assist",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "PartD_Drug_Deductible",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PartD_Drug_Deductible",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "key_segment2",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "key_segment2",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "star_rating",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "star_rating",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "parent_organization",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "parent_organization",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Premium_C_new",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Premium_C_new",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Premium_D_new",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Premium_D_new",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "SNP",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SNP",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Special_Needs_Plan_Type",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Special_Needs_Plan_Type",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "PartD",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PartD",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "April_2019",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "April_2019",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "August_2019",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "August_2019",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "December_2019",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "December_2019",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "February_2019",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "February_2019",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "January_2019",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "January_2019",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "July_2019",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "July_2019",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "June_2019",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "June_2019",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "March_2019",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "March_2019",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "May_2019",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "May_2019",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "November_2019",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "November_2019",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "October_2019",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "October_2019",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "September_2019",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "September_2019",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "January_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "January_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "February_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "February_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "March_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "March_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "April_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "April_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "May_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "May_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "June_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "June_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "July_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "July_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "August_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "August_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "September_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "September_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "October_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "October_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "November_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "November_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "December_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "December_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "January_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "January_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "February_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "February_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "March_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "March_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "April_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "April_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "May_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "May_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "June_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "June_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "July_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "July_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "August_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "August_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "September_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "September_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "October_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "October_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "November_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "November_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "December_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "December_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "January_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "January_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "February_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "February_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "March_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "March_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "April_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "April_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "May_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "May_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "June_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "June_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "July_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "July_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "August_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "August_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "September_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "September_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "October_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "October_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "November_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "November_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "December_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "December_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "January_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "January_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "February_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "February_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "March_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "March_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Inpatient_Hospital_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Inpatient_Hospital_YN",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Snf_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Snf_YN",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Cardiac_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Cardiac_YN",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Emergency_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Emergency_YN",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Chiropractor_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Chiropractor_YN",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Podiatry_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Podiatry_YN",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Telehealth_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Telehealth_YN",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Outpatient_Blood_Services_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Outpatient_Blood_Services_YN",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Transportation_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Transportation_YN",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Accupuncture_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Accupuncture_YN",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Over_the_Counter_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Over_the_Counter_YN",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Meal_Services_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Meal_Services_YN",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Annual_Physical_Exam_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Annual_Physical_Exam_YN",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Pre_Dental_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Pre_Dental_YN",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Comp_Dental_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Comp_Dental_YN",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Eye_Exam_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Eye_Exam_YN",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Eye_Wear_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Eye_Wear_YN",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Hear_Exam_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Hear_Exam_YN",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Hear_Aid_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Hear_Aid_YN",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Giveback_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Giveback_YN",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Alternative_Therapy_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Alternative_Therapy_YN",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "PERS_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PERS_YN",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "flag_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "flag_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Contract_Number_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Contract_Number_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Plan_ID_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Plan_ID_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Segment_ID_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Segment_ID_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Organization_Marketing_Name_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Organization_Marketing_Name_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Plan Name_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Plan Name_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Benefit_Year_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Benefit_Year_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Inpatient_Hospital_Acute_Care_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Inpatient_Hospital_Acute_Care_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Inpatient_Mental_Health_Care_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Inpatient_Mental_Health_Care_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Skilled_Nursing_Facility_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Skilled_Nursing_Facility_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Cardiac_Rehabilitation_Services_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Cardiac_Rehabilitation_Services_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Pulmonary_Rehab_Services_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Pulmonary_Rehab_Services_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Emergency_Care_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Emergency_Care_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Urgently_Needed_Care_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Urgently_Needed_Care_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Home_Health_Agency_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Home_Health_Agency_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Primary_Care_Physician_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Primary_Care_Physician_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Chiropractic_Services_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Chiropractic_Services_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Occupational_Therapy_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Occupational_Therapy_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Physician_Specialists_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Physician_Specialists_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Outpatient_Mental_Health_Care_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Outpatient_Mental_Health_Care_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Podiatry_Services_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Podiatry_Services_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Other_Health_Professionals_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Other_Health_Professionals_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Psychiatric_Care_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Psychiatric_Care_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Physical_and_Speech_Therapy_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Physical_and_Speech_Therapy_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Outpatient_Lab_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Outpatient_Lab_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Diagnostic_Tests_and_Procedures_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Diagnostic_Tests_and_Procedures_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Therapeutic_Radiation_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Therapeutic_Radiation_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Outpatient_X_Rays_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Outpatient_X_Rays_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Diagnostic_Radiological_Services_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Diagnostic_Radiological_Services_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Outpatient_Hospital_Services_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Outpatient_Hospital_Services_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Ambulatory_Surgical_Center_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Ambulatory_Surgical_Center_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Chemotherapy_Drugs_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Chemotherapy_Drugs_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Ambulance_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Ambulance_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Durable_Medical_Equipment_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Durable_Medical_Equipment_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Prosthetic_Devices_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Prosthetic_Devices_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Renal_Dialysis_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Renal_Dialysis_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Diabetes_Education_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Diabetes_Education_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Medicare_Covered_Part_B_Drugs_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Medicare_Covered_Part_B_Drugs_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Preventative_Dental_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Preventative_Dental_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Comprehensive_Dental_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Comprehensive_Dental_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Eye_Exams_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Eye_Exams_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Hearing_Exams_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Hearing_Exams_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Opioid_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Opioid_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Total_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Total_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "PartD_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PartD_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Grand_Total_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Grand_Total_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "PBP_Version_Date_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PBP_Version_Date_2022",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Organization_Marketing_Name_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Organization_Marketing_Name_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Plan Name_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Plan Name_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Benefit_Year_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Benefit_Year_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Inpatient_Hospital_Acute_Care_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Inpatient_Hospital_Acute_Care_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Inpatient_Mental_Health_Care_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Inpatient_Mental_Health_Care_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Skilled_Nursing_Facility_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Skilled_Nursing_Facility_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Cardiac_Rehabilitation_Services_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Cardiac_Rehabilitation_Services_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Pulmonary_Rehab_Services_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Pulmonary_Rehab_Services_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Emergency_Care_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Emergency_Care_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Urgently_Needed_Care_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Urgently_Needed_Care_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Home_Health_Agency_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Home_Health_Agency_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Primary_Care_Physician_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Primary_Care_Physician_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Chiropractic_Services_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Chiropractic_Services_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Occupational_Therapy_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Occupational_Therapy_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Physician_Specialists_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Physician_Specialists_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Outpatient_Mental_Health_Care_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Outpatient_Mental_Health_Care_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Podiatry_Services_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Podiatry_Services_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Other_Health_Professionals_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Other_Health_Professionals_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Psychiatric_Care_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Psychiatric_Care_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Physical_and_Speech_Therapy_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Physical_and_Speech_Therapy_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Outpatient_Lab_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Outpatient_Lab_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Diagnostic_Tests_and_Procedures_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Diagnostic_Tests_and_Procedures_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Therapeutic_Radiation_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Therapeutic_Radiation_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Outpatient_X_Rays_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Outpatient_X_Rays_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Diagnostic_Radiological_Services_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Diagnostic_Radiological_Services_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Outpatient_Hospital_Services_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Outpatient_Hospital_Services_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Ambulatory_Surgical_Center_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Ambulatory_Surgical_Center_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Chemotherapy_Drugs_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Chemotherapy_Drugs_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Ambulance_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Ambulance_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Durable_Medical_Equipment_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Durable_Medical_Equipment_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Prosthetic_Devices_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Prosthetic_Devices_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Renal_Dialysis_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Renal_Dialysis_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Diabetes_Education_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Diabetes_Education_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Medicare_Covered_Part_B_Drugs_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Medicare_Covered_Part_B_Drugs_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Preventative_Dental_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Preventative_Dental_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Comprehensive_Dental_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Comprehensive_Dental_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Eye_Exams_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Eye_Exams_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Hearing_Exams_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Hearing_Exams_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Opioid_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Opioid_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Total_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Total_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "PartD_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PartD_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Grand_Total_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Grand_Total_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "PBP_Version_Date_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PBP_Version_Date_2023",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Description",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Description",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Contract_Number_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Contract_Number_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Plan_ID_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Plan_ID_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Segment_ID_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Segment_ID_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Organization_Marketing_Name_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Organization_Marketing_Name_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Plan_Name_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Plan_Name_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Benefit_Year_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Benefit_Year_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Inpatient_Hospital_Acute_Care_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Inpatient_Hospital_Acute_Care_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Inpatient_Mental_Health_Care_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Inpatient_Mental_Health_Care_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Skilled_Nursing_Facility_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Skilled_Nursing_Facility_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Cardiac_Rehabilitation_Services_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Cardiac_Rehabilitation_Services_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Pulmonary_Rehab_Services_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Pulmonary_Rehab_Services_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Emergency_Care_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Emergency_Care_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Urgently_Needed_Care_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Urgently_Needed_Care_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Home_Health_Agency_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Home_Health_Agency_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Primary_Care_Physician_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Primary_Care_Physician_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Chiropractic_Services_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Chiropractic_Services_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Occupational_Therapy_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Occupational_Therapy_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Physician_Specialists_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Physician_Specialists_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Outpatient_Mental_Health_Care_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Outpatient_Mental_Health_Care_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Podiatry_Services_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Podiatry_Services_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Other_Health_Professionals_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Other_Health_Professionals_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Psychiatric_Care_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Psychiatric_Care_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Physical_and_Speech_Therapy_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Physical_and_Speech_Therapy_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Outpatient_Lab_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Outpatient_Lab_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Diagnostic_Tests_and_Procedures_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Diagnostic_Tests_and_Procedures_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Therapeutic_Radiation_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Therapeutic_Radiation_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Outpatient_X_Rays_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Outpatient_X_Rays_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Diagnostic_Radiological_Services_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Diagnostic_Radiological_Services_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Outpatient_Hospital_Services_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Outpatient_Hospital_Services_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Ambulatory_Surgical_Center_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Ambulatory_Surgical_Center_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Chemotherapy_Drugs_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Chemotherapy_Drugs_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Ambulance_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Ambulance_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Durable_Medical_Equipment_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Durable_Medical_Equipment_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Prosthetic_Devices_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Prosthetic_Devices_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Renal_Dialysis_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Renal_Dialysis_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Diabetes_Education_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Diabetes_Education_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Medicare_Covered_Part_B_Drugs_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Medicare_Covered_Part_B_Drugs_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Preventative_Dental_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Preventative_Dental_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Comprehensive_Dental_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Comprehensive_Dental_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Eye_Exams_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Eye_Exams_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Hearing_Exams_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Hearing_Exams_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Opioid_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Opioid_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Total_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Total_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "PartD_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PartD_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Grand_Total_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Grand_Total_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "PBP_Version_Date_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PBP_Version_Date_2021",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Contract_Number_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Contract_Number_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Plan_ID_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Plan_ID_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Segment_ID_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Segment_ID_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Organization_Marketing_Name_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Organization_Marketing_Name_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Plan_Name_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Plan_Name_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Benefit_Year_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Benefit_Year_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Inpatient_Hospital_Acute_Care_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Inpatient_Hospital_Acute_Care_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Inpatient_Mental_Health_Care_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Inpatient_Mental_Health_Care_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Skilled_Nursing_Facility_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Skilled_Nursing_Facility_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Cardiac_Rehabilitation_Services_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Cardiac_Rehabilitation_Services_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Pulmonary_Rehab_Services_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Pulmonary_Rehab_Services_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Emergency_Care_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Emergency_Care_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Urgently_Needed_Care_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Urgently_Needed_Care_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Home_Health_Agency_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Home_Health_Agency_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Primary_Care_Physician_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Primary_Care_Physician_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Chiropractic_Services_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Chiropractic_Services_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Occupational_Therapy_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Occupational_Therapy_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Physician_Specialists_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Physician_Specialists_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Outpatient_Mental_Health_Care_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Outpatient_Mental_Health_Care_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Podiatry_Services_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Podiatry_Services_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Other_Health_Professionals_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Other_Health_Professionals_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Psychiatric_Care_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Psychiatric_Care_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Physical_and_Speech_Therapy_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Physical_and_Speech_Therapy_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Outpatient_Lab_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Outpatient_Lab_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Diagnostic_Tests_and_Procedures_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Diagnostic_Tests_and_Procedures_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Therapeutic_Radiation_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Therapeutic_Radiation_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Outpatient_X_Rays_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Outpatient_X_Rays_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Diagnostic_Radiological_Services_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Diagnostic_Radiological_Services_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Outpatient_Hospital_Services_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Outpatient_Hospital_Services_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Ambulatory_Surgical_Center_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Ambulatory_Surgical_Center_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Chemotherapy_Drugs_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Chemotherapy_Drugs_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Ambulance_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Ambulance_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Durable_Medical_Equipment_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Durable_Medical_Equipment_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Prosthetic_Devices_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Prosthetic_Devices_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Renal_Dialysis_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Renal_Dialysis_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Diabetes_Education_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Diabetes_Education_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Medicare_Covered_Part_B_Drugs_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Medicare_Covered_Part_B_Drugs_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Preventative_Dental_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Preventative_Dental_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Comprehensive_Dental_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Comprehensive_Dental_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Eye_Exams_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Eye_Exams_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Hearing_Exams_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Hearing_Exams_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Opioid_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Opioid_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Total_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Total_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "PartD_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PartD_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Grand_Total_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Grand_Total_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "PBP_Version_Date_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PBP_Version_Date_2020",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "health_deductible",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "health_deductible",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Annual_Drug_Deductible",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Annual_Drug_Deductible",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "PDSS_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PDSS_YN",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "enr_latest",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "enr_latest",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "enr_latest_prev_yr",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "enr_latest_prev_yr",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							}
+						],
 						"typeConversion": true,
 						"typeConversionSettings": {
 							"allowDataTruncation": true,
@@ -987,7 +5570,7 @@
 								"value": "@pipeline().parameters.password",
 								"type": "Expression"
 							},
-							"sql_table_name": "pi_lsacpe"
+							"sql_table_name": "pi_landscape"
 						}
 					}
 				]
