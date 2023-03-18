@@ -741,7 +741,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "DELETE FROM pi_pivot where Month = (SELECT DATENAME(month,GETDATE())) and Year = (SELECT YEAR(GETDATE()));\nSELECT TOP 10 * FROM pi_pivot;",
+						"sqlReaderQuery": "DELETE FROM pi_pivot_2023 where Month = (SELECT DATENAME(month,GETDATE())) and Year = (SELECT YEAR(GETDATE()));\nSELECT TOP 10 * FROM pi_pivot;",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
