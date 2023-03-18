@@ -204,11 +204,11 @@
 				}
 			},
 			{
-				"name": "Copy Eligibles to Db",
+				"name": "Copy pi_pivot to Db",
 				"type": "Copy",
 				"dependsOn": [
 					{
-						"activity": "Delete Existing record from pi_lscape_pivot",
+						"activity": "Delete Existing record from pi_pivot",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -566,7 +566,7 @@
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "Copy Eligibles to Db",
+						"activity": "Copy pi_pivot to Db",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -617,7 +617,7 @@
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "Copy Eligibles to Db",
+						"activity": "Copy pi_pivot to Db",
 						"dependencyConditions": [
 							"Failed"
 						]
@@ -720,16 +720,9 @@
 				}
 			},
 			{
-				"name": "Delete Existing record from pi_lscape_pivot",
+				"name": "Delete Existing record from pi_pivot",
 				"type": "Lookup",
-				"dependsOn": [
-					{
-						"activity": "start time update_data_upload_DB",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
+				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
@@ -741,7 +734,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "DELETE FROM pi_lscape_pivot where Month = (SELECT DATENAME(month,GETDATE())) and Year = (SELECT YEAR(GETDATE()));\nSELECT TOP 10 * FROM pi_lscape_pivot;",
+						"sqlReaderQuery": "DELETE FROM pi_pivot where Month = (SELECT DATENAME(month,GETDATE())) and Year = (SELECT YEAR(GETDATE()));\nSELECT TOP 10 * FROM pi_pivot;",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -822,7 +815,7 @@
 				}
 			},
 			{
-				"name": "Copy Eligibles to Db_copy1",
+				"name": "Copy pi_trends to Db",
 				"type": "Copy",
 				"dependsOn": [
 					{
@@ -842,11 +835,11 @@
 				"userProperties": [
 					{
 						"name": "Source",
-						"value": "hwaicontainer/Eligibles/ Output/Eligibles/p*"
+						"value": "hwaicontainer/Product_Insights / Output / pi_trends/p*"
 					},
 					{
 						"name": "Destination",
-						"value": "dbo.@{'Eligibles'}"
+						"value": "dbo.@{'pi_trends'}"
 					}
 				],
 				"typeProperties": {
@@ -855,7 +848,7 @@
 						"storeSettings": {
 							"type": "AzureBlobFSReadSettings",
 							"recursive": true,
-							"wildcardFolderPath": "Eligibles/ Output/Eligibles",
+							"wildcardFolderPath": "Product_Insights / Output / pi_trends",
 							"wildcardFileName": "p*",
 							"enablePartitionDiscovery": false
 						},
@@ -871,224 +864,6 @@
 					"enableStaging": false,
 					"translator": {
 						"type": "TabularTranslator",
-						"mappings": [
-							{
-								"source": {
-									"name": "State",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "State",
-									"type": "String",
-									"physicalType": "varchar"
-								}
-							},
-							{
-								"source": {
-									"name": "County",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "County",
-									"type": "String",
-									"physicalType": "varchar"
-								}
-							},
-							{
-								"source": {
-									"name": "FIPS",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "FIPS",
-									"type": "String",
-									"physicalType": "varchar"
-								}
-							},
-							{
-								"source": {
-									"name": "SSA",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "SSA",
-									"type": "String",
-									"physicalType": "varchar"
-								}
-							},
-							{
-								"source": {
-									"name": "ma_eligibles",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "ma_eligibles",
-									"type": "String",
-									"physicalType": "varchar"
-								}
-							},
-							{
-								"source": {
-									"name": "Month",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "Month",
-									"type": "String",
-									"physicalType": "varchar"
-								}
-							},
-							{
-								"source": {
-									"name": "Year",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "Year",
-									"type": "String",
-									"physicalType": "varchar"
-								}
-							},
-							{
-								"source": {
-									"name": "QMB only",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "QMB only",
-									"type": "String",
-									"physicalType": "varchar"
-								}
-							},
-							{
-								"source": {
-									"name": "QMB plus Full Medicaid Benefits",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "QMB plus Full Medicaid Benefits",
-									"type": "String",
-									"physicalType": "varchar"
-								}
-							},
-							{
-								"source": {
-									"name": "SLMB only",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "SLMB only",
-									"type": "String",
-									"physicalType": "varchar"
-								}
-							},
-							{
-								"source": {
-									"name": "SLMB plus Full Medicaid Benefits",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "SLMB plus Full Medicaid Benefits",
-									"type": "String",
-									"physicalType": "varchar"
-								}
-							},
-							{
-								"source": {
-									"name": "QDWI",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "QDWI",
-									"type": "String",
-									"physicalType": "varchar"
-								}
-							},
-							{
-								"source": {
-									"name": "QI",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "QI",
-									"type": "String",
-									"physicalType": "varchar"
-								}
-							},
-							{
-								"source": {
-									"name": "Other Dual Full Medicaid Benefit",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "Other Dual Full Medicaid Benefit",
-									"type": "String",
-									"physicalType": "varchar"
-								}
-							},
-							{
-								"source": {
-									"name": "SNP_Eligibles",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "SNP_Eligibles",
-									"type": "String",
-									"physicalType": "varchar"
-								}
-							},
-							{
-								"source": {
-									"name": "Is_Active_Ind",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "Is_Active_Ind",
-									"type": "String",
-									"physicalType": "varchar"
-								}
-							},
-							{
-								"source": {
-									"name": "Current_Time",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "Current_Time",
-									"type": "String",
-									"physicalType": "varchar"
-								}
-							},
-							{
-								"source": {
-									"name": "Updated_Time",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "Updated_Time",
-									"type": "String",
-									"physicalType": "varchar"
-								}
-							}
-						],
 						"typeConversion": true,
 						"typeConversionSettings": {
 							"allowDataTruncation": true,
@@ -1098,7 +873,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "Eligibles",
+						"referenceName": "pi_trends",
 						"type": "DatasetReference"
 					}
 				],
@@ -1123,7 +898,7 @@
 								"value": "@pipeline().parameters.password",
 								"type": "Expression"
 							},
-							"sql_table_name": "HWAI_Eligibles"
+							"sql_table_name": "pi_trends"
 						}
 					}
 				]
@@ -1149,11 +924,11 @@
 				"userProperties": [
 					{
 						"name": "Source",
-						"value": "hwaicontainer/Eligibles/ Output/Eligibles/p*"
+						"value": "hwaicontainer/Product_Insights / Output / pi_lscape/p*"
 					},
 					{
 						"name": "Destination",
-						"value": "dbo.@{'Eligibles'}"
+						"value": "dbo.@{'pi_lsacpe'}"
 					}
 				],
 				"typeProperties": {
@@ -1162,7 +937,7 @@
 						"storeSettings": {
 							"type": "AzureBlobFSReadSettings",
 							"recursive": true,
-							"wildcardFolderPath": "Eligibles/ Output/Eligibles",
+							"wildcardFolderPath": "Product_Insights / Output / pi_lscape",
 							"wildcardFileName": "p*",
 							"enablePartitionDiscovery": false
 						},
@@ -1178,224 +953,6 @@
 					"enableStaging": false,
 					"translator": {
 						"type": "TabularTranslator",
-						"mappings": [
-							{
-								"source": {
-									"name": "State",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "State",
-									"type": "String",
-									"physicalType": "varchar"
-								}
-							},
-							{
-								"source": {
-									"name": "County",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "County",
-									"type": "String",
-									"physicalType": "varchar"
-								}
-							},
-							{
-								"source": {
-									"name": "FIPS",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "FIPS",
-									"type": "String",
-									"physicalType": "varchar"
-								}
-							},
-							{
-								"source": {
-									"name": "SSA",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "SSA",
-									"type": "String",
-									"physicalType": "varchar"
-								}
-							},
-							{
-								"source": {
-									"name": "ma_eligibles",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "ma_eligibles",
-									"type": "String",
-									"physicalType": "varchar"
-								}
-							},
-							{
-								"source": {
-									"name": "Month",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "Month",
-									"type": "String",
-									"physicalType": "varchar"
-								}
-							},
-							{
-								"source": {
-									"name": "Year",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "Year",
-									"type": "String",
-									"physicalType": "varchar"
-								}
-							},
-							{
-								"source": {
-									"name": "QMB only",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "QMB only",
-									"type": "String",
-									"physicalType": "varchar"
-								}
-							},
-							{
-								"source": {
-									"name": "QMB plus Full Medicaid Benefits",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "QMB plus Full Medicaid Benefits",
-									"type": "String",
-									"physicalType": "varchar"
-								}
-							},
-							{
-								"source": {
-									"name": "SLMB only",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "SLMB only",
-									"type": "String",
-									"physicalType": "varchar"
-								}
-							},
-							{
-								"source": {
-									"name": "SLMB plus Full Medicaid Benefits",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "SLMB plus Full Medicaid Benefits",
-									"type": "String",
-									"physicalType": "varchar"
-								}
-							},
-							{
-								"source": {
-									"name": "QDWI",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "QDWI",
-									"type": "String",
-									"physicalType": "varchar"
-								}
-							},
-							{
-								"source": {
-									"name": "QI",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "QI",
-									"type": "String",
-									"physicalType": "varchar"
-								}
-							},
-							{
-								"source": {
-									"name": "Other Dual Full Medicaid Benefit",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "Other Dual Full Medicaid Benefit",
-									"type": "String",
-									"physicalType": "varchar"
-								}
-							},
-							{
-								"source": {
-									"name": "SNP_Eligibles",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "SNP_Eligibles",
-									"type": "String",
-									"physicalType": "varchar"
-								}
-							},
-							{
-								"source": {
-									"name": "Is_Active_Ind",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "Is_Active_Ind",
-									"type": "String",
-									"physicalType": "varchar"
-								}
-							},
-							{
-								"source": {
-									"name": "Current_Time",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "Current_Time",
-									"type": "String",
-									"physicalType": "varchar"
-								}
-							},
-							{
-								"source": {
-									"name": "Updated_Time",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "Updated_Time",
-									"type": "String",
-									"physicalType": "varchar"
-								}
-							}
-						],
 						"typeConversion": true,
 						"typeConversionSettings": {
 							"allowDataTruncation": true,
@@ -1405,7 +962,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "Eligibles",
+						"referenceName": "pi_lsacpe",
 						"type": "DatasetReference"
 					}
 				],
@@ -1430,7 +987,7 @@
 								"value": "@pipeline().parameters.password",
 								"type": "Expression"
 							},
-							"sql_table_name": "HWAI_Eligibles"
+							"sql_table_name": "pi_lsacpe"
 						}
 					}
 				]
@@ -1487,7 +1044,7 @@
 				}
 			},
 			{
-				"name": "Pass_status_update_Eligibles_to_DB_copy1",
+				"name": "Pass_status_update_pi_lsacpe_to_DB",
 				"type": "Lookup",
 				"dependsOn": [
 					{
@@ -1538,11 +1095,11 @@
 				}
 			},
 			{
-				"name": "Pass_status_update_Eligibles_to_DB_copy2",
+				"name": "Pass_status_update_pi_trends_to_DB",
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "Copy Eligibles to Db_copy1",
+						"activity": "Copy pi_trends to Db",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -1589,11 +1146,11 @@
 				}
 			},
 			{
-				"name": "Fail_status_update_Eligibles_to_DB_copy1",
+				"name": "Fail_status_update_pi_trends_to_DB",
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "Copy Eligibles to Db_copy1",
+						"activity": "Copy pi_trends to Db",
 						"dependencyConditions": [
 							"Failed"
 						]
@@ -1640,7 +1197,7 @@
 				}
 			},
 			{
-				"name": "Fail_status_update_Eligibles_to_DB_copy2",
+				"name": "Fail_status_update_pi_lsacpe_to_DB",
 				"type": "Lookup",
 				"dependsOn": [
 					{
@@ -1691,11 +1248,11 @@
 				}
 			},
 			{
-				"name": "Eligibles pipeline run successfully_copy1",
+				"name": "pi_lsacpe pipeline run successfully",
 				"type": "WebActivity",
 				"dependsOn": [
 					{
-						"activity": "Pass_status_update_Eligibles_to_DB_copy1",
+						"activity": "Pass_status_update_pi_lsacpe_to_DB",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -1713,17 +1270,17 @@
 					"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
 					"method": "POST",
 					"body": {
-						"value": "{\n \"title\":\"PIPELINE RUN FOR Eligibles_to_DB IS SUCCESS\",\n \"color\":\"GREEN\",\n \"message\":\"Eligibles_to_DB completed sccessfully\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+						"value": "{\n \"title\":\"PIPELINE RUN FOR pi_lsacpe_to_DB IS SUCCESS\",\n \"color\":\"GREEN\",\n \"message\":\"pi_lsacpe_to_DB completed sccessfully\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
 						"type": "Expression"
 					}
 				}
 			},
 			{
-				"name": "Eligibles pipeline run successfully_copy2",
+				"name": "pi_trends pipeline run successfully",
 				"type": "WebActivity",
 				"dependsOn": [
 					{
-						"activity": "Pass_status_update_Eligibles_to_DB_copy2",
+						"activity": "Pass_status_update_pi_trends_to_DB",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -1741,17 +1298,17 @@
 					"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
 					"method": "POST",
 					"body": {
-						"value": "{\n \"title\":\"PIPELINE RUN FOR Eligibles_to_DB IS SUCCESS\",\n \"color\":\"GREEN\",\n \"message\":\"Eligibles_to_DB completed sccessfully\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+						"value": "{\n \"title\":\"PIPELINE RUN FOR pi_trends_to_DB IS SUCCESS\",\n \"color\":\"GREEN\",\n \"message\":\"pi_trends_to_DB completed sccessfully\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
 						"type": "Expression"
 					}
 				}
 			},
 			{
-				"name": "send email update for fail Eligibles to DB_copy1",
+				"name": "send email update for fail pi_trends to DB_copy1",
 				"type": "WebActivity",
 				"dependsOn": [
 					{
-						"activity": "Fail_status_update_Eligibles_to_DB_copy1",
+						"activity": "Fail_status_update_pi_trends_to_DB",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -1769,17 +1326,17 @@
 					"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
 					"method": "POST",
 					"body": {
-						"value": "{\n \"title\":\"PIPELINE RUN FOR Eligibles_to_DB FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the Eligibles_to_DB and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+						"value": "{\n \"title\":\"PIPELINE RUN FOR pi_trends_to_DB FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the pi_trends_to_DB and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
 						"type": "Expression"
 					}
 				}
 			},
 			{
-				"name": "send email update for fail Eligibles to DB_copy2",
+				"name": "send email update for fail pi_lsacpe to DB",
 				"type": "WebActivity",
 				"dependsOn": [
 					{
-						"activity": "Fail_status_update_Eligibles_to_DB_copy2",
+						"activity": "Fail_status_update_pi_lsacpe_to_DB",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -1797,7 +1354,7 @@
 					"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
 					"method": "POST",
 					"body": {
-						"value": "{\n \"title\":\"PIPELINE RUN FOR Eligibles_to_DB FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the Eligibles_to_DB and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+						"value": "{\n \"title\":\"PIPELINE RUN FOR pi_lsacpe_to_DB FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the pi_lsacpe_to_DB and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
 						"type": "Expression"
 					}
 				}
