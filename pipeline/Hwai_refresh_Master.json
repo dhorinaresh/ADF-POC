@@ -100,7 +100,7 @@
 				"type": "ExecutePipeline",
 				"dependsOn": [
 					{
-						"activity": "Competitor_Analysis",
+						"activity": "Product_Insights",
 						"dependencyConditions": [
 							"Completed"
 						]
@@ -110,6 +110,46 @@
 				"typeProperties": {
 					"pipeline": {
 						"referenceName": "enrollment_trends",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "Plan_finder",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Competitor_Analysis",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Plan_Finder",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "Product_Insights",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Plan_finder",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Product_Insight",
 						"type": "PipelineReference"
 					},
 					"waitOnCompletion": true
