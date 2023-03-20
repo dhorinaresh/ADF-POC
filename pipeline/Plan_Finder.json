@@ -200,7 +200,7 @@
 						"storeSettings": {
 							"type": "AzureBlobFSReadSettings",
 							"recursive": true,
-							"wildcardFolderPath": "Enr_all_files/Output/Enrollment_final_data",
+							"wildcardFolderPath": "Plan_Finder/Output/Enrollment_final_data",
 							"wildcardFileName": "p*",
 							"enablePartitionDiscovery": false
 						},
