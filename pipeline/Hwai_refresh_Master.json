@@ -100,7 +100,7 @@
 				"type": "ExecutePipeline",
 				"dependsOn": [
 					{
-						"activity": "Product_Insights",
+						"activity": "Plan_finder",
 						"dependencyConditions": [
 							"Completed"
 						]
@@ -140,7 +140,7 @@
 				"type": "ExecutePipeline",
 				"dependsOn": [
 					{
-						"activity": "Plan_finder",
+						"activity": "Enrollment_Trends",
 						"dependencyConditions": [
 							"Completed"
 						]
@@ -150,6 +150,26 @@
 				"typeProperties": {
 					"pipeline": {
 						"referenceName": "Product_Insight",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "Data_Cube",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Product_Insights",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Data_Cube",
 						"type": "PipelineReference"
 					},
 					"waitOnCompletion": true
