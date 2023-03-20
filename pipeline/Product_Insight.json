@@ -204,7 +204,7 @@
 				}
 			},
 			{
-				"name": "Copy pi_pivot_2023 to Db",
+				"name": "Copy pi_pivot to Db",
 				"type": "Copy",
 				"dependsOn": [
 					{
@@ -228,7 +228,7 @@
 					},
 					{
 						"name": "Destination",
-						"value": "dbo.@{'pi_pivot_2023'}"
+						"value": "dbo.@{'pi_pivot'}"
 					}
 				],
 				"typeProperties": {
@@ -507,7 +507,7 @@
 								"value": "@pipeline().parameters.password",
 								"type": "Expression"
 							},
-							"sql_table_name": "pi_pivot_2023"
+							"sql_table_name": "pi_pivot"
 						}
 					}
 				]
@@ -568,7 +568,7 @@
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "Copy pi_pivot_2023 to Db",
+						"activity": "Copy pi_pivot to Db",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -619,7 +619,7 @@
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "Copy pi_pivot_2023 to Db",
+						"activity": "Copy pi_pivot to Db",
 						"dependencyConditions": [
 							"Failed"
 						]
@@ -743,7 +743,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "DELETE FROM pi_pivot_2023 where Month = (SELECT DATENAME(month,GETDATE())) and Year = (SELECT YEAR(GETDATE()));\nSELECT TOP 10 * FROM pi_pivot;",
+						"sqlReaderQuery": "DELETE FROM pi_pivot where Month = (SELECT DATENAME(month,GETDATE())) and Year = (SELECT YEAR(GETDATE()));\nSELECT TOP 10 * FROM pi_pivot;",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -767,7 +767,7 @@
 								"value": "@pipeline().parameters.password",
 								"type": "Expression"
 							},
-							"sql_table_name": "pi_pivot_2023"
+							"sql_table_name": "pi_pivot"
 						}
 					}
 				}
@@ -818,7 +818,7 @@
 								"value": "@pipeline().parameters.password",
 								"type": "Expression"
 							},
-							"sql_table_name": "HWAI_Eligibles"
+							"sql_table_name": "pi_trends"
 						}
 					}
 				}
@@ -1863,11 +1863,11 @@
 				]
 			},
 			{
-				"name": "Copy to pi_lscape Db",
+				"name": "Copy to pi_landscape Db",
 				"type": "Copy",
 				"dependsOn": [
 					{
-						"activity": "Delete Existing record from pi_lscape",
+						"activity": "Delete Existing record from pi_landscape",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -1887,7 +1887,7 @@
 					},
 					{
 						"name": "Destination",
-						"value": "dbo.@{'pi_lsacpe'}"
+						"value": "dbo.@{'pi_landscape'}"
 					}
 				],
 				"typeProperties": {
@@ -5578,7 +5578,7 @@
 				]
 			},
 			{
-				"name": "Delete Existing record from pi_lscape",
+				"name": "Delete Existing record from pi_landscape",
 				"type": "Lookup",
 				"dependsOn": [
 					{
@@ -5599,7 +5599,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "DELETE FROM pi_lscape where Month = (SELECT DATENAME(month,GETDATE())) and Year = (SELECT YEAR(GETDATE()));\nSELECT TOP 10 * FROM pi_lscape;",
+						"sqlReaderQuery": "DELETE FROM pi_landscape where Month = (SELECT DATENAME(month,GETDATE())) and Year = (SELECT YEAR(GETDATE()));\nSELECT TOP 10 * FROM pi_landscape;",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -5623,7 +5623,7 @@
 								"value": "@pipeline().parameters.password",
 								"type": "Expression"
 							},
-							"sql_table_name": "HWAI_Eligibles"
+							"sql_table_name": "pi_landscape"
 						}
 					}
 				}
@@ -5633,7 +5633,7 @@
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "Copy to pi_lscape Db",
+						"activity": "Copy to pi_landscape Db",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -5786,7 +5786,7 @@
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "Copy to pi_lscape Db",
+						"activity": "Copy to pi_landscape Db",
 						"dependencyConditions": [
 							"Failed"
 						]
