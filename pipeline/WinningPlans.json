@@ -276,7 +276,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "Truncate table WinningPlans;\nSELECT TOP 10 * FROM WinningPlans;",
+						"sqlReaderQuery": "Truncate table winning_plans;\nSELECT TOP 10 * FROM winning_plans;",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -300,7 +300,7 @@
 								"value": "@pipeline().parameters.password",
 								"type": "Expression"
 							},
-							"sql_table_name": "WinningPlans"
+							"sql_table_name": "winning_plans"
 						}
 					}
 				}
@@ -330,7 +330,7 @@
 					},
 					{
 						"name": "Destination",
-						"value": "dbo.@{'WinningPlans'}"
+						"value": "dbo.@{'winning_plans'}"
 					}
 				],
 				"typeProperties": {
@@ -1832,7 +1832,7 @@
 								"value": "@pipeline().parameters.password",
 								"type": "Expression"
 							},
-							"sql_table_name": "WinningPlans"
+							"sql_table_name": "winning_plans"
 						}
 					}
 				]
