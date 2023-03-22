@@ -208,8 +208,8 @@
 							{
 								"source": {
 									"name": "Star_rating",
-									"type": "Decimal",
-									"physicalType": "String"
+									"type": "Double",
+									"physicalType": "float"
 								},
 								"sink": {
 									"name": "Star_rating",
