@@ -202,14 +202,14 @@
 								"sink": {
 									"name": "MOOP",
 									"type": "String",
-									"physicalType": "nvarchar"
+									"physicalType": "float"
 								}
 							},
 							{
 								"source": {
 									"name": "Star_rating",
-									"type": "float",
-									"physicalType": "float"
+									"type": "Decimal",
+									"physicalType": "String"
 								},
 								"sink": {
 									"name": "Star_rating",
