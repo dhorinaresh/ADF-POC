@@ -1381,7 +1381,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "DELETE FROM pi_pivot_2023 where Month = (SELECT DATENAME(month,GETDATE())) and Year = (SELECT YEAR(GETDATE()));\nSELECT TOP 10 * FROM pi_pivot;",
+						"sqlReaderQuery": "truncate table FROM pi_pivot_2023; \nSELECT TOP 10 * FROM pi_pivot;",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -1432,7 +1432,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "DELETE FROM pi_trends_2023 where Month = (SELECT DATENAME(month,GETDATE())) and Year = (SELECT YEAR(GETDATE()));\nSELECT TOP 10 * FROM pi_trends_2023;",
+						"sqlReaderQuery": "truncate table FROM pi_trends_2023;\nSELECT TOP 10 * FROM pi_trends_2023;",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -6373,7 +6373,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "DELETE FROM pi_landscape_2023 where Month = (SELECT DATENAME(month,GETDATE())) and Year = (SELECT YEAR(GETDATE()));\nSELECT TOP 10 * FROM pi_landscape_2023;",
+						"sqlReaderQuery": "truncate table FROM pi_landscape_2023;\nSELECT TOP 10 * FROM pi_landscape_2023;",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
