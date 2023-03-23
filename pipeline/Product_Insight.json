@@ -1381,7 +1381,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "truncate table pi_pivot_2023; \nSELECT TOP 10 * FROM pi_pivot;",
+						"sqlReaderQuery": "truncate table pi_pivot_2023; \nSELECT TOP 10 * FROM pi_pivot_2023;",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
