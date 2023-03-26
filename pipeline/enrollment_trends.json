@@ -473,6 +473,243 @@
 						"type": "Expression"
 					}
 				}
+			},
+			{
+				"name": "Copy_final_data_to_trends_cw_with_predictions_copy1",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Truncate_trends_cw_with_predictions",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"wildcardFolderPath": "Enrollment_trends_dashboard/Output_files",
+							"wildcardFileName": "trends_cw_with_stabality_final_output.csv",
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "SqlServerSink",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Enr_final_file",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "SqlServerTable2",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "Truncate_trends_cw_with_predictions",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Email update for succesfull execution of step3",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": "Truncate table Trends_CW_withpredictions_backup;\n\nINSERT INTO dbo.Trends_CW_withpredictions_backup\nSELECT * FROM dbo.Trends_CW_withpredictions;\n\nTruncate table Trends_CW_withpredictions\n\nSELECT top 10 * from dbo.Trends_CW_withpredictions",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "SqlServerTable5",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "Successfull upload to Trends_CW_with_Predictions",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "Copy_final_data_to_trends_cw_with_predictions_copy1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+					"method": "POST",
+					"body": {
+						"value": "{\n \"title\":\"DATA UPLOADED TO trends_cw_with_predictions\",\n \"color\":\"GREEN\",\n \"message\":\"Data uploaded succesfully heading for data prep procedure\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Remaining data prep procedure_copy1_copy1",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Successfull upload to Trends_CW_with_Predictions",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": " \n\n--TRUNCATE the table and INSERT the data FROM main table\nTRUNCATE table RoopaETPreData\nINSERT into RoopaETPreData\nSELECT [State]\n      ,[County]\n,(CASE WHEN len(cast(Plan_ID as varchar(50)))='3' and left(cast(Plan_ID as varchar(50)),1)='8' THEN 'Group MA Plans' ELSE 'Individual MA Plans' END)IndGroupPlans,\n(CASE WHEN ((LEFT([Contract_ID],1) ='H' or LEFT([Contract_ID],1) = 'R')) AND [Offers_Part_D]='Yes' THEN 'MA-PD'\nWHEN ((LEFT([Contract_ID],1) ='H' or LEFT([Contract_ID],1) = 'R')) AND [Offers_Part_D]='No' THEN 'MA (without drugs)'\nWHEN (LEFT([Contract_ID],1) ='E' or LEFT([Contract_ID],1) = 'S') THEN 'PDP' END) as MAPDP\n      ,[Special_Needs_Plan_Type] as [SNP]\n      ,[Plan_Type] as [PlanType]\n      ,[Plan_Name] as [PlanName]\n      ,[Key_Cp_Id] as [BidId]\n      ,[Parent_Organization] as [OrganizationName]\n      ,[Year]\n      ,[Month] as [MonthName]\n      ,[Enrollments]\n      ,[ma_eligibles] as [MAEligibles]\n      ,[Stability_Index] as [StabilityIndex]\n\t  --,'Yes' as [Prediction] \n      ,'No' as [Prediction] \n      ,[EGHP]\n      ,[FIPS_State_County_Code]\n      ,[Offers_Part_D]\n      ,[Other Dual Full Medicaid Benefit] as [Other_Dual_Full_Medicaid_Benefit]\n      ,[Plan_ID]\n      ,[QDWI]\n      ,[QI]\n      ,[QMB only] as [QMB_Only]\n      ,[QMB plus Full Medicaid Benefits] as [QMB_Plus_Full_Medicaid_Benefits]\n      ,[SLMB only] as [SLMB_only]\n      ,[SLMB plus Full Medicaid Benefits] as [SLMB_Plus_Full_Medicaid_Benefits]\n      ,[SNP_Eligibles]\n      ,[SNP_Plan]\n      ,[SSA_State_County_Code]\n      ,[Contract_ID],null,null,null,null,null,null,null\n\t  ,[Status]\n  FROM [HWAIETDB].[dbo].[Trends_CW_withpredictions]\n  \n \nDELETE FROM RoopaETPreData WHERE monthname='' \n  \nUPDATE a SET  a.OrganizationID=b.OrganizationID\nFROM RoopaETPreData a INNER JOIN EnrollmentTrendsOrganization b ON a.OrganizationName = b.OrganizationName\n\nSELECT *  FROM RoopaETPreData where organizationid is null\n\nINSERT into EnrollmentTrendsOrganization\nSELECT distinct OrganizationName FROM RoopaETPreData where organizationid is null\norder by OrganizationName\n\nUPDATE a SET  a.OrganizationID=b.OrganizationID\nFROM RoopaETPreData a INNER JOIN EnrollmentTrendsOrganization b ON a.OrganizationName = b.OrganizationName\nwhere a.OrganizationID is null\n\nUPDATE a SET  a.StateID=b.StateID\nFROM RoopaETPreData a INNER JOIN EnrollmentTrendsState b ON a.State = b.State\n\nSELECT * FROM RoopaETPreData where stateid is null\n\nUPDATE a SET  a.CountyID=b.CountyID\nFROM RoopaETPreData a INNER JOIN EnrollmentTrendsCounty b ON a.County = b.County\n\nSELECT * FROM RoopaETPreData where CountyID is null\n\nUPDATE a SET  a.IndGroupPlansID=b.IndGroupPlansID\nFROM RoopaETPreData a INNER JOIN EnrollmentTrendsIndGroupPlans b ON a.IndGroupPlans = b.IndGroupPlans\n\nSELECT * FROM RoopaETPreData where IndGroupPlansID is null\n\nUPDATE a SET  a.MAPDPID=b.MAPDPID\nFROM RoopaETPreData a INNER JOIN EnrollmentTrendsMAPDP b ON a.MAPDP = b.MAPDP\n\nSELECT * FROM RoopaETPreData where MAPDPID is null\n\nUPDATE a SET  a.SNPID=b.SNPID\nFROM RoopaETPreData a INNER JOIN EnrollmentTrendsSNP b ON a.SNP = b.SNP\n\nSELECT * FROM RoopaETPreData where SNPID is null\n\nUPDATE a SET  a.PlanTypeID=b.PlanTypeID\nFROM RoopaETPreData a INNER JOIN EnrollmentTrendsPlanType b ON a.PlanType = b.PlanType\n\nSELECT * FROM RoopaETPreData where PlanTypeID is null\n\n--Get data for filters\nTRUNCATE table EnrollmentTrendsFilters\nINSERT into EnrollmentTrendsFilters\nSELECT distinct \n      [OrganizationID]\n      ,[StateID]\n      ,[CountyID]\n      ,[IndGroupPlansID]\n      ,[MAPDPID]\n      ,[SNPID]\n      ,[PlanTypeID]\n  FROM [HWAIETDB].[dbo].RoopaETPreData\n \n --get data for filters\nTRUNCATE table EnrollmentTrendsSubFilters \nINSERT into EnrollmentTrendsSubFilters\nSELECT distinct \n      [StateID]\n      ,[CountyID]\n      ,[IndGroupPlansID]\n      ,[MAPDPID]\n      ,[SNPID]\n      ,[PlanTypeID]\n  FROM [HWAIETDB].[dbo].RoopaETPreData\n  \n--Get Data for EnrollmentTrendsData\nTRUNCATE table EnrollmentTrendsData\nINSERT into EnrollmentTrendsData\nSELECT [StateID]\n      ,[CountyID]\n      ,[IndGroupPlansID]\n      ,[MAPDPID]\n      ,[SNPID]\n      ,[PlanTypeID]  \n\t  ,[OrganizationID]\n\t  ,[PlanName]\n      ,[BidId]\n      ,[Year]\n      ,[MonthName]\n      ,[Enrollments]\n\t  ,[MAEligibles]\n      ,[StabilityIndex]\n      ,[Prediction]\n      ,[EGHP]\n      ,[FIPS_State_County_Code]\n      ,[Offers_Part_D]\n      ,[Other_Dual_Full_Medicaid_Benefit]\n      ,[Plan_ID]\n      ,[QDWI]\n      ,[QI]\n      ,[QMB_Only]\n      ,[QMB_Plus_Full_Medicaid_Benefits]\n      ,[SLMB_only]\n      ,[SLMB_Plus_Full_Medicaid_Benefits]\n      ,[SNP_Eligibles]\n      ,[SNP_Plan]\n      ,[SSA_State_County_Code]\n      ,[Contract_ID],null,null\n\t  ,[Status]\n\n  FROM [HWAIETDB].[dbo].RoopaETPreData\n  \n  \n--alter table  [HWAIETDB].[dbo].[EnrollmentTrendsData] add MonthNumber int\n--alter table  [HWAIETDB].[dbo].[EnrollmentTrendsData] add MonthYear int\n\nupdate EnrollmentTrendsData set monthnumber=charindex(left([MonthName],3),'JAN FEB MAR APR MAY JUN JUL AUG SEP OCT NOV DEC')/4+1\nupdate EnrollmentTrendsData set monthyear=CONVERT(char(6), DATEFROMPARTS(year, monthnumber, 1), 112)\n\n-- to replace 0 with nulls as it disturbs the average of eligibles\nUPDATE EnrollmentTrendsData SET MAEligibles = CASE WHEN MAEligibles=0 THEN NULL ELSE MAEligibles END\n\nTRUNCATE table [ETDFilterLevelWithoutPrediction]\nINSERT into [ETDFilterLevelWithoutPrediction]\nSELECT [StateID]\n      ,[CountyID]\n      ,[IndGroupPlansID]\n      ,[MAPDPID]\n      ,[SNPID]\n      ,[PlanTypeID]\n      ,[Year]\n      ,[MonthName]\n      ,[MonthNumber]\n      ,[MonthYear]\n      ,[Prediction]\t  \n      ,Sum([Enrollments]) as [Enrollments]\n      ,Avg([MAEligibles]) as [MAEligibles]\n      ,Avg([StabilityIndex])  as [StabilityIndex]    \n      ,Avg([Other_Dual_Full_Medicaid_Benefit])    as [Other_Dual_Full_Medicaid_Benefit]\n      ,Avg([QMB_Plus_Full_Medicaid_Benefits])   as [QMB_Plus_Full_Medicaid_Benefits]\n      ,Avg([SLMB_Plus_Full_Medicaid_Benefits]) as [SLMB_Plus_Full_Medicaid_Benefits]\n      ,Avg([SNP_Eligibles])    as [SNP_Eligibles]  \n\t  ,null as FilterID\n\t  ,[Status]\n  FROM [HWAIETDB].[dbo].[EnrollmentTrendsData]\n  where prediction='No'\n  group by [StateID]\n      ,[CountyID]\n      ,[IndGroupPlansID]\n      ,[MAPDPID]\n      ,[SNPID]\n      ,[PlanTypeID]\n      ,[Year]\n      ,[MonthName]\n      ,[MonthNumber]\n      ,[MonthYear]\n      ,[Prediction]\n\t  ,[Status]\n\t   order  by [StateID]\n      ,[CountyID]\n      ,[IndGroupPlansID]\n      ,[MAPDPID]\n      ,[SNPID]\n      ,[PlanTypeID]\n      ,[Year]\n      ,[MonthName]\n      ,[MonthNumber]\n      ,[MonthYear]\n      ,[Prediction]\n\nUPDATE a SET  a.FilterID=b.EnrollmentTrendsSubFiltersKey\nFROM ETDFilterLevelWithoutPrediction a INNER JOIN EnrollmentTrendsSubFilters b ON \na.StateID=b.StateID and\na.CountyID=b.CountyID and a.IndGroupPlansID=b.IndGroupPlansID and\na.MAPDPID =b.MAPDPID and a.SNPID=b.SNPID and a.PlanTypeID=b.PlanTypeID\n\n\nINSERT into ETDFilterLevelWithPrediction\nSELECT [StateID]\n      ,[CountyID]\n      ,[IndGroupPlansID]\n      ,[MAPDPID]\n      ,[SNPID]\n      ,[PlanTypeID]\n      ,[Year]\n      ,[MonthName]\n      ,[MonthNumber]\n      ,[MonthYear]\n      ,[Prediction]\t  \n      ,Sum([Enrollments]) as [Enrollments]\n      ,Avg([MAEligibles]) as [MAEligibles]\n      ,Avg([StabilityIndex])  as [StabilityIndex]    \n      ,Avg([Other_Dual_Full_Medicaid_Benefit])    as [Other_Dual_Full_Medicaid_Benefit]\n      ,Avg([QMB_Plus_Full_Medicaid_Benefits])   as [QMB_Plus_Full_Medicaid_Benefits]\n      ,Avg([SLMB_Plus_Full_Medicaid_Benefits]) as [SLMB_Plus_Full_Medicaid_Benefits]\n      ,Avg([SNP_Eligibles])    as [SNP_Eligibles]  \n\t  ,null as FilterID\n\t  ,[Status]\n\t  \n  FROM [HWAIETDB].[dbo].[EnrollmentTrendsData]\n  where prediction='Yes'\n  group by [StateID]\n      ,[CountyID]\n      ,[IndGroupPlansID]\n      ,[MAPDPID]\n      ,[SNPID]\n      ,[PlanTypeID]\n      ,[Year]\n      ,[MonthName]\n      ,[MonthNumber]\n      ,[MonthYear]\n      ,[Prediction]\n\t  ,[Status]\n\t   order  by [StateID]\n      ,[CountyID]\n      ,[IndGroupPlansID]\n      ,[MAPDPID]\n      ,[SNPID]\n      ,[PlanTypeID]\n      ,[Year]\n      ,[MonthName]\n      ,[MonthNumber]\n      ,[MonthYear]\n      ,[Prediction]\n\n\t  UPDATE a SET  a.FilterID=b.EnrollmentTrendsSubFiltersKey\nFROM ETDFilterLevelWithPrediction a INNER JOIN EnrollmentTrendsSubFilters b ON \na.StateID=b.StateID and\na.CountyID=b.CountyID and a.IndGroupPlansID=b.IndGroupPlansID and\na.MAPDPID =b.MAPDPID and a.SNPID=b.SNPID and a.PlanTypeID=b.PlanTypeID\n\n\t  /****** Script for SELECTTopNRows command FROM SSMS  ******/\nTRUNCATE table ETDOrganizationLevelWithoutPrediction\nINSERT into ETDOrganizationLevelWithoutPrediction\nSELECT [StateID]\n      ,[CountyID]\n      ,[IndGroupPlansID]\n      ,[MAPDPID]\n      ,[SNPID]\n      ,[PlanTypeID]\n\t  ,[OrganizationID]\n      ,[Year]\n      ,[MonthName]\n\t  ,[MonthNumber]\n      ,[MonthYear]\n\t  ,[Prediction]\n      ,Sum([Enrollments]) as [Enrollments]\n      ,Avg([MAEligibles]) as [MAEligibles]\n      ,Avg([StabilityIndex])  as [StabilityIndex]    \n      ,Avg([Other_Dual_Full_Medicaid_Benefit])    as [Other_Dual_Full_Medicaid_Benefit]\n      ,Avg([QMB_Plus_Full_Medicaid_Benefits])   as [QMB_Plus_Full_Medicaid_Benefits]\n      ,Avg([SLMB_Plus_Full_Medicaid_Benefits]) as [SLMB_Plus_Full_Medicaid_Benefits]\n      ,Avg([SNP_Eligibles])    as [SNP_Eligibles]  \n\t  ,count(distinct BidId) as NoOfPlans,\n\t  null as FilterID,\n\t  null as SubFilterID\n  FROM [HWAIETDB].[dbo].[EnrollmentTrendsData]\n  where Prediction='No'\n  group by [StateID]\n      ,[CountyID]\n      ,[IndGroupPlansID]\n      ,[MAPDPID]\n      ,[SNPID]\n      ,[PlanTypeID]\n\t  ,[OrganizationID]\n      ,[Year]\n      ,[MonthName]\n\t  ,[MonthNumber]\n      ,[MonthYear]\n\t  ,[Prediction]\n\t  order  by [StateID]\n      ,[CountyID]\n      ,[IndGroupPlansID]\n      ,[MAPDPID]\n      ,[SNPID]\n      ,[PlanTypeID]\n\t  ,[OrganizationID]\n      ,[Year]\n\t  ,[MonthYear]\n\t  ,[Prediction]\n\n\nUPDATE a SET  a.FilterID=b.PKey\nFROM ETDOrganizationLevelWithoutPrediction a INNER JOIN EnrollmentTrendsFilters b ON \na.OrganizationID=b.OrganizationID and a.StateID=b.StateID and\na.CountyID=b.CountyID and a.IndGroupPlansID=b.IndGroupPlansID and\na.MAPDPID =b.MAPDPID and a.SNPID=b.SNPID and a.PlanTypeID=b.PlanTypeID\n\n\nUPDATE a SET  a.SubFilterID=b.EnrollmentTrendsSubFiltersKey\nFROM ETDOrganizationLevelWithoutPrediction a INNER JOIN EnrollmentTrendsSubFilters b ON \na.StateID=b.StateID and\na.CountyID=b.CountyID and a.IndGroupPlansID=b.IndGroupPlansID and\na.MAPDPID =b.MAPDPID and a.SNPID=b.SNPID and a.PlanTypeID=b.PlanTypeID\n\n\nINSERT into ETDOrganizationLevelWithPrediction\nSELECT [StateID]\n      ,[CountyID]\n      ,[IndGroupPlansID]\n      ,[MAPDPID]\n      ,[SNPID]\n      ,[PlanTypeID]\n\t  ,[OrganizationID]\n      ,[Year]\n      ,[MonthName]\n\t  ,[MonthNumber]\n      ,[MonthYear]\n\t  ,[Prediction]\t  \n      ,Sum([Enrollments]) as [Enrollments]\n      ,Avg([MAEligibles]) as [MAEligibles]\n      ,Avg([StabilityIndex])  as [StabilityIndex]    \n      ,Avg([Other_Dual_Full_Medicaid_Benefit])    as [Other_Dual_Full_Medicaid_Benefit]\n      ,Avg([QMB_Plus_Full_Medicaid_Benefits])   as [QMB_Plus_Full_Medicaid_Benefits]\n      ,Avg([SLMB_Plus_Full_Medicaid_Benefits]) as [SLMB_Plus_Full_Medicaid_Benefits]\n      ,Avg([SNP_Eligibles])    as [SNP_Eligibles]  \n\t  ,count(distinct BidId) as NoOfPlans,\n\t  null as FilterID,\n\t  null as SubFilterID\n  FROM [HWAIETDB].[dbo].[EnrollmentTrendsData]\n  where Prediction='Yes'\n  group by [StateID]\n      ,[CountyID]\n      ,[IndGroupPlansID]\n      ,[MAPDPID]\n      ,[SNPID]\n      ,[PlanTypeID]\n\t  ,[OrganizationID]\n      ,[Year]\n      ,[MonthName]\n\t  ,[MonthNumber]\n      ,[MonthYear]\n\t  ,[Prediction]\n\t  order  by [StateID]\n      ,[CountyID]\n      ,[IndGroupPlansID]\n      ,[MAPDPID]\n      ,[SNPID]\n      ,[PlanTypeID]\n\t  ,[OrganizationID]\n      ,[Year]\n\t  ,[MonthYear]\n\t  ,[Prediction]\n\n\nUPDATE a SET  a.FilterID=b.PKey\nFROM ETDOrganizationLevelWithPrediction a INNER JOIN EnrollmentTrendsFilters b ON \na.OrganizationID=b.OrganizationID and a.StateID=b.StateID and\na.CountyID=b.CountyID and a.IndGroupPlansID=b.IndGroupPlansID and\na.MAPDPID =b.MAPDPID and a.SNPID=b.SNPID and a.PlanTypeID=b.PlanTypeID\n\n\nUPDATE a SET  a.SubFilterID=b.EnrollmentTrendsSubFiltersKey\nFROM ETDOrganizationLevelWithPrediction a INNER JOIN EnrollmentTrendsSubFilters b ON \na.StateID=b.StateID and\na.CountyID=b.CountyID and a.IndGroupPlansID=b.IndGroupPlansID and\na.MAPDPID =b.MAPDPID and a.SNPID=b.SNPID and a.PlanTypeID=b.PlanTypeID\n\n\n\nTRUNCATE table [ETDPlans]\nINSERT into  [HWAIETDB].[dbo].[ETDPlans]\nSELECT [MonthYear],[OrganizationID],count(distinct BidId) [NoOfplans]\nFROM EnrollmentTrendsData \nGROUP BY [MonthYear],[OrganizationID] \n\t   \nTRUNCATE table [EnrollmentTrendsMonthYear]\nINSERT into [EnrollmentTrendsMonthYear]\nSELECT distinct [Year],[MonthNumber],[Monthyear]\nFROM [HWAIETDB].[dbo].[EnrollmentTrendsData]\nORDER BY [Year],[MonthNumber]\n--END\n\nexec sp_updatestats",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "SqlServerTable4",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "Upload failed to Trends_CW_with_Predictions_copy1",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "Copy_final_data_to_trends_cw_with_predictions_copy1",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+					"method": "POST",
+					"body": {
+						"value": "{\n \"title\":\"DATA UPLOADED TO trends_cw_with_predictions failed\",\n \"color\":\"RED\",\n \"message\":\"Data uploaded failed pl debug\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Final data prep procedure succesfull",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "Remaining data prep procedure_copy1_copy1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+					"method": "POST",
+					"body": {
+						"value": "{\n \"title\":\"DATA PROCEDRE RAN succesfully\",\n \"color\":\"GREEN\",\n \"message\":\"Data prep procedure succesfull\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Final data prep procedure unsuccesfull",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "Remaining data prep procedure_copy1_copy1",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+					"method": "POST",
+					"body": {
+						"value": "{\n \"title\":\"DATA PROCEDRE not succesfull\",\n \"color\":\"RED\",\n \"message\":\"DEBUG Data prep procedure\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+						"type": "Expression"
+					}
+				}
 			}
 		],
 		"parameters": {

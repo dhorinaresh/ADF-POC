@@ -1,0 +1,173 @@
+{
+	"name": "Enr_final_file",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "trends_cw_with_stabality_final_output.csv",
+				"folderPath": "Enrollment_trends_dashboard/Output_files",
+				"fileSystem": "hwaicontainer"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "Contract_ID",
+				"type": "String"
+			},
+			{
+				"name": "County",
+				"type": "String"
+			},
+			{
+				"name": "Month",
+				"type": "String"
+			},
+			{
+				"name": "Offers_Part_D",
+				"type": "String"
+			},
+			{
+				"name": "Organization_Marketing_Name",
+				"type": "String"
+			},
+			{
+				"name": "Organization_Name",
+				"type": "String"
+			},
+			{
+				"name": "Organization_Type",
+				"type": "String"
+			},
+			{
+				"name": "Parent_Organization",
+				"type": "String"
+			},
+			{
+				"name": "Plan_ID",
+				"type": "String"
+			},
+			{
+				"name": "Plan_Name",
+				"type": "String"
+			},
+			{
+				"name": "Plan_Type",
+				"type": "String"
+			},
+			{
+				"name": "SNP_Plan",
+				"type": "String"
+			},
+			{
+				"name": "Special_Needs_Plan_Type",
+				"type": "String"
+			},
+			{
+				"name": "State",
+				"type": "String"
+			},
+			{
+				"name": "Year",
+				"type": "String"
+			},
+			{
+				"name": "enrollments",
+				"type": "String"
+			},
+			{
+				"name": "Key_Cp_Id",
+				"type": "String"
+			},
+			{
+				"name": "ma_eligibles",
+				"type": "String"
+			},
+			{
+				"name": "SLMB plus Full Medicaid Benefits",
+				"type": "String"
+			},
+			{
+				"name": "SSA_State_County_Code",
+				"type": "String"
+			},
+			{
+				"name": "SLMB only",
+				"type": "String"
+			},
+			{
+				"name": "SNP_Eligibles",
+				"type": "String"
+			},
+			{
+				"name": "QDWI",
+				"type": "String"
+			},
+			{
+				"name": "QMB plus Full Medicaid Benefits",
+				"type": "String"
+			},
+			{
+				"name": "Other Dual Full Medicaid Benefit",
+				"type": "String"
+			},
+			{
+				"name": "FIPS_State_County_Code",
+				"type": "String"
+			},
+			{
+				"name": "QMB only",
+				"type": "String"
+			},
+			{
+				"name": "QI",
+				"type": "String"
+			},
+			{
+				"name": "EGHP",
+				"type": "String"
+			},
+			{
+				"name": "SC_Key",
+				"type": "String"
+			},
+			{
+				"name": "Plantype_index",
+				"type": "String"
+			},
+			{
+				"name": "Player_index",
+				"type": "String"
+			},
+			{
+				"name": "Premium_index",
+				"type": "String"
+			},
+			{
+				"name": "Age_index",
+				"type": "String"
+			},
+			{
+				"name": "drug_index",
+				"type": "String"
+			},
+			{
+				"name": "Stability_Index",
+				"type": "String"
+			},
+			{
+				"name": "Status",
+				"type": "String"
+			}
+		]
+	}
+}
