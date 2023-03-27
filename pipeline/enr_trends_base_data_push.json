@@ -7,7 +7,7 @@
 				"type": "Copy",
 				"dependsOn": [
 					{
-						"activity": "Truncate_trends_cw_with_predictions",
+						"activity": "Trends_backup_data_populate",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -396,13 +396,13 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "Data_check_for_base_et",
+						"referenceName": "datalake_sql_transfer",
 						"type": "DatasetReference"
 					}
 				]
 			},
 			{
-				"name": "Truncate_trends_cw_with_predictions",
+				"name": "Trends_backup_data_populate",
 				"type": "Lookup",
 				"dependsOn": [],
 				"policy": {
