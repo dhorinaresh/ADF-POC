@@ -1,0 +1,43 @@
+{
+	"name": "ASAY_DATA",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileSystem": "hwaicontainer"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "State",
+				"type": "String"
+			},
+			{
+				"name": "County",
+				"type": "String"
+			},
+			{
+				"name": "MA Sales Region",
+				"type": "String"
+			},
+			{
+				"name": "MA Product Region",
+				"type": "String"
+			},
+			{
+				"name": "Double County",
+				"type": "String"
+			}
+		]
+	}
+}
