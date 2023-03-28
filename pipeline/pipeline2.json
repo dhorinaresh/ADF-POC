@@ -946,7 +946,7 @@
 		"parameters": {
 			"db_name": {
 				"type": "String",
-				"defaultValue": "pf_data"
+				"defaultValue": "HWai_Dashboards"
 			},
 			"sql_server_dataset_name": {
 				"type": "String",
