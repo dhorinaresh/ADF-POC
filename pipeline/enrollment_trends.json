@@ -439,7 +439,7 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Enrollment_trends/enr_trends_broadcasting_step3_rectification"
+					"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Enrollment_trends/Enrollment_trends_step3/Enr_trends_post_crosswalk_step3_rect2"
 				},
 				"linkedServiceName": {
 					"referenceName": "AzureDatabricks4_pfcluster3",
@@ -453,7 +453,7 @@
 					{
 						"activity": "enr_trends_post_broadcasting_step3",
 						"dependencyConditions": [
-							"Failed"
+							"Succeeded"
 						]
 					}
 				],
@@ -712,13 +712,13 @@
 				}
 			},
 			{
-				"name": "Temp mail for final output creation",
+				"name": "Email update for failure of step3",
 				"type": "WebActivity",
 				"dependsOn": [
 					{
 						"activity": "enr_trends_post_broadcasting_step3",
 						"dependencyConditions": [
-							"Succeeded"
+							"Failed"
 						]
 					}
 				],
@@ -734,7 +734,7 @@
 					"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
 					"method": "POST",
 					"body": {
-						"value": "{\n \"title\":\"PIPELINE RUN FOR ENR FINAL STEP SUCCEDED\",\n \"color\":\"GREEN\",\n \"message\":\"Debug the enr trends broadcasting step 2c script and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+						"value": "{\n \"title\":\"PIPELINE RUN FOR ENR FINAL STEP FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the enr trends broadcasting step 3 script and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
 						"type": "Expression"
 					}
 				}
