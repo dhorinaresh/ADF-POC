@@ -180,7 +180,7 @@
 				"type": "Copy",
 				"dependsOn": [
 					{
-						"activity": "start time update_copy_MS_data",
+						"activity": "Truncate table MS Data",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -250,7 +250,7 @@
 								"value": "@pipeline().parameters.password",
 								"type": "Expression"
 							},
-							"sql_table_name": "Crosswalk_Master_Data"
+							"sql_table_name": "ms_allstatesallyears"
 						}
 					}
 				]
@@ -598,6 +598,57 @@
 				"linkedServiceName": {
 					"referenceName": "AzureDatabricks4_pfcluster3",
 					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Truncate table MS Data",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "start time update_copy_MS_data",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "Truncate table ms_allstatesallyears;\nSelect Top 10 * from ms_allstatesallyears;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "dataset_sql",
+						"type": "DatasetReference",
+						"parameters": {
+							"sql_server_dataset": {
+								"value": "@pipeline().parameters.sql_server_dataset_name",
+								"type": "Expression"
+							},
+							"db_name_dataset": {
+								"value": "@pipeline().parameters.db_name",
+								"type": "Expression"
+							},
+							"user_name_dataset": {
+								"value": "@pipeline().parameters.user_name",
+								"type": "Expression"
+							},
+							"password_dataset": {
+								"value": "@pipeline().parameters.password",
+								"type": "Expression"
+							},
+							"sql_table_name": "ms_allstatesallyears"
+						}
+					}
 				}
 			}
 		],
