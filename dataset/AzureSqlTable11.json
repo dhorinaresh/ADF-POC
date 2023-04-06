@@ -3,7 +3,13 @@
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "Linked_Service_SQL",
-			"type": "LinkedServiceReference"
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"sql_server": "hwpilot.database.windows.net",
+				"db_name": "HWai_Dashboards",
+				"user_name": "pladmin",
+				"password": "Goteg@12345"
+			}
 		},
 		"annotations": [],
 		"type": "AzureSqlTable",
