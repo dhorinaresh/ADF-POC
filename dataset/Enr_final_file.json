@@ -11,7 +11,7 @@
 			"location": {
 				"type": "AzureBlobFSLocation",
 				"fileName": "trends_cw_with_stabality_final_output.csv",
-				"folderPath": "Enrollment_trends_dashboard/Output_files",
+				"folderPath": "Enrollment_trends_gateway_dashboard/output_files",
 				"fileSystem": "hwaicontainer"
 			},
 			"columnDelimiter": ",",
