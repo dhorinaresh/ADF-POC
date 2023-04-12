@@ -28,7 +28,7 @@
 		],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "Customers"
+			"table": "OrgUser"
 		}
 	}
 }
