@@ -469,6 +469,18 @@
 									"type": "String",
 									"physicalType": "varchar"
 								}
+							},
+							{
+								"source": {
+									"name": "Geo_Id",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Geo_Id",
+									"type": "Int32",
+									"physicalType": "int"
+								}
 							}
 						],
 						"typeConversion": true,
