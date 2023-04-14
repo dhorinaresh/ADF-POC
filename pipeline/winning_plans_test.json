@@ -1553,7 +1553,7 @@
 						"type": "DatasetReference",
 						"parameters": {
 							"sql_server_dataset": "hwpilot.database.windows.net",
-							"db_name_dataset": "pf_data",
+							"db_name_dataset": "HWai_Dashboards",
 							"user_name_dataset": "pladmin",
 							"password_dataset": "Goteg@12345",
 							"sql_table_name": "winning_plans"
