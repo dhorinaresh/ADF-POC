@@ -16,8 +16,8 @@
 			"recurrence": {
 				"frequency": "Minute",
 				"interval": 60,
-				"startTime": "2023-04-14T13:44:00Z",
-				"timeZone": "UTC"
+				"startTime": "2023-04-14T13:44:00",
+				"timeZone": "India Standard Time"
 			}
 		}
 	}
