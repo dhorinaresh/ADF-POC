@@ -180,7 +180,7 @@
 				"type": "Copy",
 				"dependsOn": [
 					{
-						"activity": "Truncate competitor final table ",
+						"activity": "Truncate competitor final table",
 						"dependencyConditions": [
 							"Succeeded"
 						]
