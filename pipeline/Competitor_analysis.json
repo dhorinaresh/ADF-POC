@@ -1120,7 +1120,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "Truncate table ca_allstatesallyears\nSELECT TOP 10 * FROM ca_allstatesallyears;",
+						"sqlReaderQuery": "Truncate table ca_allstatesallyears;\nSELECT TOP 10 * FROM ca_allstatesallyears;",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -1157,7 +1157,7 @@
 			},
 			"db_name": {
 				"type": "String",
-				"defaultValue": "pf_data"
+				"defaultValue": "HWai_Dashboards"
 			},
 			"user_name": {
 				"type": "String",
