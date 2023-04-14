@@ -2003,7 +2003,7 @@
 			},
 			"db_name": {
 				"type": "String",
-				"defaultValue": "pf_data"
+				"defaultValue": "Hwai_Dashboard"
 			},
 			"user_name": {
 				"type": "String",
