@@ -1,153 +1,156 @@
 {
-	"name": "ASAY_DATA",
+	"name": "ET_TECH_STACK",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "AzureDataLakeStorage1",
+			"referenceName": "AzureSqlDatabase2",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
-		"type": "DelimitedText",
-		"typeProperties": {
-			"location": {
-				"type": "AzureBlobFSLocation",
-				"fileName": "Trend_CW_withpredictions.csv",
-				"folderPath": "EnrollmentTrendTechStack",
-				"fileSystem": "hwaicontainer"
-			},
-			"columnDelimiter": ",",
-			"escapeChar": "\\",
-			"firstRowAsHeader": true,
-			"quoteChar": "\""
-		},
+		"type": "AzureSqlTable",
 		"schema": [
 			{
 				"name": "Contract_ID",
-				"type": "String"
+				"type": "varchar"
 			},
 			{
 				"name": "County",
-				"type": "String"
+				"type": "varchar"
 			},
 			{
 				"name": "EGHP",
-				"type": "String"
+				"type": "varchar"
 			},
 			{
 				"name": "FIPS_State_County_Code",
-				"type": "String"
+				"type": "varchar"
 			},
 			{
 				"name": "Month",
-				"type": "String"
+				"type": "varchar"
 			},
 			{
 				"name": "Offers_Part_D",
-				"type": "String"
+				"type": "varchar"
 			},
 			{
 				"name": "Other Dual Full Medicaid Benefit",
-				"type": "String"
+				"type": "float",
+				"precision": 15
 			},
 			{
 				"name": "Parent_Organization",
-				"type": "String"
+				"type": "varchar"
 			},
 			{
 				"name": "Plan_ID",
-				"type": "String"
+				"type": "varchar"
 			},
 			{
 				"name": "Plan_Name",
-				"type": "String"
+				"type": "varchar"
 			},
 			{
 				"name": "Plan_Type",
-				"type": "String"
+				"type": "varchar"
 			},
 			{
 				"name": "QDWI",
-				"type": "String"
+				"type": "float",
+				"precision": 15
 			},
 			{
 				"name": "QI",
-				"type": "String"
+				"type": "float",
+				"precision": 15
 			},
 			{
 				"name": "QMB only",
-				"type": "String"
+				"type": "float",
+				"precision": 15
 			},
 			{
 				"name": "QMB plus Full Medicaid Benefits",
-				"type": "String"
+				"type": "float",
+				"precision": 15
 			},
 			{
 				"name": "SLMB only",
-				"type": "String"
+				"type": "float",
+				"precision": 15
 			},
 			{
 				"name": "SLMB plus Full Medicaid Benefits",
-				"type": "String"
+				"type": "float",
+				"precision": 15
 			},
 			{
 				"name": "SNP_Eligibles",
-				"type": "String"
+				"type": "float",
+				"precision": 15
 			},
 			{
 				"name": "SNP_Plan",
-				"type": "String"
+				"type": "varchar"
 			},
 			{
 				"name": "SSA_State_County_Code",
-				"type": "String"
+				"type": "varchar"
 			},
 			{
 				"name": "Special_Needs_Plan_Type",
-				"type": "String"
+				"type": "varchar"
 			},
 			{
 				"name": "State",
-				"type": "String"
+				"type": "varchar"
 			},
 			{
 				"name": "Year",
-				"type": "String"
+				"type": "int",
+				"precision": 10
 			},
 			{
 				"name": "enrollments",
-				"type": "String"
+				"type": "float",
+				"precision": 15
 			},
 			{
 				"name": "Key_Cp_Id",
-				"type": "String"
+				"type": "varchar"
 			},
 			{
 				"name": "ma_eligibles",
-				"type": "String"
+				"type": "varchar"
 			},
 			{
 				"name": "Stability_Index",
-				"type": "String"
+				"type": "float",
+				"precision": 15
 			},
 			{
 				"name": "Prediction",
-				"type": "String"
+				"type": "varchar"
 			},
 			{
 				"name": "Status",
-				"type": "String"
+				"type": "varchar"
 			},
 			{
 				"name": "IsTerminated",
-				"type": "String"
+				"type": "bit"
 			},
 			{
 				"name": "IsOutofArea",
-				"type": "String"
+				"type": "bit"
 			},
 			{
 				"name": "IsStarEnr",
-				"type": "String"
+				"type": "bit"
 			}
-		]
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "ET_Trends_CW_withpredictions"
+		}
 	}
 }
