@@ -511,7 +511,7 @@
 				"type": "WebActivity",
 				"dependsOn": [
 					{
-						"activity": "Copy_final_data_to_trends_cw_with_predictions_copy1",
+						"activity": "Copy_final_data_to_trends_cw_with_predictions",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -535,7 +535,7 @@
 				}
 			},
 			{
-				"name": "Remaining data prep procedure_copy1_copy1",
+				"name": "Remaining data prep procedure",
 				"type": "Lookup",
 				"dependsOn": [
 					{
@@ -571,7 +571,7 @@
 				"type": "WebActivity",
 				"dependsOn": [
 					{
-						"activity": "Copy_final_data_to_trends_cw_with_predictions_copy1",
+						"activity": "Copy_final_data_to_trends_cw_with_predictions",
 						"dependencyConditions": [
 							"Failed"
 						]
@@ -599,7 +599,7 @@
 				"type": "WebActivity",
 				"dependsOn": [
 					{
-						"activity": "Remaining data prep procedure_copy1_copy1",
+						"activity": "Remaining data prep procedure",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -627,7 +627,7 @@
 				"type": "WebActivity",
 				"dependsOn": [
 					{
-						"activity": "Remaining data prep procedure_copy1_copy1",
+						"activity": "Remaining data prep procedure",
 						"dependencyConditions": [
 							"Failed"
 						]
@@ -679,7 +679,7 @@
 				}
 			},
 			{
-				"name": "Copy_final_data_to_trends_cw_with_predictions_copy1",
+				"name": "Copy_final_data_to_trends_cw_with_predictions",
 				"type": "Copy",
 				"dependsOn": [
 					{
