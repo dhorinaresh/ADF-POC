@@ -137,20 +137,23 @@
 			},
 			{
 				"name": "IsTerminated",
-				"type": "bit"
+				"type": "int",
+				"precision": 10
 			},
 			{
 				"name": "IsOutofArea",
-				"type": "bit"
+				"type": "int",
+				"precision": 10
 			},
 			{
 				"name": "IsStarEnr",
-				"type": "bit"
+				"type": "int",
+				"precision": 10
 			}
 		],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "ET_Trends_CW_withpredictions"
+			"table": "TrendsCwWithPredictions"
 		}
 	}
 }
