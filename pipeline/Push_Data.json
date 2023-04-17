@@ -391,8 +391,8 @@
 								},
 								"sink": {
 									"name": "IsTerminated",
-									"type": "Boolean",
-									"physicalType": "bit"
+									"type": "Int32",
+									"physicalType": "int"
 								}
 							},
 							{
@@ -403,8 +403,8 @@
 								},
 								"sink": {
 									"name": "IsOutofArea",
-									"type": "Boolean",
-									"physicalType": "bit"
+									"type": "Int32",
+									"physicalType": "int"
 								}
 							},
 							{
@@ -415,8 +415,8 @@
 								},
 								"sink": {
 									"name": "IsStarEnr",
-									"type": "Boolean",
-									"physicalType": "bit"
+									"type": "Int32",
+									"physicalType": "int"
 								}
 							}
 						],
