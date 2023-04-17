@@ -2,7 +2,7 @@
 	"name": "SqlServerTable2",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "sql_analytics_HWAIETV2DB",
+			"referenceName": "datalake_sql",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
