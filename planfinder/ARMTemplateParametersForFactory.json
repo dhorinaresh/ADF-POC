@@ -23,10 +23,34 @@
 		"AzureSqlDatabase1_connectionString": {
 			"value": ""
 		},
+		"AzureSqlDatabase2_connectionString": {
+			"value": ""
+		},
 		"Linked_Service_SQL_connectionString": {
 			"value": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=@{linkedService().sql_server};Initial Catalog=@{linkedService().db_name};User ID=@{linkedService().user_name};Password=@{linkedService().password}"
 		},
 		"Linked_service_AzureDataLakeStorage2_accountKey": {
+			"value": ""
+		},
+		"Prod_Azure_connectionString": {
+			"value": ""
+		},
+		"datalake_sql_connectionString": {
+			"value": ""
+		},
+		"datalake_sql_gw_connectionString": {
+			"value": ""
+		},
+		"prod_sql_analytics_connectionString": {
+			"value": ""
+		},
+		"sql_analytics_connectionString": {
+			"value": ""
+		},
+		"sql_analytics_HWAIETDB_connectionString": {
+			"value": ""
+		},
+		"sql_analytics_HWAIETV2DB_connectionString": {
 			"value": ""
 		},
 		"AzureDataLakeStorage1_properties_typeProperties_url": {

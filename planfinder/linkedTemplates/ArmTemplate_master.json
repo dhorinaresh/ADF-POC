@@ -31,6 +31,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureSqlDatabase1'"
 		},
+		"AzureSqlDatabase2_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureSqlDatabase2'"
+		},
 		"Linked_Service_SQL_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'Linked_Service_SQL'",
@@ -39,6 +43,34 @@
 		"Linked_service_AzureDataLakeStorage2_accountKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'Linked_service_AzureDataLakeStorage2'"
+		},
+		"Prod_Azure_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'Prod_Azure'"
+		},
+		"datalake_sql_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'datalake_sql'"
+		},
+		"datalake_sql_gw_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'datalake_sql_gw'"
+		},
+		"prod_sql_analytics_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'prod_sql_analytics'"
+		},
+		"sql_analytics_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'sql_analytics'"
+		},
+		"sql_analytics_HWAIETDB_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'sql_analytics_HWAIETDB'"
+		},
+		"sql_analytics_HWAIETV2DB_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'sql_analytics_HWAIETV2DB'"
 		},
 		"AzureDataLakeStorage1_properties_typeProperties_url": {
 			"type": "string",
@@ -93,11 +125,35 @@
 					"AzureSqlDatabase1_connectionString": {
 						"value": "[parameters('AzureSqlDatabase1_connectionString')]"
 					},
+					"AzureSqlDatabase2_connectionString": {
+						"value": "[parameters('AzureSqlDatabase2_connectionString')]"
+					},
 					"Linked_Service_SQL_connectionString": {
 						"value": "[parameters('Linked_Service_SQL_connectionString')]"
 					},
 					"Linked_service_AzureDataLakeStorage2_accountKey": {
 						"value": "[parameters('Linked_service_AzureDataLakeStorage2_accountKey')]"
+					},
+					"Prod_Azure_connectionString": {
+						"value": "[parameters('Prod_Azure_connectionString')]"
+					},
+					"datalake_sql_connectionString": {
+						"value": "[parameters('datalake_sql_connectionString')]"
+					},
+					"datalake_sql_gw_connectionString": {
+						"value": "[parameters('datalake_sql_gw_connectionString')]"
+					},
+					"prod_sql_analytics_connectionString": {
+						"value": "[parameters('prod_sql_analytics_connectionString')]"
+					},
+					"sql_analytics_connectionString": {
+						"value": "[parameters('sql_analytics_connectionString')]"
+					},
+					"sql_analytics_HWAIETDB_connectionString": {
+						"value": "[parameters('sql_analytics_HWAIETDB_connectionString')]"
+					},
+					"sql_analytics_HWAIETV2DB_connectionString": {
+						"value": "[parameters('sql_analytics_HWAIETV2DB_connectionString')]"
 					},
 					"AzureDataLakeStorage1_properties_typeProperties_url": {
 						"value": "[parameters('AzureDataLakeStorage1_properties_typeProperties_url')]"
@@ -267,6 +323,66 @@
 			},
 			"dependsOn": [
 				"[resourceId('Microsoft.Resources/deployments', 'planfinder_ArmTemplate_7')]"
+			]
+		},
+		{
+			"name": "planfinder_ArmTemplate_9",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_9.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'planfinder_ArmTemplate_8')]"
+			]
+		},
+		{
+			"name": "planfinder_ArmTemplate_10",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_10.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'planfinder_ArmTemplate_9')]"
+			]
+		},
+		{
+			"name": "planfinder_ArmTemplate_11",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_11.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'planfinder_ArmTemplate_10')]"
 			]
 		}
 	]

@@ -13,315 +13,7 @@
 	},
 	"resources": [
 		{
-			"name": "[concat(parameters('factoryName'), '/Geography_table_sink')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureSqlDatabase1",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "Geography_Id",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "Country_Id",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "State_Id",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "County_Id",
-						"type": "int",
-						"precision": 10
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "Geography_Table"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/OrgBenefit')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureSqlDatabase1",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "ID",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "Bid_Id",
-						"type": "varchar"
-					},
-					{
-						"name": "Benefits",
-						"type": "varchar"
-					},
-					{
-						"name": "BenefitValue",
-						"type": "varchar"
-					},
-					{
-						"name": "Year",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "Plan_Name",
-						"type": "varchar"
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "OrgBenefits"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/OrgState')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureSqlDatabase1",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "StateId",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "State",
-						"type": "varchar"
-					},
-					{
-						"name": "Statecode",
-						"type": "varchar"
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "OrgState"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Org_Plan_table')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureSqlDatabase1",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "StateId",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "CountyId",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "BidId",
-						"type": "nvarchar"
-					},
-					{
-						"name": "RichPlans",
-						"type": "float",
-						"precision": 15
-					},
-					{
-						"name": "LeanPlans",
-						"type": "float",
-						"precision": 15
-					},
-					{
-						"name": "WinningPlans",
-						"type": "float",
-						"precision": 15
-					},
-					{
-						"name": "PlanName",
-						"type": "nvarchar"
-					},
-					{
-						"name": "PremiumCD",
-						"type": "nvarchar"
-					},
-					{
-						"name": "PartD",
-						"type": "nvarchar"
-					},
-					{
-						"name": "PartBGiveBack",
-						"type": "nvarchar"
-					},
-					{
-						"name": "PlanCoverage",
-						"type": "nvarchar"
-					},
-					{
-						"name": "SbWorldWideEmegency",
-						"type": "nvarchar"
-					},
-					{
-						"name": "SbHearing",
-						"type": "nvarchar"
-					},
-					{
-						"name": "HealthDeductible",
-						"type": "nvarchar"
-					},
-					{
-						"name": "AnnualDrugDeductible",
-						"type": "nvarchar"
-					},
-					{
-						"name": "MOOP",
-						"type": "nvarchar"
-					},
-					{
-						"name": "SbVision",
-						"type": "nvarchar"
-					},
-					{
-						"name": "TEGPlanValue",
-						"type": "float",
-						"precision": 15
-					},
-					{
-						"name": "OOPC",
-						"type": "float",
-						"precision": 15
-					},
-					{
-						"name": "PCP",
-						"type": "nvarchar"
-					},
-					{
-						"name": "Specalist",
-						"type": "nvarchar"
-					},
-					{
-						"name": "InpatAcute",
-						"type": "nvarchar"
-					},
-					{
-						"name": "SbInpatient",
-						"type": "nvarchar"
-					},
-					{
-						"name": "OCTCoverage",
-						"type": "nvarchar"
-					},
-					{
-						"name": "SbOTC",
-						"type": "nvarchar"
-					},
-					{
-						"name": "SbCompDental",
-						"type": "nvarchar"
-					},
-					{
-						"name": "CompDentalCoverage",
-						"type": "nvarchar"
-					},
-					{
-						"name": "SbChiropractor",
-						"type": "nvarchar"
-					},
-					{
-						"name": "SbMeal",
-						"type": "nvarchar"
-					},
-					{
-						"name": "SbFitness",
-						"type": "nvarchar"
-					},
-					{
-						"name": "EmergencyCare",
-						"type": "nvarchar"
-					},
-					{
-						"name": "OpHospital",
-						"type": "nvarchar"
-					},
-					{
-						"name": "SbTeleHealth",
-						"type": "nvarchar"
-					},
-					{
-						"name": "SbHomeSupport",
-						"type": "nvarchar"
-					},
-					{
-						"name": "SbHomeSafety",
-						"type": "nvarchar"
-					},
-					{
-						"name": "SBPers",
-						"type": "nvarchar"
-					},
-					{
-						"name": "SbAmbulance",
-						"type": "nvarchar"
-					},
-					{
-						"name": "OverallStarRating",
-						"type": "varchar"
-					},
-					{
-						"name": "GeographyPlanFilterID",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "Id",
-						"type": "int",
-						"precision": 10
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "OrgPlans"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Org_Plans_data')]",
+			"name": "[concat(parameters('factoryName'), '/Competitor_final')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -334,36 +26,19 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
-						"fileSystem": "pfcontainer"
+						"fileSystem": "hwaicontainer"
 					},
 					"columnDelimiter": ",",
 					"escapeChar": "\\",
 					"firstRowAsHeader": true,
 					"quoteChar": "\""
 				},
-				"schema": [
-					{
-						"name": "bid_id",
-						"type": "String"
-					},
-					{
-						"name": "pbp_a_dsnp_zerodollar",
-						"type": "String"
-					},
-					{
-						"name": "pbp_a_snp_state_cvg_yn",
-						"type": "String"
-					},
-					{
-						"name": "plan_type_new_updated",
-						"type": "String"
-					}
-				]
+				"schema": []
 			},
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Parent_Org_Data')]",
+			"name": "[concat(parameters('factoryName'), '/County_data')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -376,68 +51,6 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
-						"fileSystem": "pfcontainer"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"quoteChar": "\""
-				},
-				"schema": [
-					{
-						"name": "bid_id",
-						"type": "String"
-					},
-					{
-						"name": "pbp_a_dsnp_zerodollar",
-						"type": "String"
-					},
-					{
-						"name": "pbp_a_snp_state_cvg_yn",
-						"type": "String"
-					},
-					{
-						"name": "plan_type_new_updated",
-						"type": "String"
-					}
-				]
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Parent_org_table')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureSqlDatabase1",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "parent_organization"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Plan_Table')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureDataLakeStorage1",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"folderPath": "Output_Plan_details",
 						"fileSystem": "pfcontainer"
 					},
 					"columnDelimiter": ",",
@@ -450,7 +63,270 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Plan_comparision_output')]",
+			"name": "[concat(parameters('factoryName'), '/County_table')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "CountyId",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "County",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "OrgCounty"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Crosswalk')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Linked_service_AzureDataLakeStorage2",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "Crosswalk/Output/crosswalk_2023",
+						"fileSystem": "hwaicontainer"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "PREVIOUS_CONTRACT_ID",
+						"type": "String"
+					},
+					{
+						"name": "PREVIOUS_PLAN_ID",
+						"type": "String"
+					},
+					{
+						"name": "PREVIOUS_PLAN_NAME",
+						"type": "String"
+					},
+					{
+						"name": "PREVIOUS_SNP_TYPE",
+						"type": "String"
+					},
+					{
+						"name": "PREVIOUS_SNP_INSTITUTIONAL",
+						"type": "String"
+					},
+					{
+						"name": "CURRENT_CONTRACT_ID",
+						"type": "String"
+					},
+					{
+						"name": "CURRENT_PLAN_ID",
+						"type": "String"
+					},
+					{
+						"name": "CURRENT_PLAN_NAME",
+						"type": "String"
+					},
+					{
+						"name": "CURRENT_SNP_TYPE",
+						"type": "String"
+					},
+					{
+						"name": "CURRENT_SNP_INSTITUTIONAL",
+						"type": "String"
+					},
+					{
+						"name": "DESCRIPTION",
+						"type": "String"
+					},
+					{
+						"name": "CP_ID_prev",
+						"type": "String"
+					},
+					{
+						"name": "CP_ID_curr",
+						"type": "String"
+					},
+					{
+						"name": "flag",
+						"type": "String"
+					},
+					{
+						"name": "Year",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Data_check_for_base_et')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "sql_analytics_HWAIETDB",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [
+					{
+						"name": "Contract_ID",
+						"type": "varchar"
+					},
+					{
+						"name": "County",
+						"type": "varchar"
+					},
+					{
+						"name": "EGHP",
+						"type": "varchar"
+					},
+					{
+						"name": "FIPS_State_County_Code",
+						"type": "varchar"
+					},
+					{
+						"name": "Month",
+						"type": "varchar"
+					},
+					{
+						"name": "Offers_Part_D",
+						"type": "varchar"
+					},
+					{
+						"name": "Other Dual Full Medicaid Benefit",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "Parent_Organization",
+						"type": "varchar"
+					},
+					{
+						"name": "Plan_ID",
+						"type": "varchar"
+					},
+					{
+						"name": "Plan_Name",
+						"type": "varchar"
+					},
+					{
+						"name": "Plan_Type",
+						"type": "varchar"
+					},
+					{
+						"name": "QDWI",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "QI",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "QMB only",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "QMB plus Full Medicaid Benefits",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "SLMB only",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "SLMB plus Full Medicaid Benefits",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "SNP_Eligibles",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "SNP_Plan",
+						"type": "varchar"
+					},
+					{
+						"name": "SSA_State_County_Code",
+						"type": "varchar"
+					},
+					{
+						"name": "Special_Needs_Plan_Type",
+						"type": "varchar"
+					},
+					{
+						"name": "State",
+						"type": "varchar"
+					},
+					{
+						"name": "Year",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "enrollments",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "Key_Cp_Id",
+						"type": "varchar"
+					},
+					{
+						"name": "ma_eligibles",
+						"type": "varchar"
+					},
+					{
+						"name": "Stability_Index",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "Prediction",
+						"type": "varchar"
+					},
+					{
+						"name": "Status",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Trends_CW_withpredictions_backup"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DelimitedText1')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -463,7 +339,45 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
-						"fileName": "part-00000-tid-3460078169827958077-2d1bd854-30fa-4fec-8346-6d160f7c09e6-77-1-c000.csv",
+						"folderPath": "Output_final/b13a_final",
+						"fileSystem": "pfcontainer"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "Bid_Id",
+						"type": "String"
+					},
+					{
+						"name": "Benefits",
+						"type": "String"
+					},
+					{
+						"name": "BenefitValue",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DelimitedText2')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
 						"folderPath": "Output_Org_Plans/Plan_comparision_table_final",
 						"fileSystem": "pfcontainer"
 					},
@@ -550,6 +464,22 @@
 						"type": "String"
 					},
 					{
+						"name": "Supplemental_Benefit_Value",
+						"type": "String"
+					},
+					{
+						"name": "TEG_Plan_Value_PartC",
+						"type": "String"
+					},
+					{
+						"name": "TEG_Plan_Value_PartD",
+						"type": "String"
+					},
+					{
+						"name": "Actuarial (%)",
+						"type": "String"
+					},
+					{
 						"name": "OOPC",
 						"type": "String"
 					},
@@ -630,7 +560,859 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Plan_comparision_table')]",
+			"name": "[concat(parameters('factoryName'), '/DelimitedText3')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "Output_Org_Plans/Plan_comparision_table_final",
+						"fileSystem": "pfcontainer"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "StateId",
+						"type": "String"
+					},
+					{
+						"name": "CountyId",
+						"type": "String"
+					},
+					{
+						"name": "BidId",
+						"type": "String"
+					},
+					{
+						"name": "RichPlans",
+						"type": "String"
+					},
+					{
+						"name": "LeanPlans",
+						"type": "String"
+					},
+					{
+						"name": "WinningPlans",
+						"type": "String"
+					},
+					{
+						"name": "PlanName",
+						"type": "String"
+					},
+					{
+						"name": "PremiumCD",
+						"type": "String"
+					},
+					{
+						"name": "PartD",
+						"type": "String"
+					},
+					{
+						"name": "PartBGiveBack",
+						"type": "String"
+					},
+					{
+						"name": "PlanCoverage",
+						"type": "String"
+					},
+					{
+						"name": "SbWorldWideEmegency",
+						"type": "String"
+					},
+					{
+						"name": "SbHearing",
+						"type": "String"
+					},
+					{
+						"name": "HealthDeductible",
+						"type": "String"
+					},
+					{
+						"name": "AnnualDrugDeductible",
+						"type": "String"
+					},
+					{
+						"name": "MOOP",
+						"type": "String"
+					},
+					{
+						"name": "SbVision",
+						"type": "String"
+					},
+					{
+						"name": "OverallStarRating",
+						"type": "String"
+					},
+					{
+						"name": "TEGPlanValue",
+						"type": "String"
+					},
+					{
+						"name": "Supplemental_Benefit_Value",
+						"type": "String"
+					},
+					{
+						"name": "TEG_Plan_Value_PartC",
+						"type": "String"
+					},
+					{
+						"name": "TEG_Plan_Value_PartD",
+						"type": "String"
+					},
+					{
+						"name": "Actuarial (%)",
+						"type": "String"
+					},
+					{
+						"name": "OOPC",
+						"type": "String"
+					},
+					{
+						"name": "PCP",
+						"type": "String"
+					},
+					{
+						"name": "Specalist",
+						"type": "String"
+					},
+					{
+						"name": "InpatAcute",
+						"type": "String"
+					},
+					{
+						"name": "SbInpatient",
+						"type": "String"
+					},
+					{
+						"name": "OCTCoverage",
+						"type": "String"
+					},
+					{
+						"name": "SbOTC",
+						"type": "String"
+					},
+					{
+						"name": "SbCompDental",
+						"type": "String"
+					},
+					{
+						"name": "CompDentalCoverage",
+						"type": "String"
+					},
+					{
+						"name": "SbChiropractor",
+						"type": "String"
+					},
+					{
+						"name": "SbMeal",
+						"type": "String"
+					},
+					{
+						"name": "SbFitness",
+						"type": "String"
+					},
+					{
+						"name": "EmergencyCare",
+						"type": "String"
+					},
+					{
+						"name": "OpHospital",
+						"type": "String"
+					},
+					{
+						"name": "SbTeleHealth",
+						"type": "String"
+					},
+					{
+						"name": "SbHomeSupport",
+						"type": "String"
+					},
+					{
+						"name": "SbHomeSafety",
+						"type": "String"
+					},
+					{
+						"name": "SBPers",
+						"type": "String"
+					},
+					{
+						"name": "SbAmbulance",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DelimitedText4')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "Output_Geography_plan_filters/Geography_plan_filters_final",
+						"fileSystem": "pfcontainer"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "StateId",
+						"type": "String"
+					},
+					{
+						"name": "CountyId",
+						"type": "String"
+					},
+					{
+						"name": "BidId",
+						"type": "String"
+					},
+					{
+						"name": "PlanTypeId",
+						"type": "String"
+					},
+					{
+						"name": "SnpTypeId",
+						"type": "String"
+					},
+					{
+						"name": "CrosswalkId",
+						"type": "String"
+					},
+					{
+						"name": "ParentOrganizationId",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DelimitedText8')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "trends_cw_with_stabality_final_output.csv",
+						"folderPath": "Enrollment_trends_gateway_dashboard/output_files",
+						"fileSystem": "hwaicontainer"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "Contract_ID",
+						"type": "String"
+					},
+					{
+						"name": "County",
+						"type": "String"
+					},
+					{
+						"name": "Month",
+						"type": "String"
+					},
+					{
+						"name": "Offers_Part_D",
+						"type": "String"
+					},
+					{
+						"name": "Organization_Marketing_Name",
+						"type": "String"
+					},
+					{
+						"name": "Organization_Name",
+						"type": "String"
+					},
+					{
+						"name": "Organization_Type",
+						"type": "String"
+					},
+					{
+						"name": "Parent_Organization",
+						"type": "String"
+					},
+					{
+						"name": "Plan_ID",
+						"type": "String"
+					},
+					{
+						"name": "Plan_Name",
+						"type": "String"
+					},
+					{
+						"name": "Plan_Type",
+						"type": "String"
+					},
+					{
+						"name": "SNP_Plan",
+						"type": "String"
+					},
+					{
+						"name": "Special_Needs_Plan_Type",
+						"type": "String"
+					},
+					{
+						"name": "State",
+						"type": "String"
+					},
+					{
+						"name": "Year",
+						"type": "String"
+					},
+					{
+						"name": "enrollments",
+						"type": "String"
+					},
+					{
+						"name": "Key_Cp_Id",
+						"type": "String"
+					},
+					{
+						"name": "ma_eligibles",
+						"type": "String"
+					},
+					{
+						"name": "SLMB plus Full Medicaid Benefits",
+						"type": "String"
+					},
+					{
+						"name": "SSA_State_County_Code",
+						"type": "String"
+					},
+					{
+						"name": "SLMB only",
+						"type": "String"
+					},
+					{
+						"name": "SNP_Eligibles",
+						"type": "String"
+					},
+					{
+						"name": "QDWI",
+						"type": "String"
+					},
+					{
+						"name": "QMB plus Full Medicaid Benefits",
+						"type": "String"
+					},
+					{
+						"name": "Other Dual Full Medicaid Benefit",
+						"type": "String"
+					},
+					{
+						"name": "FIPS_State_County_Code",
+						"type": "String"
+					},
+					{
+						"name": "QMB only",
+						"type": "String"
+					},
+					{
+						"name": "QI",
+						"type": "String"
+					},
+					{
+						"name": "EGHP",
+						"type": "String"
+					},
+					{
+						"name": "SC_Key",
+						"type": "String"
+					},
+					{
+						"name": "Plantype_index",
+						"type": "String"
+					},
+					{
+						"name": "Player_index",
+						"type": "String"
+					},
+					{
+						"name": "Premium_index",
+						"type": "String"
+					},
+					{
+						"name": "Age_index",
+						"type": "String"
+					},
+					{
+						"name": "drug_index",
+						"type": "String"
+					},
+					{
+						"name": "Stability_Index",
+						"type": "String"
+					},
+					{
+						"name": "Status",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DelimitedText9')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "part-00000-tid-1823096363297085363-09cf68ca-d374-4a43-9631-d6e9e2dd1bf5-2907-1-c000.csv",
+						"folderPath": "Market_Snapshot/Output/MS_Final_Dataset",
+						"fileSystem": "hwaicontainer"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "FIPS_State_County_Code",
+						"type": "String"
+					},
+					{
+						"name": "Month",
+						"type": "String"
+					},
+					{
+						"name": "Year",
+						"type": "String"
+					},
+					{
+						"name": "enrollments",
+						"type": "String"
+					},
+					{
+						"name": "Contract_ID",
+						"type": "String"
+					},
+					{
+						"name": "Plan_ID",
+						"type": "String"
+					},
+					{
+						"name": "SSA_State_County_Code",
+						"type": "String"
+					},
+					{
+						"name": "County",
+						"type": "String"
+					},
+					{
+						"name": "Parent_Organization",
+						"type": "String"
+					},
+					{
+						"name": "Organization_Type",
+						"type": "String"
+					},
+					{
+						"name": "Plan_Type",
+						"type": "String"
+					},
+					{
+						"name": "Offers_Part_D",
+						"type": "String"
+					},
+					{
+						"name": "SNP_Plan",
+						"type": "String"
+					},
+					{
+						"name": "Eghp",
+						"type": "String"
+					},
+					{
+						"name": "Organization_Name",
+						"type": "String"
+					},
+					{
+						"name": "Organization_Marketing_Name",
+						"type": "String"
+					},
+					{
+						"name": "Plan_Name",
+						"type": "String"
+					},
+					{
+						"name": "Ma_Eligibles",
+						"type": "String"
+					},
+					{
+						"name": "key",
+						"type": "String"
+					},
+					{
+						"name": "Special_Needs_Plan_Type",
+						"type": "String"
+					},
+					{
+						"name": "QMB only",
+						"type": "String"
+					},
+					{
+						"name": "QMB plus Full Medicaid Benefits",
+						"type": "String"
+					},
+					{
+						"name": "SLMB only",
+						"type": "String"
+					},
+					{
+						"name": "SLMB plus Full Medicaid Benefits",
+						"type": "String"
+					},
+					{
+						"name": "Qdwi",
+						"type": "String"
+					},
+					{
+						"name": "QI",
+						"type": "String"
+					},
+					{
+						"name": "Other Dual Full Medicaid Benefit",
+						"type": "String"
+					},
+					{
+						"name": "SNP_Eligibles",
+						"type": "String"
+					},
+					{
+						"name": "State",
+						"type": "String"
+					},
+					{
+						"name": "Out of Area",
+						"type": "String"
+					},
+					{
+						"name": "Sex_And_Age_Population_Above_65_Sex_Ratio_Males_Per_100_Females",
+						"type": "String"
+					},
+					{
+						"name": "Sex_And_Age_Population_65_To_74_Years",
+						"type": "String"
+					},
+					{
+						"name": "Sex_And_Age_Population_75_To_84_Years",
+						"type": "String"
+					},
+					{
+						"name": "Sex_And_Age_Population_85_Years_And_Over",
+						"type": "String"
+					},
+					{
+						"name": "Sex_And_Age_Population_Above_65",
+						"type": "String"
+					},
+					{
+						"name": "Sex_And_Age_Population_Above_65_Male",
+						"type": "String"
+					},
+					{
+						"name": "Sex_And_Age_Population_Above_65_Female",
+						"type": "String"
+					},
+					{
+						"name": "Total_In_Households_Above_65",
+						"type": "String"
+					},
+					{
+						"name": "Total_Above_65_Has_A_Computer",
+						"type": "String"
+					},
+					{
+						"name": "Total_Male_Above_65_With_Employer-Based_Health_Insurance",
+						"type": "String"
+					},
+					{
+						"name": "Total_Female_Above_65_With_Employer-Based_Health_Insurance",
+						"type": "String"
+					},
+					{
+						"name": "Total_Male_Above_65_With_Medicare_Coverage",
+						"type": "String"
+					},
+					{
+						"name": "Total_Male_Above_65_No_Medicare_Coverage",
+						"type": "String"
+					},
+					{
+						"name": "Total_Female_Above_65_With_Medicare_Coverage",
+						"type": "String"
+					},
+					{
+						"name": "Total_Female_Above_65_No_Medicare_Coverage",
+						"type": "String"
+					},
+					{
+						"name": "Total_Income_In_The_Past_12_Months_Below_Poverty_Level_Male_65_To_74_Years",
+						"type": "String"
+					},
+					{
+						"name": "Total_Income_In_The_Past_12_Months_Below_Poverty_Level_Male_75_Years_And_Over",
+						"type": "String"
+					},
+					{
+						"name": "Total_Income_In_The_Past_12_Months_Below_Poverty_Level_Female_65_To_74_Years",
+						"type": "String"
+					},
+					{
+						"name": "Total_Income_In_The_Past_12_Months_Below_Poverty_Level_Female_75_Years_And_Over",
+						"type": "String"
+					},
+					{
+						"name": "Total_Male_65_To_74_Years_With_A_Disability",
+						"type": "String"
+					},
+					{
+						"name": "Total_Male_75_Years_And_Over_With_A_Disability",
+						"type": "String"
+					},
+					{
+						"name": "Total_Female_65_To_74_Years_With_A_Disability",
+						"type": "String"
+					},
+					{
+						"name": "Total_Female_75_Years_And_Over_With_A_Disability",
+						"type": "String"
+					},
+					{
+						"name": "Household_Received_Snap_In_The_Past_12_Months_At_Least_One_Person_In_Household_60_Years_Or_Over",
+						"type": "String"
+					},
+					{
+						"name": "Not_Received_Snap_In_The_Past_12_Months_At_Least_One_Person_In_Household_60_Years_Or_Over",
+						"type": "String"
+					},
+					{
+						"name": "Total_Above_65_Literate",
+						"type": "String"
+					},
+					{
+						"name": "Percent__Literacy_Above_65",
+						"type": "String"
+					},
+					{
+						"name": "D-SNP Type",
+						"type": "String"
+					},
+					{
+						"name": "Termination Status",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ET_TECH_STACK')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase2",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "Contract_ID",
+						"type": "varchar"
+					},
+					{
+						"name": "County",
+						"type": "varchar"
+					},
+					{
+						"name": "EGHP",
+						"type": "varchar"
+					},
+					{
+						"name": "FIPS_State_County_Code",
+						"type": "varchar"
+					},
+					{
+						"name": "Month",
+						"type": "varchar"
+					},
+					{
+						"name": "Offers_Part_D",
+						"type": "varchar"
+					},
+					{
+						"name": "Other Dual Full Medicaid Benefit",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "Parent_Organization",
+						"type": "varchar"
+					},
+					{
+						"name": "Plan_ID",
+						"type": "varchar"
+					},
+					{
+						"name": "Plan_Name",
+						"type": "varchar"
+					},
+					{
+						"name": "Plan_Type",
+						"type": "varchar"
+					},
+					{
+						"name": "QDWI",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "QI",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "QMB only",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "QMB plus Full Medicaid Benefits",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "SLMB only",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "SLMB plus Full Medicaid Benefits",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "SNP_Eligibles",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "SNP_Plan",
+						"type": "varchar"
+					},
+					{
+						"name": "SSA_State_County_Code",
+						"type": "varchar"
+					},
+					{
+						"name": "Special_Needs_Plan_Type",
+						"type": "varchar"
+					},
+					{
+						"name": "State",
+						"type": "varchar"
+					},
+					{
+						"name": "Year",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "enrollments",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "Key_Cp_Id",
+						"type": "varchar"
+					},
+					{
+						"name": "ma_eligibles",
+						"type": "varchar"
+					},
+					{
+						"name": "Stability_Index",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "Prediction",
+						"type": "varchar"
+					},
+					{
+						"name": "Status",
+						"type": "varchar"
+					},
+					{
+						"name": "IsTerminated",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "IsOutofArea",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "IsStarEnr",
+						"type": "int",
+						"precision": 10
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "TrendsCwWithPredictions"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Eligible')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -642,10 +1424,441 @@
 				"type": "AzureSqlTable",
 				"schema": [
 					{
-						"name": "Id",
-						"type": "int",
-						"precision": 10
+						"name": "State Name",
+						"type": "varchar"
 					},
+					{
+						"name": "County Name",
+						"type": "varchar"
+					},
+					{
+						"name": "FIPSST",
+						"type": "varchar"
+					},
+					{
+						"name": "FIPSCNTY",
+						"type": "varchar"
+					},
+					{
+						"name": "FIPS",
+						"type": "varchar"
+					},
+					{
+						"name": "SSAST",
+						"type": "varchar"
+					},
+					{
+						"name": "SSACNTY",
+						"type": "varchar"
+					},
+					{
+						"name": "SSA",
+						"type": "varchar"
+					},
+					{
+						"name": "Eligibles",
+						"type": "varchar"
+					},
+					{
+						"name": "Enrolled",
+						"type": "varchar"
+					},
+					{
+						"name": "Penetration",
+						"type": "varchar"
+					},
+					{
+						"name": "Month",
+						"type": "varchar"
+					},
+					{
+						"name": "Year",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Eligible"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Eligibles')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Linked_service_AzureDataLakeStorage2",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "Eligibles/ Output/Eligibles",
+						"fileSystem": "hwaicontainer"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "State Name",
+						"type": "String"
+					},
+					{
+						"name": "County Name",
+						"type": "String"
+					},
+					{
+						"name": "FIPSST",
+						"type": "String"
+					},
+					{
+						"name": "FIPSCNTY",
+						"type": "String"
+					},
+					{
+						"name": "FIPS",
+						"type": "String"
+					},
+					{
+						"name": "SSAST",
+						"type": "String"
+					},
+					{
+						"name": "SSACNTY",
+						"type": "String"
+					},
+					{
+						"name": "SSA",
+						"type": "String"
+					},
+					{
+						"name": "Eligibles",
+						"type": "String"
+					},
+					{
+						"name": "Enrolled",
+						"type": "String"
+					},
+					{
+						"name": "Penetration",
+						"type": "String"
+					},
+					{
+						"name": "Month",
+						"type": "String"
+					},
+					{
+						"name": "Year",
+						"type": "String"
+					},
+					{
+						"name": "Year_DSNP",
+						"type": "String"
+					},
+					{
+						"name": "Month_DSNP",
+						"type": "String"
+					},
+					{
+						"name": "State_DSNP",
+						"type": "String"
+					},
+					{
+						"name": "County_DSNP",
+						"type": "String"
+					},
+					{
+						"name": "QMB only",
+						"type": "String"
+					},
+					{
+						"name": "QMB plus Full Medicaid Benefits",
+						"type": "String"
+					},
+					{
+						"name": "SLMB only",
+						"type": "String"
+					},
+					{
+						"name": "SLMB plus Full Medicaid Benefits",
+						"type": "String"
+					},
+					{
+						"name": "QDWI",
+						"type": "String"
+					},
+					{
+						"name": "QI",
+						"type": "String"
+					},
+					{
+						"name": "Other Dual Full Medicaid Benefit",
+						"type": "String"
+					},
+					{
+						"name": "SNP_Eligibles",
+						"type": "String"
+					},
+					{
+						"name": "statecode",
+						"type": "String"
+					},
+					{
+						"name": "state",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Enr_Output')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "Output_enrollment",
+						"fileSystem": "pfcontainer"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Enr_final_data')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "trends_cw_with_stabality_final_output.csv",
+						"folderPath": "Enrollment_trends_dashboard/Output_files",
+						"fileSystem": "hwaicontainer"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Enr_final_file')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "trends_cw_with_stabality_final_output.csv",
+						"folderPath": "Enrollment_trends_gateway_dashboard/output_files",
+						"fileSystem": "hwaicontainer"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "Contract_ID",
+						"type": "String"
+					},
+					{
+						"name": "County",
+						"type": "String"
+					},
+					{
+						"name": "Month",
+						"type": "String"
+					},
+					{
+						"name": "Offers_Part_D",
+						"type": "String"
+					},
+					{
+						"name": "Organization_Marketing_Name",
+						"type": "String"
+					},
+					{
+						"name": "Organization_Name",
+						"type": "String"
+					},
+					{
+						"name": "Organization_Type",
+						"type": "String"
+					},
+					{
+						"name": "Parent_Organization",
+						"type": "String"
+					},
+					{
+						"name": "Plan_ID",
+						"type": "String"
+					},
+					{
+						"name": "Plan_Name",
+						"type": "String"
+					},
+					{
+						"name": "Plan_Type",
+						"type": "String"
+					},
+					{
+						"name": "SNP_Plan",
+						"type": "String"
+					},
+					{
+						"name": "Special_Needs_Plan_Type",
+						"type": "String"
+					},
+					{
+						"name": "State",
+						"type": "String"
+					},
+					{
+						"name": "Year",
+						"type": "String"
+					},
+					{
+						"name": "enrollments",
+						"type": "String"
+					},
+					{
+						"name": "Key_Cp_Id",
+						"type": "String"
+					},
+					{
+						"name": "ma_eligibles",
+						"type": "String"
+					},
+					{
+						"name": "SLMB plus Full Medicaid Benefits",
+						"type": "String"
+					},
+					{
+						"name": "SSA_State_County_Code",
+						"type": "String"
+					},
+					{
+						"name": "SLMB only",
+						"type": "String"
+					},
+					{
+						"name": "SNP_Eligibles",
+						"type": "String"
+					},
+					{
+						"name": "QDWI",
+						"type": "String"
+					},
+					{
+						"name": "QMB plus Full Medicaid Benefits",
+						"type": "String"
+					},
+					{
+						"name": "Other Dual Full Medicaid Benefit",
+						"type": "String"
+					},
+					{
+						"name": "FIPS_State_County_Code",
+						"type": "String"
+					},
+					{
+						"name": "QMB only",
+						"type": "String"
+					},
+					{
+						"name": "QI",
+						"type": "String"
+					},
+					{
+						"name": "EGHP",
+						"type": "String"
+					},
+					{
+						"name": "SC_Key",
+						"type": "String"
+					},
+					{
+						"name": "Plantype_index",
+						"type": "String"
+					},
+					{
+						"name": "Player_index",
+						"type": "String"
+					},
+					{
+						"name": "Premium_index",
+						"type": "String"
+					},
+					{
+						"name": "Age_index",
+						"type": "String"
+					},
+					{
+						"name": "drug_index",
+						"type": "String"
+					},
+					{
+						"name": "Stability_Index",
+						"type": "String"
+					},
+					{
+						"name": "Status",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Enrollment_table')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
 					{
 						"name": "StateId",
 						"type": "int",
@@ -658,171 +1871,42 @@
 					},
 					{
 						"name": "BidId",
-						"type": "nvarchar"
-					},
-					{
-						"name": "RichPlans",
-						"type": "float",
-						"precision": 15
-					},
-					{
-						"name": "LeanPlans",
-						"type": "float",
-						"precision": 15
-					},
-					{
-						"name": "WinningPlans",
-						"type": "float",
-						"precision": 15
-					},
-					{
-						"name": "PlanName",
-						"type": "nvarchar"
-					},
-					{
-						"name": "PremiumCD",
-						"type": "float",
-						"precision": 15
-					},
-					{
-						"name": "PartD",
-						"type": "float",
-						"precision": 15
-					},
-					{
-						"name": "PartBGiveBack",
-						"type": "float",
-						"precision": 15
-					},
-					{
-						"name": "PlanCoverage",
-						"type": "nvarchar"
-					},
-					{
-						"name": "SbWorldWideEmegency",
-						"type": "nvarchar"
-					},
-					{
-						"name": "SbHearing",
-						"type": "nvarchar"
-					},
-					{
-						"name": "HealthDeductible",
-						"type": "float",
-						"precision": 15
-					},
-					{
-						"name": "AnnualDrugDeductible",
-						"type": "float",
-						"precision": 15
-					},
-					{
-						"name": "MOOP",
-						"type": "float",
-						"precision": 15
-					},
-					{
-						"name": "SbVision",
-						"type": "nvarchar"
-					},
-					{
-						"name": "TEGPlanValue",
-						"type": "float",
-						"precision": 15
-					},
-					{
-						"name": "OOPC",
-						"type": "float",
-						"precision": 15
-					},
-					{
-						"name": "PCP",
-						"type": "nvarchar"
-					},
-					{
-						"name": "Specalist",
-						"type": "nvarchar"
-					},
-					{
-						"name": "InpatAcute",
-						"type": "nvarchar"
-					},
-					{
-						"name": "SbInpatient",
-						"type": "nvarchar"
-					},
-					{
-						"name": "OCTCoverage",
-						"type": "nvarchar"
-					},
-					{
-						"name": "SbOTC",
-						"type": "nvarchar"
-					},
-					{
-						"name": "SbCompDental",
-						"type": "nvarchar"
-					},
-					{
-						"name": "CompDentalCoverage",
-						"type": "nvarchar"
-					},
-					{
-						"name": "SbChiropractor",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "SbMeal",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "SbFitness",
-						"type": "nvarchar"
-					},
-					{
-						"name": "EmergencyCare",
-						"type": "nvarchar"
-					},
-					{
-						"name": "OpHospital",
-						"type": "nvarchar"
-					},
-					{
-						"name": "SbTeleHealth",
-						"type": "nvarchar"
-					},
-					{
-						"name": "SbHomeSupport",
-						"type": "nvarchar"
-					},
-					{
-						"name": "SbHomeSafety",
-						"type": "nvarchar"
-					},
-					{
-						"name": "SBPers",
-						"type": "nvarchar"
-					},
-					{
-						"name": "SbAmbulance",
-						"type": "nvarchar"
-					},
-					{
-						"name": "OverallStarRating",
 						"type": "varchar"
+					},
+					{
+						"name": "Enrollments",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Year",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Month",
+						"type": "nvarchar"
+					},
+					{
+						"name": "MonthNumber",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Id",
+						"type": "int",
+						"precision": 10
 					}
 				],
 				"typeProperties": {
 					"schema": "dbo",
-					"table": "OrgPlansCopy"
+					"table": "OrgEnrollmentCopy"
 				}
 			},
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Plan_details_Audit_table')]",
+			"name": "[concat(parameters('factoryName'), '/Enrollment_table_new')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -832,13 +1916,55 @@
 				},
 				"annotations": [],
 				"type": "AzureSqlTable",
-				"schema": [],
-				"typeProperties": {}
+				"schema": [
+					{
+						"name": "StateId",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "CountyId",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "BidId",
+						"type": "varchar"
+					},
+					{
+						"name": "Enrollments",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Year",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Month",
+						"type": "nvarchar"
+					},
+					{
+						"name": "MonthNumber",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Id",
+						"type": "int",
+						"precision": 10
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "OrgEnrollment"
+				}
 			},
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Plan_details_QC')]",
+			"name": "[concat(parameters('factoryName'), '/Geo_Filters_QC')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -860,272 +1986,6 @@
 					"quoteChar": "\""
 				},
 				"schema": []
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Plan_table_sink')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureSqlDatabase1",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "Plan_Id",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "BidId",
-						"type": "varchar"
-					},
-					{
-						"name": "PlanName",
-						"type": "varchar"
-					},
-					{
-						"name": "StateId",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "CountyId",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "PlantypeId",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "SnptypeId",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "CrosswalkId",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "ParentOrgId",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "Active_Ind",
-						"type": "int",
-						"precision": 10
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "Plan_Table"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/QC_dummy_output')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureSqlDatabase1",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "ID",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "Output",
-						"type": "varchar"
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "QC_dummy_output"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/QC_dummy_table')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureSqlDatabase1",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "ID",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "Test_Script_Type",
-						"type": "varchar"
-					},
-					{
-						"name": "Test_Script_location",
-						"type": "varchar"
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "QC_files_table"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Section_C_OON_final_data')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureDataLakeStorage1",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"folderPath": "Output_final",
-						"fileSystem": "pfcontainer"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"quoteChar": "\""
-				},
-				"schema": []
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Section_C_POS_final_data')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureDataLakeStorage1",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"folderPath": "Output_final",
-						"fileSystem": "pfcontainer"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"quoteChar": "\""
-				},
-				"schema": []
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Section_C_final_data')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureDataLakeStorage1",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"folderPath": "Output_final",
-						"fileSystem": "pfcontainer"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"quoteChar": "\""
-				},
-				"schema": []
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/State_data')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureDataLakeStorage1",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"fileSystem": "pfcontainer"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"quoteChar": "\""
-				},
-				"schema": []
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/State_table_sink')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureSqlDatabase1",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "StateId",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "State",
-						"type": "varchar"
-					},
-					{
-						"name": "Statecode",
-						"type": "varchar"
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "OrgState"
-				}
 			},
 			"dependsOn": []
 		}
