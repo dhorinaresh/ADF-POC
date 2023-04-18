@@ -1,0 +1,162 @@
+{
+	"name": "User_log_trigger",
+	"properties": {
+		"activities": [
+			{
+				"name": "User_Info_Update_on_Azure",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"writeBehavior": "upsert",
+						"upsertSettings": {
+							"useTempDB": true,
+							"keys": [
+								"UserId"
+							]
+						},
+						"sqlWriterUseTableLock": false,
+						"disableMetricsCollection": false
+					},
+					"enableStaging": false,
+					"parallelCopies": 1,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "UserId",
+									"type": "String",
+									"physicalType": "varchar"
+								},
+								"sink": {
+									"name": "UserId",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Email",
+									"type": "String",
+									"physicalType": "varchar"
+								},
+								"sink": {
+									"name": "Email",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "FirstName",
+									"type": "String",
+									"physicalType": "varchar"
+								},
+								"sink": {
+									"name": "FirstName",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "LastName",
+									"type": "String",
+									"physicalType": "varchar"
+								},
+								"sink": {
+									"name": "LastName",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "ClientId",
+									"type": "Int32",
+									"physicalType": "int"
+								},
+								"sink": {
+									"name": "ClientId",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							},
+							{
+								"source": {
+									"name": "SessionId",
+									"type": "String",
+									"physicalType": "varchar"
+								},
+								"sink": {
+									"name": "SessionId",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "IsLoggedIn",
+									"type": "Int32",
+									"physicalType": "int"
+								},
+								"sink": {
+									"name": "IsLoggedIn",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							},
+							{
+								"source": {
+									"name": "created_date",
+									"type": "DateTime",
+									"physicalType": "datetime"
+								},
+								"sink": {
+									"name": "created_date",
+									"type": "DateTime",
+									"physicalType": "datetime"
+								}
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "HealthWorksPlan_SQL_Analytics",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "User_table_Azure_prod",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2023-04-18T10:45:42Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

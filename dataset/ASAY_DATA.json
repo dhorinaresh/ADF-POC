@@ -1,0 +1,154 @@
+{
+	"name": "ASAY_DATA",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "Trend_CW_withpredictions.csv",
+				"folderPath": "EnrollmentTrendTechStack",
+				"fileSystem": "hwaicontainer"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "Contract_ID",
+				"type": "String"
+			},
+			{
+				"name": "County",
+				"type": "String"
+			},
+			{
+				"name": "EGHP",
+				"type": "String"
+			},
+			{
+				"name": "FIPS_State_County_Code",
+				"type": "String"
+			},
+			{
+				"name": "Month",
+				"type": "String"
+			},
+			{
+				"name": "Offers_Part_D",
+				"type": "String"
+			},
+			{
+				"name": "Other Dual Full Medicaid Benefit",
+				"type": "String"
+			},
+			{
+				"name": "Parent_Organization",
+				"type": "String"
+			},
+			{
+				"name": "Plan_ID",
+				"type": "String"
+			},
+			{
+				"name": "Plan_Name",
+				"type": "String"
+			},
+			{
+				"name": "Plan_Type",
+				"type": "String"
+			},
+			{
+				"name": "QDWI",
+				"type": "String"
+			},
+			{
+				"name": "QI",
+				"type": "String"
+			},
+			{
+				"name": "QMB only",
+				"type": "String"
+			},
+			{
+				"name": "QMB plus Full Medicaid Benefits",
+				"type": "String"
+			},
+			{
+				"name": "SLMB only",
+				"type": "String"
+			},
+			{
+				"name": "SLMB plus Full Medicaid Benefits",
+				"type": "String"
+			},
+			{
+				"name": "SNP_Eligibles",
+				"type": "String"
+			},
+			{
+				"name": "SNP_Plan",
+				"type": "String"
+			},
+			{
+				"name": "SSA_State_County_Code",
+				"type": "String"
+			},
+			{
+				"name": "Special_Needs_Plan_Type",
+				"type": "String"
+			},
+			{
+				"name": "State",
+				"type": "String"
+			},
+			{
+				"name": "Year",
+				"type": "String"
+			},
+			{
+				"name": "enrollments",
+				"type": "String"
+			},
+			{
+				"name": "Key_Cp_Id",
+				"type": "String"
+			},
+			{
+				"name": "ma_eligibles",
+				"type": "String"
+			},
+			{
+				"name": "Stability_Index",
+				"type": "String"
+			},
+			{
+				"name": "Prediction",
+				"type": "String"
+			},
+			{
+				"name": "Status",
+				"type": "String"
+			},
+			{
+				"name": "IsTerminated",
+				"type": "String"
+			},
+			{
+				"name": "IsOutofArea",
+				"type": "String"
+			},
+			{
+				"name": "IsStarEnr",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

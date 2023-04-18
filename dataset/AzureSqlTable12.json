@@ -1,0 +1,159 @@
+{
+	"name": "AzureSqlTable12",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "Contract_ID",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Plan_ID",
+				"type": "nvarchar"
+			},
+			{
+				"name": "SSA_State_County_Code",
+				"type": "nvarchar"
+			},
+			{
+				"name": "FIPS_State_County_Code",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Statecode",
+				"type": "nvarchar"
+			},
+			{
+				"name": "County",
+				"type": "nvarchar"
+			},
+			{
+				"name": "enrollments",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Parent_Organization",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Organization_Type",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Plan_Type",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Offers_Part_D",
+				"type": "nvarchar"
+			},
+			{
+				"name": "SNP_Plan",
+				"type": "nvarchar"
+			},
+			{
+				"name": "EGHP",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Organization_Name",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Organization_Marketing_Name",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Plan_Name",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Year",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Month",
+				"type": "nvarchar"
+			},
+			{
+				"name": "ma_eligibles",
+				"type": "nvarchar"
+			},
+			{
+				"name": "key",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Special_Needs_Plan_Type",
+				"type": "nvarchar"
+			},
+			{
+				"name": "QMB only",
+				"type": "nvarchar"
+			},
+			{
+				"name": "QMB plus Full Medicaid Benefits",
+				"type": "nvarchar"
+			},
+			{
+				"name": "SLMB only",
+				"type": "nvarchar"
+			},
+			{
+				"name": "SLMB plus Full Medicaid Benefits",
+				"type": "nvarchar"
+			},
+			{
+				"name": "QDWI",
+				"type": "nvarchar"
+			},
+			{
+				"name": "QI",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Other Dual Full Medicaid Benefit",
+				"type": "nvarchar"
+			},
+			{
+				"name": "SNP_Eligibles",
+				"type": "nvarchar"
+			},
+			{
+				"name": "MA Sales Region",
+				"type": "nvarchar"
+			},
+			{
+				"name": "MA Product Region",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Double County",
+				"type": "nvarchar"
+			},
+			{
+				"name": "GeographyID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "cpid",
+				"type": "nvarchar"
+			},
+			{
+				"name": "State",
+				"type": "nvarchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "HWAI_ASAY"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

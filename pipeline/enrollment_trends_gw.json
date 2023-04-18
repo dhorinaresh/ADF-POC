@@ -1,0 +1,1006 @@
+{
+	"name": "enrollment_trends_gw",
+	"properties": {
+		"activities": [
+			{
+				"name": "start time update",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "INSERT INTO Audit(FileName, Operation, StartTime,Dashboard)\nValues('enr_trends_gw_pre_broadcasting', 'enr_trends_data_prep', (Select GETDATE()),'enr_trends');\nSelect * from Audit;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "dataset_sql",
+						"type": "DatasetReference",
+						"parameters": {
+							"sql_server_dataset": {
+								"value": "@pipeline().parameters.sql_server_dataset_name",
+								"type": "Expression"
+							},
+							"db_name_dataset": {
+								"value": "@pipeline().parameters.db_name",
+								"type": "Expression"
+							},
+							"user_name_dataset": {
+								"value": "@pipeline().parameters.user_name",
+								"type": "Expression"
+							},
+							"password_dataset": {
+								"value": "@pipeline().parameters.password",
+								"type": "Expression"
+							},
+							"sql_table_name": "Audit"
+						}
+					}
+				}
+			},
+			{
+				"name": "pre_broadcasting_step1a",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "start time update",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Enrollment_trends_gateway/enr_trends_gw_pre_broadcasting_step1a"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks4_pfcluster3",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "end time update for enr pre broadcasting step1a",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "pre_broadcasting_step1a",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'pass'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "dataset_sql",
+						"type": "DatasetReference",
+						"parameters": {
+							"sql_server_dataset": {
+								"value": "@pipeline().parameters.sql_server_dataset_name",
+								"type": "Expression"
+							},
+							"db_name_dataset": {
+								"value": "@pipeline().parameters.db_name",
+								"type": "Expression"
+							},
+							"user_name_dataset": {
+								"value": "@pipeline().parameters.user_name",
+								"type": "Expression"
+							},
+							"password_dataset": {
+								"value": "@pipeline().parameters.password",
+								"type": "Expression"
+							},
+							"sql_table_name": "Audit"
+						}
+					}
+				}
+			},
+			{
+				"name": "end time update for enr pre broadcasting step1a_fail",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "pre_broadcasting_step1a",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'fail'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "dataset_sql",
+						"type": "DatasetReference",
+						"parameters": {
+							"sql_server_dataset": {
+								"value": "@pipeline().parameters.sql_server_dataset_name",
+								"type": "Expression"
+							},
+							"db_name_dataset": {
+								"value": "@pipeline().parameters.db_name",
+								"type": "Expression"
+							},
+							"user_name_dataset": {
+								"value": "@pipeline().parameters.user_name",
+								"type": "Expression"
+							},
+							"password_dataset": {
+								"value": "@pipeline().parameters.password",
+								"type": "Expression"
+							},
+							"sql_table_name": "Audit"
+						}
+					}
+				}
+			},
+			{
+				"name": "send email update for enr pre broadcasting step1a",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "end time update for enr pre broadcasting step1a_fail",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+					"method": "POST",
+					"body": {
+						"value": "{\n \"title\":\"PIPELINE RUN FOR ENR PRE-BROADCASTING STEP 1a FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the enr trends pre-broadcasting script and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "pre_broadcasting_step1b",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "end time update for enr pre broadcasting step1a",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Enrollment_trends_gateway/Enr_trends_gw_pre_broadcasting_step1b"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks4_pfcluster3",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "end time update for enr pre broadcasting step1b_pass",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "pre_broadcasting_step1b",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'pass'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "dataset_sql",
+						"type": "DatasetReference",
+						"parameters": {
+							"sql_server_dataset": {
+								"value": "@pipeline().parameters.sql_server_dataset_name",
+								"type": "Expression"
+							},
+							"db_name_dataset": {
+								"value": "@pipeline().parameters.db_name",
+								"type": "Expression"
+							},
+							"user_name_dataset": {
+								"value": "@pipeline().parameters.user_name",
+								"type": "Expression"
+							},
+							"password_dataset": {
+								"value": "@pipeline().parameters.password",
+								"type": "Expression"
+							},
+							"sql_table_name": "Audit"
+						}
+					}
+				}
+			},
+			{
+				"name": "end time update for enr pre broadcasting step1b_fail",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "pre_broadcasting_step1b",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'fail'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "dataset_sql",
+						"type": "DatasetReference",
+						"parameters": {
+							"sql_server_dataset": {
+								"value": "@pipeline().parameters.sql_server_dataset_name",
+								"type": "Expression"
+							},
+							"db_name_dataset": {
+								"value": "@pipeline().parameters.db_name",
+								"type": "Expression"
+							},
+							"user_name_dataset": {
+								"value": "@pipeline().parameters.user_name",
+								"type": "Expression"
+							},
+							"password_dataset": {
+								"value": "@pipeline().parameters.password",
+								"type": "Expression"
+							},
+							"sql_table_name": "Audit"
+						}
+					}
+				}
+			},
+			{
+				"name": "pre_broadcasting_step1c_start_update",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "end time update for enr pre broadcasting step1b_pass",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "INSERT INTO Audit(FileName, Operation, StartTime,Dashboard)\nValues('enr_trends_gw_pre_broadcasting_step1c', 'enr_trends_data_prep', (Select GETDATE()),'enr_trends');\nSelect * from Audit;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "dataset_sql",
+						"type": "DatasetReference",
+						"parameters": {
+							"sql_server_dataset": {
+								"value": "@pipeline().parameters.sql_server_dataset_name",
+								"type": "Expression"
+							},
+							"db_name_dataset": {
+								"value": "@pipeline().parameters.db_name",
+								"type": "Expression"
+							},
+							"user_name_dataset": {
+								"value": "@pipeline().parameters.user_name",
+								"type": "Expression"
+							},
+							"password_dataset": {
+								"value": "@pipeline().parameters.password",
+								"type": "Expression"
+							},
+							"sql_table_name": "Audit"
+						}
+					}
+				}
+			},
+			{
+				"name": "pre_broadcasting_step1c",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "pre_broadcasting_step1c_start_update",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Enrollment_trends_gateway/enr_trends_gw_pre_broadcasting_step1c"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks4_pfcluster3",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "end time update for enr pre broadcasting step1c_pass",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "pre_broadcasting_step1c",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'pass'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "dataset_sql",
+						"type": "DatasetReference",
+						"parameters": {
+							"sql_server_dataset": {
+								"value": "@pipeline().parameters.sql_server_dataset_name",
+								"type": "Expression"
+							},
+							"db_name_dataset": {
+								"value": "@pipeline().parameters.db_name",
+								"type": "Expression"
+							},
+							"user_name_dataset": {
+								"value": "@pipeline().parameters.user_name",
+								"type": "Expression"
+							},
+							"password_dataset": {
+								"value": "@pipeline().parameters.password",
+								"type": "Expression"
+							},
+							"sql_table_name": "Audit"
+						}
+					}
+				}
+			},
+			{
+				"name": "end time update for enr pre broadcasting step1c_fail",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "pre_broadcasting_step1c",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'fail'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "dataset_sql",
+						"type": "DatasetReference",
+						"parameters": {
+							"sql_server_dataset": {
+								"value": "@pipeline().parameters.sql_server_dataset_name",
+								"type": "Expression"
+							},
+							"db_name_dataset": {
+								"value": "@pipeline().parameters.db_name",
+								"type": "Expression"
+							},
+							"user_name_dataset": {
+								"value": "@pipeline().parameters.user_name",
+								"type": "Expression"
+							},
+							"password_dataset": {
+								"value": "@pipeline().parameters.password",
+								"type": "Expression"
+							},
+							"sql_table_name": "Audit"
+						}
+					}
+				}
+			},
+			{
+				"name": "broadcasting_step_start",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "end time update for enr pre broadcasting step1c_pass",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "INSERT INTO Audit(FileName, Operation, StartTime,Dashboard)\nValues('broadcasting_start', 'enr_trends_data_prep', (Select GETDATE()),'enr_trends');\nSelect * from Audit;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "dataset_sql",
+						"type": "DatasetReference",
+						"parameters": {
+							"sql_server_dataset": {
+								"value": "@pipeline().parameters.sql_server_dataset_name",
+								"type": "Expression"
+							},
+							"db_name_dataset": {
+								"value": "@pipeline().parameters.db_name",
+								"type": "Expression"
+							},
+							"user_name_dataset": {
+								"value": "@pipeline().parameters.user_name",
+								"type": "Expression"
+							},
+							"password_dataset": {
+								"value": "@pipeline().parameters.password",
+								"type": "Expression"
+							},
+							"sql_table_name": "Audit"
+						}
+					}
+				}
+			},
+			{
+				"name": "Broadcasting_step2a",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "broadcasting_step_start",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Enrollment_trends_gateway/gw_broadcasting_folder/Enr_gw_broadcasting_step2a"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks4_pfcluster3",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "end time update for broadcasting step2b",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Broadcasting_step2a",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'pass'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "dataset_sql",
+						"type": "DatasetReference",
+						"parameters": {
+							"sql_server_dataset": {
+								"value": "@pipeline().parameters.sql_server_dataset_name",
+								"type": "Expression"
+							},
+							"db_name_dataset": {
+								"value": "@pipeline().parameters.db_name",
+								"type": "Expression"
+							},
+							"user_name_dataset": {
+								"value": "@pipeline().parameters.user_name",
+								"type": "Expression"
+							},
+							"password_dataset": {
+								"value": "@pipeline().parameters.password",
+								"type": "Expression"
+							},
+							"sql_table_name": "Audit"
+						}
+					}
+				}
+			},
+			{
+				"name": "end time update for enr pre broadcasting step2a_fail",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Broadcasting_step2a",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'fail'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "dataset_sql",
+						"type": "DatasetReference",
+						"parameters": {
+							"sql_server_dataset": {
+								"value": "@pipeline().parameters.sql_server_dataset_name",
+								"type": "Expression"
+							},
+							"db_name_dataset": {
+								"value": "@pipeline().parameters.db_name",
+								"type": "Expression"
+							},
+							"user_name_dataset": {
+								"value": "@pipeline().parameters.user_name",
+								"type": "Expression"
+							},
+							"password_dataset": {
+								"value": "@pipeline().parameters.password",
+								"type": "Expression"
+							},
+							"sql_table_name": "Audit"
+						}
+					}
+				}
+			},
+			{
+				"name": "Broadcasting_step2b",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "end time update for broadcasting step2b",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Enrollment_trends_gateway/gw_broadcasting_folder/Enr_gw_broadcasting_step2b"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks4_pfcluster3",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "end time update for broadcasting step2b_pass",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Broadcasting_step2b",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'pass'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "dataset_sql",
+						"type": "DatasetReference",
+						"parameters": {
+							"sql_server_dataset": {
+								"value": "@pipeline().parameters.sql_server_dataset_name",
+								"type": "Expression"
+							},
+							"db_name_dataset": {
+								"value": "@pipeline().parameters.db_name",
+								"type": "Expression"
+							},
+							"user_name_dataset": {
+								"value": "@pipeline().parameters.user_name",
+								"type": "Expression"
+							},
+							"password_dataset": {
+								"value": "@pipeline().parameters.password",
+								"type": "Expression"
+							},
+							"sql_table_name": "Audit"
+						}
+					}
+				}
+			},
+			{
+				"name": "end time update for enr pre broadcasting step2b fail",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Broadcasting_step2b",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'fail'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "dataset_sql",
+						"type": "DatasetReference",
+						"parameters": {
+							"sql_server_dataset": {
+								"value": "@pipeline().parameters.sql_server_dataset_name",
+								"type": "Expression"
+							},
+							"db_name_dataset": {
+								"value": "@pipeline().parameters.db_name",
+								"type": "Expression"
+							},
+							"user_name_dataset": {
+								"value": "@pipeline().parameters.user_name",
+								"type": "Expression"
+							},
+							"password_dataset": {
+								"value": "@pipeline().parameters.password",
+								"type": "Expression"
+							},
+							"sql_table_name": "Audit"
+						}
+					}
+				}
+			},
+			{
+				"name": "Broadcasting_step2c",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "end time update for broadcasting step2b_pass",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Enrollment_trends_gateway/gw_broadcasting_folder/Enr_gw_broadcasting_step2c"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks4_pfcluster3",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "end time update for broadcasting step2c_pass",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Broadcasting_step2c",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'pass'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "dataset_sql",
+						"type": "DatasetReference",
+						"parameters": {
+							"sql_server_dataset": {
+								"value": "@pipeline().parameters.sql_server_dataset_name",
+								"type": "Expression"
+							},
+							"db_name_dataset": {
+								"value": "@pipeline().parameters.db_name",
+								"type": "Expression"
+							},
+							"user_name_dataset": {
+								"value": "@pipeline().parameters.user_name",
+								"type": "Expression"
+							},
+							"password_dataset": {
+								"value": "@pipeline().parameters.password",
+								"type": "Expression"
+							},
+							"sql_table_name": "Audit"
+						}
+					}
+				}
+			},
+			{
+				"name": "end time update for enr pre broadcasting step2c fail",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Broadcasting_step2c",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'fail'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "dataset_sql",
+						"type": "DatasetReference",
+						"parameters": {
+							"sql_server_dataset": {
+								"value": "@pipeline().parameters.sql_server_dataset_name",
+								"type": "Expression"
+							},
+							"db_name_dataset": {
+								"value": "@pipeline().parameters.db_name",
+								"type": "Expression"
+							},
+							"user_name_dataset": {
+								"value": "@pipeline().parameters.user_name",
+								"type": "Expression"
+							},
+							"password_dataset": {
+								"value": "@pipeline().parameters.password",
+								"type": "Expression"
+							},
+							"sql_table_name": "Audit"
+						}
+					}
+				}
+			},
+			{
+				"name": "Post_broadcasting_step",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "end time update for broadcasting step2c_pass",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Enrollment_trends_gateway/Enr_trends_gw_post_broadcasting_step3"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks4_pfcluster3",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"sql_server_dataset_name": {
+				"type": "string",
+				"defaultValue": "hwpilot.database.windows.net"
+			},
+			"db_name": {
+				"type": "string",
+				"defaultValue": "pf_data"
+			},
+			"user_name": {
+				"type": "string",
+				"defaultValue": "pladmin"
+			},
+			"password": {
+				"type": "string",
+				"defaultValue": "Goteg@12345"
+			}
+		},
+		"folder": {
+			"name": "Hwai_Refresh/Hwai_enr_trends"
+		},
+		"annotations": [],
+		"lastPublishTime": "2023-04-18T10:45:41Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}
