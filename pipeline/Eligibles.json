@@ -281,7 +281,6 @@
 							{
 								"source": {
 									"name": "FIPS",
-									"type": "String",
 									"physicalType": "String"
 								},
 								"sink": {
@@ -293,7 +292,6 @@
 							{
 								"source": {
 									"name": "SSA",
-									"type": "String",
 									"physicalType": "String"
 								},
 								"sink": {
@@ -472,7 +470,7 @@
 							},
 							{
 								"source": {
-									"name": "Geo_Id",
+									"name": "Geo_id",
 									"type": "String",
 									"physicalType": "String"
 								},
