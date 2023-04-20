@@ -6528,7 +6528,7 @@
 			},
 			"db_name": {
 				"type": "String",
-				"defaultValue": "pf_data"
+				"defaultValue": "Hwai_Dashboards"
 			},
 			"user_name": {
 				"type": "String",
