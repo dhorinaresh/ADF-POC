@@ -1048,6 +1048,18 @@
 							},
 							{
 								"source": {
+									"name": "April_2023"
+								},
+								"sink": {
+									"name": "April_2023",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
 									"name": "health_deductible",
 									"type": "String",
 									"physicalType": "String"
@@ -2440,6 +2452,18 @@
 							},
 							{
 								"source": {
+									"name": "April_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "April_2023",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
 									"name": "In_network_MOOP_Amount",
 									"type": "String",
 									"physicalType": "String"
@@ -3759,6 +3783,20 @@
 								},
 								"sink": {
 									"name": "March_2023",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "April_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "April_2023",
 									"type": "Decimal",
 									"physicalType": "decimal",
 									"scale": 0,
@@ -6726,7 +6764,7 @@
 			},
 			"db_name": {
 				"type": "String",
-				"defaultValue": "pf_data"
+				"defaultValue": "HWai_Dashboards"
 			},
 			"user_name": {
 				"type": "String",
