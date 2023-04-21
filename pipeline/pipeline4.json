@@ -29,8 +29,8 @@
 				}
 			},
 			{
-				"name": "Lookup2",
-				"type": "Lookup",
+				"name": "GetUserId",
+				"type": "SetVariable",
 				"dependsOn": [
 					{
 						"activity": "Lookup1",
@@ -39,32 +39,21 @@
 						]
 					}
 				],
-				"policy": {
-					"timeout": "0.12:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
 				"userProperties": [],
 				"typeProperties": {
-					"source": {
-						"type": "AzureSqlSource",
-						"sqlReaderQuery": {
-							"value": "@activity('Lookup1').output.value",
-							"type": "Expression"
-						},
-						"queryTimeout": "02:00:00",
-						"partitionOption": "None"
-					},
-					"dataset": {
-						"referenceName": "User_table_Azure_prod",
-						"type": "DatasetReference"
-					},
-					"firstRowOnly": false
+					"variableName": "UserId_Value",
+					"value": "@activity('Lookup1').value.output"
 				}
 			}
 		],
+		"variables": {
+			"UserId_Value": {
+				"type": "String"
+			},
+			"UserId_value": {
+				"type": "Array"
+			}
+		},
 		"annotations": []
 	}
 }
