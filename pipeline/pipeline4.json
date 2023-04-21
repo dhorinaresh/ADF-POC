@@ -51,7 +51,7 @@
 					"source": {
 						"type": "AzureSqlSource",
 						"sqlReaderQuery": {
-							"value": "\nSELECT UserId FROM OrgUser WHERE UserId IN (\n    SELECT value\n    FROM string_split('@{activity('Lookup1').output.UserId}', ',')\n    )",
+							"value": "@activity('Lookup1').output.value",
 							"type": "Expression"
 						},
 						"queryTimeout": "02:00:00",
