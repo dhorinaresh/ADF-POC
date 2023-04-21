@@ -51,7 +51,7 @@
 					"source": {
 						"type": "AzureSqlSource",
 						"sqlReaderQuery": {
-							"value": "SELECT * FROM OrgUser WHERE UserId in ('@{activity('Lookup1').output.value[0].UserId}')",
+							"value": "DELETE FROM OrgUser WHERE UserId NOT IN ('@{activity('Lookup1').output.value[0].UserId}')",
 							"type": "Expression"
 						},
 						"queryTimeout": "02:00:00",
