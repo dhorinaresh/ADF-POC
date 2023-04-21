@@ -51,7 +51,7 @@
 					"source": {
 						"type": "AzureSqlSource",
 						"sqlReaderQuery": {
-							"value": "@string(activity('Lookup1').output)\n",
+							"value": "SELECT * FROM OrgUser WHERE UserId in ('@{activity('Lookup1').output.value[0].UserId}')\n",
 							"type": "Expression"
 						},
 						"queryTimeout": "02:00:00",
