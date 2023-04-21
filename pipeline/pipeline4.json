@@ -27,23 +27,6 @@
 					},
 					"firstRowOnly": false
 				}
-			},
-			{
-				"name": "GetUserId",
-				"type": "SetVariable",
-				"dependsOn": [
-					{
-						"activity": "Lookup1",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"userProperties": [],
-				"typeProperties": {
-					"variableName": "UserId_Value",
-					"value": "@activity('Lookup1').value.output"
-				}
 			}
 		],
 		"variables": {
