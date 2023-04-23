@@ -1,0 +1,3852 @@
+{
+	"name": "pipeline3",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy to pi_landscape Db",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [
+					{
+						"name": "Source",
+						"value": "hwaicontainer/Product_Insights / Output / pi_lscape/p*"
+					},
+					{
+						"name": "Destination",
+						"value": "dbo.@{'pi_landscape_2023'}"
+					}
+				],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"wildcardFolderPath": "Product_Insights/Output/pi_lscape",
+							"wildcardFileName": "p*",
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "bid_id",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "bid_id",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "State",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "State",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "County",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "County",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CP_ID_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "CP_ID_2020",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CP_ID_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "CP_ID_2021",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CP_ID_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "CP_ID_2022",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CP_ID_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "CP_ID_2023",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "statecode",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "statecode",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Contract_ID",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Contract_ID",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Plan_ID",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Plan_ID",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Segment_ID",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Segment_ID",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Organization_Name",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Organization_Name",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Plan_Name",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Plan_Name",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "plan_type",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "plan_type",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Monthly_Consolidated_Premium_C_D",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Monthly_Consolidated_Premium_C_D",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Drug_Benefit_Type",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Drug_Benefit_Type",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Add_Cvrg_Offrd_in_Gap",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Add_Cvrg_Offrd_in_Gap",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Drug_Benefit_Type_Detail",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Drug_Benefit_Type_Detail",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "In_network_MOOP_Amount",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "In_network_MOOP_Amount",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Overall_Star_Rating",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Overall_Star_Rating",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "MMP",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "MMP",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Organization_Type",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Organization_Type",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "plan_type_p",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "plan_type_p",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "PartD_Basic_Prm_Blw_Rgnl_bnchmrk",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PartD_Basic_Prm_Blw_Rgnl_bnchmrk",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "partc_premium2",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "partc_premium2",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "PartD_Basic_Premium3",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PartD_Basic_Premium3",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "PartD_Supplemental_Premium4",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PartD_Supplemental_Premium4",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "PartD_Total_Premium5",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PartD_Total_Premium5",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "PartD_Prm_oblgtn_Full_prm_assist",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PartD_Prm_oblgtn_Full_prm_assist",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "PartD_Prm_oblgtn_75_prm_assist",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PartD_Prm_oblgtn_75_prm_assist",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "PartD_Prm_oblgtn_50_prm_assist",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PartD_Prm_oblgtn_50_prm_assist",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "PartD_Prm_oblgtn_25_prm_assist",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PartD_Prm_oblgtn_25_prm_assist",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "PartD_Drug_Deductible",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PartD_Drug_Deductible",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "key_segment2",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "key_segment2",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "star_rating",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "star_rating",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "parent_organization",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "parent_organization",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Premium_C_new",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Premium_C_new",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Premium_D_new",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Premium_D_new",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "SNP",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SNP",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Special_Needs_Plan_Type",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Special_Needs_Plan_Type",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "PartD",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PartD",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "April_2019",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "April_2019",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "August_2019",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "August_2019",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "December_2019",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "December_2019",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "February_2019",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "February_2019",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "January_2019",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "January_2019",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "July_2019",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "July_2019",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "June_2019",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "June_2019",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "March_2019",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "March_2019",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "May_2019",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "May_2019",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "November_2019",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "November_2019",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "October_2019",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "October_2019",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "September_2019",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "September_2019",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "January_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "January_2020",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "February_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "February_2020",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "March_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "March_2020",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "April_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "April_2020",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "May_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "May_2020",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "June_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "June_2020",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "July_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "July_2020",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "August_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "August_2020",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "September_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "September_2020",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "October_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "October_2020",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "November_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "November_2020",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "December_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "December_2020",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "January_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "January_2021",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "February_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "February_2021",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "March_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "March_2021",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "April_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "April_2021",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "May_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "May_2021",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "June_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "June_2021",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "July_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "July_2021",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "August_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "August_2021",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "September_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "September_2021",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "October_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "October_2021",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "November_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "November_2021",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "December_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "December_2021",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "January_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "January_2022",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "February_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "February_2022",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "March_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "March_2022",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "April_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "April_2022",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "May_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "May_2022",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "June_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "June_2022",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "July_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "July_2022",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "August_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "August_2022",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "September_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "September_2022",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "October_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "October_2022",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "November_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "November_2022",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "December_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "December_2022",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "January_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "January_2023",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "February_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "February_2023",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "March_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "March_2023",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "April_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "April_2023",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Inpatient_Hospital_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Inpatient_Hospital_YN",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Snf_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Snf_YN",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Cardiac_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Cardiac_YN",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Emergency_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Emergency_YN",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Chiropractor_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Chiropractor_YN",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Podiatry_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Podiatry_YN",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Telehealth_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Telehealth_YN",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Outpatient_Blood_Services_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Outpatient_Blood_Services_YN",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Transportation_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Transportation_YN",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Accupuncture_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Accupuncture_YN",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Over_the_Counter_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Over_the_Counter_YN",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Meal_Services_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Meal_Services_YN",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Annual_Physical_Exam_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Annual_Physical_Exam_YN",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Pre_Dental_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Pre_Dental_YN",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Comp_Dental_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Comp_Dental_YN",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Eye_Exam_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Eye_Exam_YN",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Eye_Wear_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Eye_Wear_YN",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Hear_Exam_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Hear_Exam_YN",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Hear_Aid_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Hear_Aid_YN",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Giveback_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Giveback_YN",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Alternative_Therapy_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Alternative_Therapy_YN",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "PERS_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PERS_YN",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "flag_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "flag_2023",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Contract_Number_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Contract_Number_2022",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Plan_ID_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Plan_ID_2022",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Segment_ID_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Segment_ID_2022",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Organization_Marketing_Name_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Organization_Marketing_Name_2022",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Plan Name_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Plan Name_2022",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Benefit_Year_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Benefit_Year_2022",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Inpatient_Hospital_Acute_Care_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Inpatient_Hospital_Acute_Care_2022",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Inpatient_Mental_Health_Care_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Inpatient_Mental_Health_Care_2022",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Skilled_Nursing_Facility_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Skilled_Nursing_Facility_2022",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Cardiac_Rehabilitation_Services_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Cardiac_Rehabilitation_Services_2022",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Pulmonary_Rehab_Services_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Pulmonary_Rehab_Services_2022",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Emergency_Care_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Emergency_Care_2022",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Urgently_Needed_Care_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Urgently_Needed_Care_2022",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Home_Health_Agency_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Home_Health_Agency_2022",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Primary_Care_Physician_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Primary_Care_Physician_2022",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Chiropractic_Services_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Chiropractic_Services_2022",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Occupational_Therapy_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Occupational_Therapy_2022",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Physician_Specialists_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Physician_Specialists_2022",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Outpatient_Mental_Health_Care_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Outpatient_Mental_Health_Care_2022",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Podiatry_Services_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Podiatry_Services_2022",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Other_Health_Professionals_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Other_Health_Professionals_2022",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Psychiatric_Care_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Psychiatric_Care_2022",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Physical_and_Speech_Therapy_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Physical_and_Speech_Therapy_2022",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Outpatient_Lab_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Outpatient_Lab_2022",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Diagnostic_Tests_and_Procedures_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Diagnostic_Tests_and_Procedures_2022",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Therapeutic_Radiation_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Therapeutic_Radiation_2022",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Outpatient_X_Rays_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Outpatient_X_Rays_2022",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Diagnostic_Radiological_Services_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Diagnostic_Radiological_Services_2022",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Outpatient_Hospital_Services_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Outpatient_Hospital_Services_2022",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Ambulatory_Surgical_Center_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Ambulatory_Surgical_Center_2022",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Chemotherapy_Drugs_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Chemotherapy_Drugs_2022",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Ambulance_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Ambulance_2022",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Durable_Medical_Equipment_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Durable_Medical_Equipment_2022",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Prosthetic_Devices_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Prosthetic_Devices_2022",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Renal_Dialysis_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Renal_Dialysis_2022",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Diabetes_Education_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Diabetes_Education_2022",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Medicare_Covered_Part_B_Drugs_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Medicare_Covered_Part_B_Drugs_2022",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Preventative_Dental_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Preventative_Dental_2022",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Comprehensive_Dental_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Comprehensive_Dental_2022",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Eye_Exams_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Eye_Exams_2022",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Hearing_Exams_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Hearing_Exams_2022",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Opioid_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Opioid_2022",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Total_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Total_2022",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "PartD_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PartD_2022",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Grand_Total_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Grand_Total_2022",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "PBP_Version_Date_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PBP_Version_Date_2022",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Organization_Marketing_Name_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Organization_Marketing_Name_2023",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Plan Name_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Plan Name_2023",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Benefit_Year_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Benefit_Year_2023",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Inpatient_Hospital_Acute_Care_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Inpatient_Hospital_Acute_Care_2023",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Inpatient_Mental_Health_Care_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Inpatient_Mental_Health_Care_2023",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Skilled_Nursing_Facility_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Skilled_Nursing_Facility_2023",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Cardiac_Rehabilitation_Services_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Cardiac_Rehabilitation_Services_2023",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Pulmonary_Rehab_Services_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Pulmonary_Rehab_Services_2023",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Emergency_Care_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Emergency_Care_2023",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Urgently_Needed_Care_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Urgently_Needed_Care_2023",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Home_Health_Agency_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Home_Health_Agency_2023",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Primary_Care_Physician_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Primary_Care_Physician_2023",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Chiropractic_Services_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Chiropractic_Services_2023",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Occupational_Therapy_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Occupational_Therapy_2023",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Physician_Specialists_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Physician_Specialists_2023",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Outpatient_Mental_Health_Care_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Outpatient_Mental_Health_Care_2023",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Podiatry_Services_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Podiatry_Services_2023",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Other_Health_Professionals_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Other_Health_Professionals_2023",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Psychiatric_Care_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Psychiatric_Care_2023",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Physical_and_Speech_Therapy_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Physical_and_Speech_Therapy_2023",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Outpatient_Lab_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Outpatient_Lab_2023",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Diagnostic_Tests_and_Procedures_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Diagnostic_Tests_and_Procedures_2023",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Therapeutic_Radiation_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Therapeutic_Radiation_2023",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Outpatient_X_Rays_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Outpatient_X_Rays_2023",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Diagnostic_Radiological_Services_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Diagnostic_Radiological_Services_2023",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Outpatient_Hospital_Services_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Outpatient_Hospital_Services_2023",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Ambulatory_Surgical_Center_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Ambulatory_Surgical_Center_2023",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Chemotherapy_Drugs_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Chemotherapy_Drugs_2023",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Ambulance_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Ambulance_2023",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Durable_Medical_Equipment_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Durable_Medical_Equipment_2023",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Prosthetic_Devices_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Prosthetic_Devices_2023",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Renal_Dialysis_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Renal_Dialysis_2023",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Diabetes_Education_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Diabetes_Education_2023",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Medicare_Covered_Part_B_Drugs_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Medicare_Covered_Part_B_Drugs_2023",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Preventative_Dental_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Preventative_Dental_2023",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Comprehensive_Dental_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Comprehensive_Dental_2023",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Eye_Exams_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Eye_Exams_2023",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Hearing_Exams_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Hearing_Exams_2023",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Opioid_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Opioid_2023",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Total_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Total_2023",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "PartD_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PartD_2023",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Grand_Total_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Grand_Total_2023",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "PBP_Version_Date_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PBP_Version_Date_2023",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Description",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Description",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Contract_Number_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Contract_Number_2021",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Plan_ID_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Plan_ID_2021",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Segment_ID_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Segment_ID_2021",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Organization_Marketing_Name_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Organization_Marketing_Name_2021",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Plan_Name_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Plan_Name_2021",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Benefit_Year_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Benefit_Year_2021",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Inpatient_Hospital_Acute_Care_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Inpatient_Hospital_Acute_Care_2021",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Inpatient_Mental_Health_Care_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Inpatient_Mental_Health_Care_2021",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Skilled_Nursing_Facility_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Skilled_Nursing_Facility_2021",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Cardiac_Rehabilitation_Services_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Cardiac_Rehabilitation_Services_2021",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Pulmonary_Rehab_Services_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Pulmonary_Rehab_Services_2021",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Emergency_Care_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Emergency_Care_2021",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Urgently_Needed_Care_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Urgently_Needed_Care_2021",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Home_Health_Agency_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Home_Health_Agency_2021",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Primary_Care_Physician_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Primary_Care_Physician_2021",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Chiropractic_Services_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Chiropractic_Services_2021",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Occupational_Therapy_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Occupational_Therapy_2021",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Physician_Specialists_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Physician_Specialists_2021",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Outpatient_Mental_Health_Care_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Outpatient_Mental_Health_Care_2021",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Podiatry_Services_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Podiatry_Services_2021",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Other_Health_Professionals_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Other_Health_Professionals_2021",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Psychiatric_Care_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Psychiatric_Care_2021",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Physical_and_Speech_Therapy_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Physical_and_Speech_Therapy_2021",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Outpatient_Lab_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Outpatient_Lab_2021",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Diagnostic_Tests_and_Procedures_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Diagnostic_Tests_and_Procedures_2021",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Therapeutic_Radiation_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Therapeutic_Radiation_2021",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Outpatient_X_Rays_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Outpatient_X_Rays_2021",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Diagnostic_Radiological_Services_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Diagnostic_Radiological_Services_2021",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Outpatient_Hospital_Services_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Outpatient_Hospital_Services_2021",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Ambulatory_Surgical_Center_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Ambulatory_Surgical_Center_2021",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Chemotherapy_Drugs_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Chemotherapy_Drugs_2021",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Ambulance_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Ambulance_2021",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Durable_Medical_Equipment_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Durable_Medical_Equipment_2021",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Prosthetic_Devices_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Prosthetic_Devices_2021",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Renal_Dialysis_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Renal_Dialysis_2021",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Diabetes_Education_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Diabetes_Education_2021",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Medicare_Covered_Part_B_Drugs_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Medicare_Covered_Part_B_Drugs_2021",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Preventative_Dental_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Preventative_Dental_2021",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Comprehensive_Dental_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Comprehensive_Dental_2021",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Eye_Exams_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Eye_Exams_2021",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Hearing_Exams_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Hearing_Exams_2021",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Opioid_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Opioid_2021",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Total_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Total_2021",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "PartD_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PartD_2021",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Grand_Total_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Grand_Total_2021",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "PBP_Version_Date_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PBP_Version_Date_2021",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Contract_Number_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Contract_Number_2020",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Plan_ID_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Plan_ID_2020",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Segment_ID_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Segment_ID_2020",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Organization_Marketing_Name_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Organization_Marketing_Name_2020",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Plan_Name_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Plan_Name_2020",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Benefit_Year_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Benefit_Year_2020",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Inpatient_Hospital_Acute_Care_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Inpatient_Hospital_Acute_Care_2020",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Inpatient_Mental_Health_Care_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Inpatient_Mental_Health_Care_2020",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Skilled_Nursing_Facility_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Skilled_Nursing_Facility_2020",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Cardiac_Rehabilitation_Services_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Cardiac_Rehabilitation_Services_2020",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Pulmonary_Rehab_Services_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Pulmonary_Rehab_Services_2020",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Emergency_Care_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Emergency_Care_2020",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Urgently_Needed_Care_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Urgently_Needed_Care_2020",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Home_Health_Agency_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Home_Health_Agency_2020",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Primary_Care_Physician_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Primary_Care_Physician_2020",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Chiropractic_Services_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Chiropractic_Services_2020",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Occupational_Therapy_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Occupational_Therapy_2020",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Physician_Specialists_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Physician_Specialists_2020",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Outpatient_Mental_Health_Care_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Outpatient_Mental_Health_Care_2020",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Podiatry_Services_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Podiatry_Services_2020",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Other_Health_Professionals_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Other_Health_Professionals_2020",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Psychiatric_Care_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Psychiatric_Care_2020",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Physical_and_Speech_Therapy_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Physical_and_Speech_Therapy_2020",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Outpatient_Lab_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Outpatient_Lab_2020",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Diagnostic_Tests_and_Procedures_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Diagnostic_Tests_and_Procedures_2020",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Therapeutic_Radiation_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Therapeutic_Radiation_2020",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Outpatient_X_Rays_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Outpatient_X_Rays_2020",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Diagnostic_Radiological_Services_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Diagnostic_Radiological_Services_2020",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Outpatient_Hospital_Services_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Outpatient_Hospital_Services_2020",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Ambulatory_Surgical_Center_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Ambulatory_Surgical_Center_2020",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Chemotherapy_Drugs_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Chemotherapy_Drugs_2020",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Ambulance_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Ambulance_2020",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Durable_Medical_Equipment_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Durable_Medical_Equipment_2020",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Prosthetic_Devices_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Prosthetic_Devices_2020",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Renal_Dialysis_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Renal_Dialysis_2020",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Diabetes_Education_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Diabetes_Education_2020",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Medicare_Covered_Part_B_Drugs_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Medicare_Covered_Part_B_Drugs_2020",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Preventative_Dental_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Preventative_Dental_2020",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Comprehensive_Dental_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Comprehensive_Dental_2020",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Eye_Exams_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Eye_Exams_2020",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Hearing_Exams_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Hearing_Exams_2020",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Opioid_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Opioid_2020",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Total_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Total_2020",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "PartD_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PartD_2020",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Grand_Total_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Grand_Total_2020",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "PBP_Version_Date_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PBP_Version_Date_2020",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "health_deductible",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "health_deductible",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Annual_Drug_Deductible",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Annual_Drug_Deductible",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "PDSS_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PDSS_YN",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "enr_latest",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "enr_latest",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "enr_latest_prev_yr",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "enr_latest_prev_yr",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "pi_lsacpe",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "dataset_sql",
+						"type": "DatasetReference",
+						"parameters": {
+							"sql_server_dataset": "hwpilot.database.windows.net",
+							"db_name_dataset": "HWai_Dashboards",
+							"user_name_dataset": "pladmin",
+							"password_dataset": "Goteg@12345",
+							"sql_table_name": "pi_landscape_2023"
+						}
+					}
+				]
+			}
+		],
+		"annotations": []
+	}
+}
