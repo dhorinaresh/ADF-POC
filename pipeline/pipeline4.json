@@ -43,7 +43,7 @@
 				"typeProperties": {
 					"variableName": "UserId",
 					"value": {
-						"value": "{UserId\\\\\" \"}",
+						"value": "TestingNitesh",
 						"type": "Expression"
 					}
 				}
@@ -62,7 +62,10 @@
 				"userProperties": [],
 				"typeProperties": {
 					"variableName": "v2",
-					"value": "@replace(variable('UserId'),'\\\\\" \"}','')"
+					"value": {
+						"value": "@replace(variables('UserId'),'{\"Nitesh\":','')",
+						"type": "Expression"
+					}
 				}
 			},
 			{
