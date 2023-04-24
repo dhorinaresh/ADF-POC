@@ -63,7 +63,7 @@
 				"typeProperties": {
 					"variableName": "v2",
 					"value": {
-						"value": "@replace(variables('UserId'),'{\"Nitesh\":','')",
+						"value": "@replace(variables('UserId'),'Nitesh','')",
 						"type": "Expression"
 					}
 				}
