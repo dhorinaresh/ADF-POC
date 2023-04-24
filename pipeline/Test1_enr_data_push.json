@@ -496,7 +496,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "SqlServerSource",
-						"sqlReaderQuery": "Truncate table Trends_CW_withpredictions_backup;\n\nINSERT INTO dbo.Trends_CW_withpredictions_backup\nSELECT * FROM dbo.Trends_CW_withpredictions;\n\nTruncate table Trends_CW_withpredictions\n\nSELECT top 10 * from dbo.Trends_CW_withpredictions",
+						"sqlReaderQuery": "Truncate table Trends_CW_withpredictions_backup;\n\n-- INSERT INTO dbo.Trends_CW_withpredictions_backup\n-- SELECT * FROM dbo.Trends_CW_withpredictions;\n\n-- Truncate table Trends_CW_withpredictions\n\nSELECT top 10 * from dbo.Trends_CW_withpredictions",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
