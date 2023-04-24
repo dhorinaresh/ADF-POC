@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "EnrollmentTrendPlan.csv",
+				"fileName": "EtTerminatedPlan.csv",
 				"folderPath": "EnrollmentTrendTechStack/Output",
 				"fileSystem": "hwaicontainer"
 			},
@@ -21,19 +21,11 @@
 		},
 		"schema": [
 			{
-				"name": "OrganizationID",
+				"name": "BidId",
 				"type": "String"
 			},
 			{
-				"name": "Year",
-				"type": "String"
-			},
-			{
-				"name": "MonthNumber",
-				"type": "String"
-			},
-			{
-				"name": "NoOfPlans",
+				"name": "Isterminated",
 				"type": "String"
 			}
 		]
