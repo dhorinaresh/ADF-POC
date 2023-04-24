@@ -29,7 +29,7 @@
 				}
 			},
 			{
-				"name": "V1",
+				"name": "testvar1",
 				"type": "SetVariable",
 				"dependsOn": [
 					{
@@ -42,7 +42,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"variableName": "V1",
-					"value": "@{activity('Lookup1').output.value}"
+					"value": ""
 				}
 			},
 			{
@@ -50,7 +50,7 @@
 				"type": "SetVariable",
 				"dependsOn": [
 					{
-						"activity": "V1",
+						"activity": "testvar1",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -59,7 +59,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"variableName": "v2",
-					"value": "@{replace(replace(replace(replace(variables('v1'),'{\"id\":',''),'}',''),'[','('),']',')')}"
+					"value": "@{replace(replace(replace(replace(variables('V1'),'{\"id\":',''),'}',''),'[','('),']',')')}"
 				}
 			},
 			{
