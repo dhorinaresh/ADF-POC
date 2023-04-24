@@ -87,7 +87,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "SqlServerSource",
-						"sqlReaderQuery": "select * from emp1 where id in @{variables('v2')}",
+						"sqlReaderQuery": "select * from OrgUser where UserId in @{variables('v2')}",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
