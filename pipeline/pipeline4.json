@@ -42,7 +42,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"variableName": "V1",
-					"value": ""
+					"value": "@{activity('Lookup1').output.value}"
 				}
 			},
 			{
