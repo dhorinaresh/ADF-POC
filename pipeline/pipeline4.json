@@ -43,7 +43,7 @@
 				"typeProperties": {
 					"variableName": "UserId",
 					"value": {
-						"value": "TestingNitesh",
+						"value": "@{activity('Lookup1').output.value}",
 						"type": "Expression"
 					}
 				}
