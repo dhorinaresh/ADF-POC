@@ -28,7 +28,7 @@
 					},
 					"sink": {
 						"type": "AzureSqlSink",
-						"preCopyScript": "TRUNCATE TABLE [dbo].[EnrollmentTrendsPlan]",
+						"preCopyScript": "TRUNCATE TABLE [dbo].[EnrollmentTrendsTerminatedPlans]",
 						"writeBehavior": "insert",
 						"sqlWriterUseTableLock": false,
 						"disableMetricsCollection": false
@@ -39,48 +39,24 @@
 						"mappings": [
 							{
 								"source": {
-									"name": "OrganizationID",
+									"name": "BidId",
 									"type": "String",
 									"physicalType": "String"
 								},
 								"sink": {
-									"name": "OrganizationID",
-									"type": "Int32",
-									"physicalType": "int"
+									"name": "BidId",
+									"type": "String",
+									"physicalType": "varchar"
 								}
 							},
 							{
 								"source": {
-									"name": "Year",
+									"name": "Isterminated",
 									"type": "String",
 									"physicalType": "String"
 								},
 								"sink": {
-									"name": "Year",
-									"type": "Int32",
-									"physicalType": "int"
-								}
-							},
-							{
-								"source": {
-									"name": "MonthNumber",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "MonthNumber",
-									"type": "Int32",
-									"physicalType": "int"
-								}
-							},
-							{
-								"source": {
-									"name": "NoOfPlans",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "NoOfPlans",
+									"name": "IsTerminated",
 									"type": "Int32",
 									"physicalType": "int"
 								}
