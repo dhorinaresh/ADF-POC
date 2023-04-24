@@ -27,6 +27,33 @@
 					},
 					"firstRowOnly": false
 				}
+			},
+			{
+				"name": "V1",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Lookup1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "V1",
+					"value": "@{activity('Lookup1').output.value}"
+				}
+			},
+			{
+				"name": "test",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "v2",
+					"value": "@{replace(replace(replace(replace(variables('v1'),'{\"id\":',''),'}',''),'[','('),']',')')}"
+				}
 			}
 		],
 		"variables": {
@@ -35,6 +62,12 @@
 			},
 			"UserId_value": {
 				"type": "Array"
+			},
+			"V1": {
+				"type": "String"
+			},
+			"v2": {
+				"type": "String"
 			}
 		},
 		"annotations": []
