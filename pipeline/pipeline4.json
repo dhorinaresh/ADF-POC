@@ -43,7 +43,7 @@
 				"typeProperties": {
 					"variableName": "UserId",
 					"value": {
-						"value": "@activity('Lookup1').output.value",
+						"value": "@{activity('Lookup1').output.value}",
 						"type": "Expression"
 					}
 				}
@@ -62,7 +62,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"variableName": "v2",
-					"value": "@{replace(replace(replace(replace(variables('testvar1'),'{\"id\":',''),'}',''),'[','('),']',')')}"
+					"value": "@{replace(replace(replace(replace(variables('UserId'),'{\"id\":',''),'}',''),'[','('),']',')')}"
 				}
 			},
 			{
