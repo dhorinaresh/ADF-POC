@@ -9,100 +9,14 @@
 		"type": "AzureSqlTable",
 		"schema": [
 			{
-				"name": "Contract_ID",
-				"type": "varchar"
+				"name": "ETKey",
+				"type": "bigint",
+				"precision": 19
 			},
 			{
-				"name": "County",
-				"type": "varchar"
-			},
-			{
-				"name": "EGHP",
-				"type": "varchar"
-			},
-			{
-				"name": "FIPS_State_County_Code",
-				"type": "varchar"
-			},
-			{
-				"name": "Month",
-				"type": "varchar"
-			},
-			{
-				"name": "Offers_Part_D",
-				"type": "varchar"
-			},
-			{
-				"name": "Other Dual Full Medicaid Benefit",
-				"type": "float",
-				"precision": 15
-			},
-			{
-				"name": "Parent_Organization",
-				"type": "varchar"
-			},
-			{
-				"name": "Plan_ID",
-				"type": "varchar"
-			},
-			{
-				"name": "Plan_Name",
-				"type": "varchar"
-			},
-			{
-				"name": "Plan_Type",
-				"type": "varchar"
-			},
-			{
-				"name": "QDWI",
-				"type": "float",
-				"precision": 15
-			},
-			{
-				"name": "QI",
-				"type": "float",
-				"precision": 15
-			},
-			{
-				"name": "QMB only",
-				"type": "float",
-				"precision": 15
-			},
-			{
-				"name": "QMB plus Full Medicaid Benefits",
-				"type": "float",
-				"precision": 15
-			},
-			{
-				"name": "SLMB only",
-				"type": "float",
-				"precision": 15
-			},
-			{
-				"name": "SLMB plus Full Medicaid Benefits",
-				"type": "float",
-				"precision": 15
-			},
-			{
-				"name": "SNP_Eligibles",
-				"type": "float",
-				"precision": 15
-			},
-			{
-				"name": "SNP_Plan",
-				"type": "varchar"
-			},
-			{
-				"name": "SSA_State_County_Code",
-				"type": "varchar"
-			},
-			{
-				"name": "Special_Needs_Plan_Type",
-				"type": "varchar"
-			},
-			{
-				"name": "State",
-				"type": "varchar"
+				"name": "OrganizationID",
+				"type": "int",
+				"precision": 10
 			},
 			{
 				"name": "Year",
@@ -110,50 +24,19 @@
 				"precision": 10
 			},
 			{
-				"name": "enrollments",
-				"type": "float",
-				"precision": 15
-			},
-			{
-				"name": "Key_Cp_Id",
-				"type": "varchar"
-			},
-			{
-				"name": "ma_eligibles",
-				"type": "varchar"
-			},
-			{
-				"name": "Stability_Index",
-				"type": "float",
-				"precision": 15
-			},
-			{
-				"name": "Prediction",
-				"type": "varchar"
-			},
-			{
-				"name": "Status",
-				"type": "varchar"
-			},
-			{
-				"name": "IsTerminated",
+				"name": "MonthNumber",
 				"type": "int",
 				"precision": 10
 			},
 			{
-				"name": "IsOutofArea",
-				"type": "int",
-				"precision": 10
-			},
-			{
-				"name": "IsStarEnr",
+				"name": "NoOfPlans",
 				"type": "int",
 				"precision": 10
 			}
 		],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "EnrollmentTrendsData"
+			"table": "EnrollmentTrendsPlan"
 		}
 	}
 }
