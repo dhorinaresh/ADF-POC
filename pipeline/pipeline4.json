@@ -96,12 +96,6 @@
 			}
 		],
 		"variables": {
-			"UserId_Value": {
-				"type": "String"
-			},
-			"UserId_value": {
-				"type": "Array"
-			},
 			"V1": {
 				"type": "String"
 			},
