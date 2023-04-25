@@ -63,7 +63,7 @@
 				"typeProperties": {
 					"variableName": "v2",
 					"value": {
-						"value": "@replace(variables('UserId'),'[{\\\\','(')",
+						"value": "@{replace(replace(replace(replace(replace(replace(variables('UserId'),'[{\\','('),'\"',''),'UserId',''''),'\\:\\',''),'\\}]',''''),'\"',')')}",
 						"type": "Expression"
 					}
 				}
