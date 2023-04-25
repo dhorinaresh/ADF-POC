@@ -5,8 +5,8 @@
 		"annotations": [],
 		"type": "SqlServer",
 		"typeProperties": {
-			"connectionString": "integrated security=False;data source=prod.SQL.analytics-hub.com;initial catalog=HWAIETV2DB;user id=sa",
-			"encryptedCredential": "ew0KICAiVmVyc2lvbiI6ICIyMDE3LTExLTMwIiwNCiAgIlByb3RlY3Rpb25Nb2RlIjogIktleSIsDQogICJTZWNyZXRDb250ZW50VHlwZSI6ICJQbGFpbnRleHQiLA0KICAiQ3JlZGVudGlhbElkIjogIkRBVEFGQUNUT1JZQDExNTREQTVDLTlDNzUtNDQ0MC04ODFFLTBDNjRCQjEwQTkzRV81MjMzZDdjYi0yZTExLTQ5ZjgtODRhMy01ODFhZmExOWFiM2UiDQp9"
+			"connectionString": "integrated security=False;data source=prodsql.analytics-hub.com;initial catalog=HWAIETV2DB;user id=sa",
+			"encryptedCredential": "ew0KICAiVmVyc2lvbiI6ICIyMDE3LTExLTMwIiwNCiAgIlByb3RlY3Rpb25Nb2RlIjogIktleSIsDQogICJTZWNyZXRDb250ZW50VHlwZSI6ICJQbGFpbnRleHQiLA0KICAiQ3JlZGVudGlhbElkIjogIkRBVEFGQUNUT1JZQDExNTREQTVDLTlDNzUtNDQ0MC04ODFFLTBDNjRCQjEwQTkzRV9iYWJkZmNhMC1kMzM5LTRmNDgtOTU1Mi0xMWM5Y2FmODY1MzkiDQp9"
 		}
 	}
 }
