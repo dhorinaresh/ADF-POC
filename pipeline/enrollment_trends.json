@@ -66,7 +66,7 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Enrollment_trends/Enr_trends_pre_broadcasting_step1"
+					"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Enrollment_trends/Enr_trends_pre_broadcasting_step1_new_ms"
 				},
 				"linkedServiceName": {
 					"referenceName": "AzureDatabricks4_pfcluster3",
