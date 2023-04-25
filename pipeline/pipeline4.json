@@ -43,7 +43,7 @@
 				"typeProperties": {
 					"variableName": "UserId",
 					"value": {
-						"value": "@{activity('Lookup1').output.value}",
+						"value": "[{\\\"UserId\\\":\\\"0053538A-86F1-4E7B-B745-6961ACDC1E70\\\"}]",
 						"type": "Expression"
 					}
 				}
@@ -63,7 +63,7 @@
 				"typeProperties": {
 					"variableName": "v2",
 					"value": {
-						"value": "@{replace(variables('UserId'),'{\\\"UserId\\\":\\\"','Nitesh')}",
+						"value": "@replace(variables('UserId'), '[{\\\"UserId\\\":\\', 'test')",
 						"type": "Expression"
 					}
 				}
@@ -90,7 +90,10 @@
 				"typeProperties": {
 					"source": {
 						"type": "SqlServerSource",
-						"sqlReaderQuery": "select * from OrgUser where UserId in @{variables('v2')}",
+						"sqlReaderQuery": {
+							"value": "select * from OrgUser where UserId in @{variables('v2')}",
+							"type": "Expression"
+						},
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
