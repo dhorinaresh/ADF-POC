@@ -17,7 +17,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "SqlServerSource",
-						"sqlReaderQuery": "SELECT TOP (3)  CONCAT(CHAR(39), UserId ,CHAR(39)) from OrgUser;",
+						"sqlReaderQuery": "SELECT DISTINCT  CONCAT(CHAR(39), UserId ,CHAR(39)) from OrgUser;",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -91,7 +91,7 @@
 					"source": {
 						"type": "SqlServerSource",
 						"sqlReaderQuery": {
-							"value": "select * from OrgUser where UserId in @{variables('v2')}",
+							"value": "select UserId from OrgUser where UserId in @{variables('v2')}",
 							"type": "Expression"
 						},
 						"queryTimeout": "02:00:00",
