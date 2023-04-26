@@ -63,7 +63,7 @@
 				"typeProperties": {
 					"variableName": "v2",
 					"value": {
-						"value": "@{replace(replace(replace(replace(replace(replace(replace(variables('UserId'),'[','('),']',')'),'\"',''),'{',''),'}',''),'UserId:',''),':','')}",
+						"value": "@{replace(replace(replace(replace(replace(replace(replace(replace(replace(variables('UserId'),'[','('),']',')'),'\"',''),'{',''),'}',''),'UserId:',''),':',''),'(',''),')','')}",
 						"type": "Expression"
 					}
 				}
@@ -90,13 +90,15 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
+						"sqlReaderQuery": "SELECT *  FROM OrgUser WHERE UserId NOT IN (@{variables('v2')})",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
 					"dataset": {
 						"referenceName": "User_table_Azure_prod",
 						"type": "DatasetReference"
-					}
+					},
+					"firstRowOnly": false
 				}
 			}
 		],
