@@ -513,62 +513,11 @@
 				}
 			},
 			{
-				"name": "broadcasting_step_start",
-				"type": "Lookup",
-				"dependsOn": [
-					{
-						"activity": "end time update for enr pre broadcasting step1c_pass",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"policy": {
-					"timeout": "0.12:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"source": {
-						"type": "AzureSqlSource",
-						"sqlReaderQuery": "INSERT INTO Audit(FileName, Operation, StartTime,Dashboard)\nValues('broadcasting_start', 'enr_trends_data_prep', (Select GETDATE()),'enr_trends');\nSelect * from Audit;",
-						"queryTimeout": "02:00:00",
-						"partitionOption": "None"
-					},
-					"dataset": {
-						"referenceName": "dataset_sql",
-						"type": "DatasetReference",
-						"parameters": {
-							"sql_server_dataset": {
-								"value": "@pipeline().parameters.sql_server_dataset_name",
-								"type": "Expression"
-							},
-							"db_name_dataset": {
-								"value": "@pipeline().parameters.db_name",
-								"type": "Expression"
-							},
-							"user_name_dataset": {
-								"value": "@pipeline().parameters.user_name",
-								"type": "Expression"
-							},
-							"password_dataset": {
-								"value": "@pipeline().parameters.password",
-								"type": "Expression"
-							},
-							"sql_table_name": "Audit"
-						}
-					}
-				}
-			},
-			{
 				"name": "Broadcasting_step2a",
 				"type": "DatabricksNotebook",
 				"dependsOn": [
 					{
-						"activity": "broadcasting_step_start",
+						"activity": "pre_broadcasting_step1d",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -1372,18 +1321,6 @@
 									"type": "Double",
 									"physicalType": "float"
 								}
-							},
-							{
-								"source": {
-									"name": "Status",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "Status",
-									"type": "String",
-									"physicalType": "varchar"
-								}
 							}
 						],
 						"typeConversion": true,
@@ -1405,6 +1342,33 @@
 						"type": "DatasetReference"
 					}
 				]
+			},
+			{
+				"name": "pre_broadcasting_step1d",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "end time update for enr pre broadcasting step1c_pass",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Enrollment_trends_gateway/enr_trends_gw_pre_broadcasting_step1d"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks4_pfcluster3",
+					"type": "LinkedServiceReference"
+				}
 			}
 		],
 		"parameters": {
