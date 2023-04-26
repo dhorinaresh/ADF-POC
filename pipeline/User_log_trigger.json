@@ -249,7 +249,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "DELETE FROM OrgUser WHERE UserId NOT IN (@{variables('v2')})",
+						"sqlReaderQuery": "DELETE FROM OrgUser WHERE UserId NOT IN (@{variables('v2')});\r\nselect 1 as abc;",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
