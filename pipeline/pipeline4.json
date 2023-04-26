@@ -89,16 +89,12 @@
 				"userProperties": [],
 				"typeProperties": {
 					"source": {
-						"type": "SqlServerSource",
-						"sqlReaderQuery": {
-							"value": "select UserId from OrgUser where UserId not in @{variables('v2')}",
-							"type": "Expression"
-						},
+						"type": "AzureSqlSource",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
 					"dataset": {
-						"referenceName": "HealthWorksPlan_SQL_Analytics",
+						"referenceName": "User_table_Azure_prod",
 						"type": "DatasetReference"
 					}
 				}
