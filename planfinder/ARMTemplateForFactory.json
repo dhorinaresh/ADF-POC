@@ -26422,6 +26422,1425 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/Copy ASAY and MS Data')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlServerSource",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "Contract_ID",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"name": "Contract_ID",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Plan_ID",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"name": "Plan_ID",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "SSA_State_County_Code",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"name": "SSA_State_County_Code",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "FIPS_State_County_Code",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"name": "FIPS_State_County_Code",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "State",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"name": "State",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "County",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"name": "County",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "enrollments",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										},
+										"sink": {
+											"name": "enrollments",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										}
+									},
+									{
+										"source": {
+											"name": "Parent_Organization",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"name": "Parent_Organization",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Organization_Type",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"name": "Organization_Type",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Plan_Type",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"name": "Plan_Type",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Offers_Part_D",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"name": "Offers_Part_D",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "SNP_Plan",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"name": "SNP_Plan",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "EGHP",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"name": "EGHP",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Organization_Name",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"name": "Organization_Name",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Organization_Marketing_Name",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"name": "Organization_Marketing_Name",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Plan_Name",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"name": "Plan_Name",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Year",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										},
+										"sink": {
+											"name": "Year",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										}
+									},
+									{
+										"source": {
+											"name": "Month",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"name": "Month",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "ma_eligibles",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										},
+										"sink": {
+											"name": "ma_eligibles",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										}
+									},
+									{
+										"source": {
+											"name": "key",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"name": "key",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Special_Needs_Plan_Type",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"name": "Special_Needs_Plan_Type",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "QMB only",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										},
+										"sink": {
+											"name": "QMB only",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										}
+									},
+									{
+										"source": {
+											"name": "QMB plus Full Medicaid Benefits",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										},
+										"sink": {
+											"name": "QMB plus Full Medicaid Benefits",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										}
+									},
+									{
+										"source": {
+											"name": "SLMB only",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										},
+										"sink": {
+											"name": "SLMB only",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										}
+									},
+									{
+										"source": {
+											"name": "SLMB plus Full Medicaid Benefits",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										},
+										"sink": {
+											"name": "SLMB plus Full Medicaid Benefits",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										}
+									},
+									{
+										"source": {
+											"name": "QDWI",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										},
+										"sink": {
+											"name": "QDWI",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										}
+									},
+									{
+										"source": {
+											"name": "QI",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										},
+										"sink": {
+											"name": "QI",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										}
+									},
+									{
+										"source": {
+											"name": "Other Dual Full Medicaid Benefit",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										},
+										"sink": {
+											"name": "Other Dual Full Medicaid Benefit",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										}
+									},
+									{
+										"source": {
+											"name": "SNP_Eligibles",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										},
+										"sink": {
+											"name": "SNP_Eligibles",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										}
+									},
+									{
+										"source": {
+											"name": "MA Sales Region",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"name": "MA Sales Region",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "MA Product Region",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"name": "MA Product Region",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Double County",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"name": "Double County",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "POA",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"name": "POA",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Note",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"name": "Note",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Acquisition_Type",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"name": "Acquisition_Type",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									}
+								],
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "SQL_analytics_HWai_Dashboards",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "Sink_Ca_Az_Prod",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "Copy data2",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "Copy data1",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlServerSource",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "Contract_ID",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"name": "Contract_ID",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Plan_ID",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"name": "Plan_ID",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "SSA_State_County_Code",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"name": "SSA_State_County_Code",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "FIPS_State_County_Code",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"name": "FIPS_State_County_Code",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "State",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"name": "State",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "County",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"name": "County",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "enrollments",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										},
+										"sink": {
+											"name": "enrollments",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										}
+									},
+									{
+										"source": {
+											"name": "Parent_Organization",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"name": "Parent_Organization",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Organization_Type",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"name": "Organization_Type",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Plan_Type",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"name": "Plan_Type",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Offers_Part_D",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"name": "Offers_Part_D",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "SNP_Plan",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"name": "SNP_Plan",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "EGHP",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"name": "EGHP",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Organization_Name",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"name": "Organization_Name",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Organization_Marketing_Name",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"name": "Organization_Marketing_Name",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Plan_Name",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"name": "Plan_Name",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Year",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										},
+										"sink": {
+											"name": "Year",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										}
+									},
+									{
+										"source": {
+											"name": "Month",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"name": "Month",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "ma_eligibles",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										},
+										"sink": {
+											"name": "ma_eligibles",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										}
+									},
+									{
+										"source": {
+											"name": "key",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"name": "key",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Special_Needs_Plan_Type",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"name": "Special_Needs_Plan_Type",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "QMB only",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										},
+										"sink": {
+											"name": "QMB only",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										}
+									},
+									{
+										"source": {
+											"name": "QMB plus Full Medicaid Benefits",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										},
+										"sink": {
+											"name": "QMB plus Full Medicaid Benefits",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										}
+									},
+									{
+										"source": {
+											"name": "SLMB only",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										},
+										"sink": {
+											"name": "SLMB only",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										}
+									},
+									{
+										"source": {
+											"name": "SLMB plus Full Medicaid Benefits",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										},
+										"sink": {
+											"name": "SLMB plus Full Medicaid Benefits",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										}
+									},
+									{
+										"source": {
+											"name": "QDWI",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										},
+										"sink": {
+											"name": "QDWI",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										}
+									},
+									{
+										"source": {
+											"name": "QI",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										},
+										"sink": {
+											"name": "QI",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										}
+									},
+									{
+										"source": {
+											"name": "Other Dual Full Medicaid Benefit",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										},
+										"sink": {
+											"name": "Other Dual Full Medicaid Benefit",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										}
+									},
+									{
+										"source": {
+											"name": "SNP_Eligibles",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										},
+										"sink": {
+											"name": "SNP_Eligibles",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										}
+									},
+									{
+										"source": {
+											"name": "Sex_And_Age_Population_65_To_74_Years",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										},
+										"sink": {
+											"name": "Sex_And_Age_Population_65_To_74_Years",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										}
+									},
+									{
+										"source": {
+											"name": "Sex_And_Age_Population_75_To_84_Years",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										},
+										"sink": {
+											"name": "Sex_And_Age_Population_75_To_84_Years",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										}
+									},
+									{
+										"source": {
+											"name": "Sex_And_Age_Population_85_Years_And_Over",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										},
+										"sink": {
+											"name": "Sex_And_Age_Population_85_Years_And_Over",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										}
+									},
+									{
+										"source": {
+											"name": "Sex_And_Age_Population_Above_65",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										},
+										"sink": {
+											"name": "Sex_And_Age_Population_Above_65",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										}
+									},
+									{
+										"source": {
+											"name": "Sex_And_Age_Population_Above_65_Male",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										},
+										"sink": {
+											"name": "Sex_And_Age_Population_Above_65_Male",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										}
+									},
+									{
+										"source": {
+											"name": "Sex_And_Age_Population_Above_65_Female",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										},
+										"sink": {
+											"name": "Sex_And_Age_Population_Above_65_Female",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										}
+									},
+									{
+										"source": {
+											"name": "Total_In_Households_Above_65",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										},
+										"sink": {
+											"name": "Total_In_Households_Above_65",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										}
+									},
+									{
+										"source": {
+											"name": "Total_Above_65_Has_A_Computer",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										},
+										"sink": {
+											"name": "Total_Above_65_Has_A_Computer",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										}
+									},
+									{
+										"source": {
+											"name": "Total_Male_Above_65_With_Employer-Based_Health_Insurance",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										},
+										"sink": {
+											"name": "Total_Male_Above_65_With_Employer-Based_Health_Insurance",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										}
+									},
+									{
+										"source": {
+											"name": "Total_Female_Above_65_With_Employer-Based_Health_Insurance",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										},
+										"sink": {
+											"name": "Total_Female_Above_65_With_Employer-Based_Health_Insurance",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										}
+									},
+									{
+										"source": {
+											"name": "Total_Male_Above_65_With_Medicare_Coverage",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										},
+										"sink": {
+											"name": "Total_Male_Above_65_With_Medicare_Coverage",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										}
+									},
+									{
+										"source": {
+											"name": "Total_Male_Above_65_No_Medicare_Coverage",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										},
+										"sink": {
+											"name": "Total_Male_Above_65_No_Medicare_Coverage",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										}
+									},
+									{
+										"source": {
+											"name": "Total_Female_Above_65_With_Medicare_Coverage",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										},
+										"sink": {
+											"name": "Total_Female_Above_65_With_Medicare_Coverage",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										}
+									},
+									{
+										"source": {
+											"name": "Total_Female_Above_65_No_Medicare_Coverage",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										},
+										"sink": {
+											"name": "Total_Female_Above_65_No_Medicare_Coverage",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										}
+									},
+									{
+										"source": {
+											"name": "Total_Income_In_The_Past_12_Months_Below_Poverty_Level_Male_65_To_74_Years",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										},
+										"sink": {
+											"name": "Total_Income_In_The_Past_12_Months_Below_Poverty_Level_Male_65_To_74_Years",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										}
+									},
+									{
+										"source": {
+											"name": "Total_Income_In_The_Past_12_Months_Below_Poverty_Level_Male_75_Years_And_Over",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										},
+										"sink": {
+											"name": "Total_Income_In_The_Past_12_Months_Below_Poverty_Level_Male_75_Years_And_Over",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										}
+									},
+									{
+										"source": {
+											"name": "Total_Income_In_The_Past_12_Months_Below_Poverty_Level_Female_65_To_74_Years",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										},
+										"sink": {
+											"name": "Total_Income_In_The_Past_12_Months_Below_Poverty_Level_Female_65_To_74_Years",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										}
+									},
+									{
+										"source": {
+											"name": "Total_Income_In_The_Past_12_Months_Below_Poverty_Level_Female_75_Years_And_Over",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										},
+										"sink": {
+											"name": "Total_Income_In_The_Past_12_Months_Below_Poverty_Level_Female_75_Years_And_Over",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										}
+									},
+									{
+										"source": {
+											"name": "Total_Male_65_To_74_Years_With_A_Disability",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										},
+										"sink": {
+											"name": "Total_Male_65_To_74_Years_With_A_Disability",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										}
+									},
+									{
+										"source": {
+											"name": "Total_Male_75_Years_And_Over_With_A_Disability",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										},
+										"sink": {
+											"name": "Total_Male_75_Years_And_Over_With_A_Disability",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										}
+									},
+									{
+										"source": {
+											"name": "Total_Female_65_To_74_Years_With_A_Disability",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										},
+										"sink": {
+											"name": "Total_Female_65_To_74_Years_With_A_Disability",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										}
+									},
+									{
+										"source": {
+											"name": "Total_Female_75_Years_And_Over_With_A_Disability",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										},
+										"sink": {
+											"name": "Total_Female_75_Years_And_Over_With_A_Disability",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										}
+									},
+									{
+										"source": {
+											"name": "Household_Received_Snap_In_The_Past_12_Months_At_Least_One_Person_In_Household_60_Years_Or_Over",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										},
+										"sink": {
+											"name": "Household_Received_Snap_In_The_Past_12_Months_At_Least_One_Person_In_Household_60_Years_Or_Over",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										}
+									},
+									{
+										"source": {
+											"name": "Not_Received_Snap_In_The_Past_12_Months_At_Least_One_Person_In_Household_60_Years_Or_Over",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										},
+										"sink": {
+											"name": "Not_Received_Snap_In_The_Past_12_Months_At_Least_One_Person_In_Household_60_Years_Or_Over",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										}
+									},
+									{
+										"source": {
+											"name": "Total_Above_65_Literate",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										},
+										"sink": {
+											"name": "Total_Above_65_Literate",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 18
+										}
+									},
+									{
+										"source": {
+											"name": "D-SNP Type",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"name": "D-SNP Type",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Out of Area",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"name": "Out of Area",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Termination Status",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"name": "Termination Status",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									}
+								],
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "MS_Sql_Analytics_Prod",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "MS_asay_az_Prod",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/SQL_analytics_HWai_Dashboards')]",
+				"[concat(variables('factoryId'), '/datasets/Sink_Ca_Az_Prod')]",
+				"[concat(variables('factoryId'), '/datasets/MS_Sql_Analytics_Prod')]",
+				"[concat(variables('factoryId'), '/datasets/MS_asay_az_Prod')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/Copy_Master_pipeline_benefit_copy1')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -31737,7 +33156,7 @@
 						},
 						"userProperties": [],
 						"typeProperties": {
-							"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Market_Snapshot/ASAY_Crosswalk_Market_Snapshot"
+							"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Market_Snapshot/ASAY_Crosswalk_MS(1st_Code)"
 						},
 						"linkedServiceName": {
 							"referenceName": "AzureDatabricks4_pfcluster3",
@@ -32945,7 +34364,7 @@
 						},
 						"userProperties": [],
 						"typeProperties": {
-							"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Market_Snapshot/Market_Snapshot_final"
+							"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Market_Snapshot/Market_Snapshot_final(Final_Code)"
 						},
 						"linkedServiceName": {
 							"referenceName": "AzureDatabricks4_pfcluster3",
@@ -32972,7 +34391,7 @@
 						},
 						"userProperties": [],
 						"typeProperties": {
-							"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Market_Snapshot/Ghost_Plans_removal"
+							"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Market_Snapshot/Ghost_Plans_removal(2nd_Code)"
 						},
 						"linkedServiceName": {
 							"referenceName": "AzureDatabricks4_pfcluster3",
@@ -32999,7 +34418,7 @@
 						},
 						"userProperties": [],
 						"typeProperties": {
-							"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Market_Snapshot/Ghost_Plan_ASAY"
+							"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Market_Snapshot/Ghost_Plan_ASAY_Spark(3rd_Code)"
 						},
 						"linkedServiceName": {
 							"referenceName": "AzureDatabricks4_pfcluster3",
@@ -33026,7 +34445,7 @@
 						},
 						"userProperties": [],
 						"typeProperties": {
-							"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Market_Snapshot/Crosswalk_final_after_ghost_inclusion"
+							"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Market_Snapshot/Crosswalk_final_after_ghost_inclusion(4th_Code)"
 						},
 						"linkedServiceName": {
 							"referenceName": "AzureDatabricks4_pfcluster3",
@@ -43799,7 +45218,7 @@
 					},
 					"db_name": {
 						"type": "String",
-						"defaultValue": "pf_data"
+						"defaultValue": "Hwai_Dashboards"
 					},
 					"user_name": {
 						"type": "String",
@@ -43830,7 +45249,7 @@
 			"properties": {
 				"activities": [
 					{
-						"name": "Push_Csv_To_SQL",
+						"name": "ET_Data_Csv_To_SQL",
 						"type": "Copy",
 						"dependsOn": [],
 						"policy": {
@@ -43855,8 +45274,10 @@
 							},
 							"sink": {
 								"type": "AzureSqlSink",
+								"preCopyScript": "TRUNCATE TABLE [dbo].[EnrollmentTrendsTerminatedPlans]",
 								"writeBehavior": "insert",
-								"sqlWriterUseTableLock": false
+								"sqlWriterUseTableLock": false,
+								"disableMetricsCollection": false
 							},
 							"enableStaging": false,
 							"translator": {
@@ -43864,384 +45285,24 @@
 								"mappings": [
 									{
 										"source": {
-											"name": "Contract_ID",
+											"name": "BidId",
 											"type": "String",
 											"physicalType": "String"
 										},
 										"sink": {
-											"name": "Contract_ID",
+											"name": "BidId",
 											"type": "String",
 											"physicalType": "varchar"
 										}
 									},
 									{
 										"source": {
-											"name": "County",
-											"type": "String",
-											"physicalType": "String"
-										},
-										"sink": {
-											"name": "County",
-											"type": "String",
-											"physicalType": "varchar"
-										}
-									},
-									{
-										"source": {
-											"name": "EGHP",
-											"type": "String",
-											"physicalType": "String"
-										},
-										"sink": {
-											"name": "EGHP",
-											"type": "String",
-											"physicalType": "varchar"
-										}
-									},
-									{
-										"source": {
-											"name": "FIPS_State_County_Code",
-											"type": "String",
-											"physicalType": "String"
-										},
-										"sink": {
-											"name": "FIPS_State_County_Code",
-											"type": "String",
-											"physicalType": "varchar"
-										}
-									},
-									{
-										"source": {
-											"name": "Month",
-											"type": "String",
-											"physicalType": "String"
-										},
-										"sink": {
-											"name": "Month",
-											"type": "String",
-											"physicalType": "varchar"
-										}
-									},
-									{
-										"source": {
-											"name": "Offers_Part_D",
-											"type": "String",
-											"physicalType": "String"
-										},
-										"sink": {
-											"name": "Offers_Part_D",
-											"type": "String",
-											"physicalType": "varchar"
-										}
-									},
-									{
-										"source": {
-											"name": "Other Dual Full Medicaid Benefit",
-											"type": "String",
-											"physicalType": "String"
-										},
-										"sink": {
-											"name": "Other Dual Full Medicaid Benefit",
-											"type": "Double",
-											"physicalType": "float"
-										}
-									},
-									{
-										"source": {
-											"name": "Parent_Organization",
-											"type": "String",
-											"physicalType": "String"
-										},
-										"sink": {
-											"name": "Parent_Organization",
-											"type": "String",
-											"physicalType": "varchar"
-										}
-									},
-									{
-										"source": {
-											"name": "Plan_ID",
-											"type": "String",
-											"physicalType": "String"
-										},
-										"sink": {
-											"name": "Plan_ID",
-											"type": "String",
-											"physicalType": "varchar"
-										}
-									},
-									{
-										"source": {
-											"name": "Plan_Name",
-											"type": "String",
-											"physicalType": "String"
-										},
-										"sink": {
-											"name": "Plan_Name",
-											"type": "String",
-											"physicalType": "varchar"
-										}
-									},
-									{
-										"source": {
-											"name": "Plan_Type",
-											"type": "String",
-											"physicalType": "String"
-										},
-										"sink": {
-											"name": "Plan_Type",
-											"type": "String",
-											"physicalType": "varchar"
-										}
-									},
-									{
-										"source": {
-											"name": "QDWI",
-											"type": "String",
-											"physicalType": "String"
-										},
-										"sink": {
-											"name": "QDWI",
-											"type": "Double",
-											"physicalType": "float"
-										}
-									},
-									{
-										"source": {
-											"name": "QI",
-											"type": "String",
-											"physicalType": "String"
-										},
-										"sink": {
-											"name": "QI",
-											"type": "Double",
-											"physicalType": "float"
-										}
-									},
-									{
-										"source": {
-											"name": "QMB only",
-											"type": "String",
-											"physicalType": "String"
-										},
-										"sink": {
-											"name": "QMB only",
-											"type": "Double",
-											"physicalType": "float"
-										}
-									},
-									{
-										"source": {
-											"name": "QMB plus Full Medicaid Benefits",
-											"type": "String",
-											"physicalType": "String"
-										},
-										"sink": {
-											"name": "QMB plus Full Medicaid Benefits",
-											"type": "Double",
-											"physicalType": "float"
-										}
-									},
-									{
-										"source": {
-											"name": "SLMB only",
-											"type": "String",
-											"physicalType": "String"
-										},
-										"sink": {
-											"name": "SLMB only",
-											"type": "Double",
-											"physicalType": "float"
-										}
-									},
-									{
-										"source": {
-											"name": "SLMB plus Full Medicaid Benefits",
-											"type": "String",
-											"physicalType": "String"
-										},
-										"sink": {
-											"name": "SLMB plus Full Medicaid Benefits",
-											"type": "Double",
-											"physicalType": "float"
-										}
-									},
-									{
-										"source": {
-											"name": "SNP_Eligibles",
-											"type": "String",
-											"physicalType": "String"
-										},
-										"sink": {
-											"name": "SNP_Eligibles",
-											"type": "Double",
-											"physicalType": "float"
-										}
-									},
-									{
-										"source": {
-											"name": "SNP_Plan",
-											"type": "String",
-											"physicalType": "String"
-										},
-										"sink": {
-											"name": "SNP_Plan",
-											"type": "String",
-											"physicalType": "varchar"
-										}
-									},
-									{
-										"source": {
-											"name": "SSA_State_County_Code",
-											"type": "String",
-											"physicalType": "String"
-										},
-										"sink": {
-											"name": "SSA_State_County_Code",
-											"type": "String",
-											"physicalType": "varchar"
-										}
-									},
-									{
-										"source": {
-											"name": "Special_Needs_Plan_Type",
-											"type": "String",
-											"physicalType": "String"
-										},
-										"sink": {
-											"name": "Special_Needs_Plan_Type",
-											"type": "String",
-											"physicalType": "varchar"
-										}
-									},
-									{
-										"source": {
-											"name": "State",
-											"type": "String",
-											"physicalType": "String"
-										},
-										"sink": {
-											"name": "State",
-											"type": "String",
-											"physicalType": "varchar"
-										}
-									},
-									{
-										"source": {
-											"name": "Year",
-											"type": "String",
-											"physicalType": "String"
-										},
-										"sink": {
-											"name": "Year",
-											"type": "Int32",
-											"physicalType": "int"
-										}
-									},
-									{
-										"source": {
-											"name": "enrollments",
-											"type": "String",
-											"physicalType": "String"
-										},
-										"sink": {
-											"name": "enrollments",
-											"type": "Double",
-											"physicalType": "float"
-										}
-									},
-									{
-										"source": {
-											"name": "Key_Cp_Id",
-											"type": "String",
-											"physicalType": "String"
-										},
-										"sink": {
-											"name": "Key_Cp_Id",
-											"type": "String",
-											"physicalType": "varchar"
-										}
-									},
-									{
-										"source": {
-											"name": "ma_eligibles",
-											"type": "String",
-											"physicalType": "String"
-										},
-										"sink": {
-											"name": "ma_eligibles",
-											"type": "String",
-											"physicalType": "varchar"
-										}
-									},
-									{
-										"source": {
-											"name": "Stability_Index",
-											"type": "String",
-											"physicalType": "String"
-										},
-										"sink": {
-											"name": "Stability_Index",
-											"type": "Double",
-											"physicalType": "float"
-										}
-									},
-									{
-										"source": {
-											"name": "Prediction",
-											"type": "String",
-											"physicalType": "String"
-										},
-										"sink": {
-											"name": "Prediction",
-											"type": "String",
-											"physicalType": "varchar"
-										}
-									},
-									{
-										"source": {
-											"name": "Status",
-											"type": "String",
-											"physicalType": "String"
-										},
-										"sink": {
-											"name": "Status",
-											"type": "String",
-											"physicalType": "varchar"
-										}
-									},
-									{
-										"source": {
-											"name": "IsTerminated",
+											"name": "Isterminated",
 											"type": "String",
 											"physicalType": "String"
 										},
 										"sink": {
 											"name": "IsTerminated",
-											"type": "Int32",
-											"physicalType": "int"
-										}
-									},
-									{
-										"source": {
-											"name": "IsOutofArea",
-											"type": "String",
-											"physicalType": "String"
-										},
-										"sink": {
-											"name": "IsOutofArea",
-											"type": "Int32",
-											"physicalType": "int"
-										}
-									},
-									{
-										"source": {
-											"name": "IsStarEnr",
-											"type": "String",
-											"physicalType": "String"
-										},
-										"sink": {
-											"name": "IsStarEnr",
 											"type": "Int32",
 											"physicalType": "int"
 										}
@@ -46052,6 +47113,2913 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/Test1_enr_data_push')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "start time update",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "INSERT INTO Audit(FileName, Operation, StartTime,Dashboard)\nValues('enr_trends_pre_broadcasting', 'enr_trends_data_prep', (Select GETDATE()),'enr_trends');\nSelect * from Audit;",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "dataset_sql",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							}
+						}
+					},
+					{
+						"name": "pre_broadcasting_data_prep",
+						"type": "DatabricksNotebook",
+						"dependsOn": [
+							{
+								"activity": "start time update",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Enrollment_trends/Enr_trends_pre_broadcasting_step1_new_ms"
+						},
+						"linkedServiceName": {
+							"referenceName": "AzureDatabricks4_pfcluster3",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "end time update for enr pre broadcasting success",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "pre_broadcasting_data_prep",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'pass'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "dataset_sql",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							}
+						}
+					},
+					{
+						"name": "end time update for enr pre broadcasting failure",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "pre_broadcasting_data_prep",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'Fail'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "dataset_sql",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							}
+						}
+					},
+					{
+						"name": "send email update for enr pre broadcasting script fail",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "end time update for enr pre broadcasting failure",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+							"method": "POST",
+							"headers": {},
+							"body": {
+								"value": "{\n \"title\":\"PIPELINE RUN FOR ENR PRE-BROADCASTING FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the enr trends pre-broadcasting script and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "start time of broadcasting steps",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "end time update for enr pre broadcasting success",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "INSERT INTO Audit(FileName, Operation, StartTime,Dashboard)\nValues('trends_landscape', 'broadcasting_step2a', (Select GETDATE()),'enr_trends');\nSelect * from Audit;",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "dataset_sql",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							}
+						}
+					},
+					{
+						"name": "Broadcasting step 2a",
+						"type": "DatabricksNotebook",
+						"dependsOn": [
+							{
+								"activity": "start time of broadcasting steps",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Enrollment_trends/Enr_trends_broadcasting_step_2a"
+						},
+						"linkedServiceName": {
+							"referenceName": "AzureDatabricks4_pfcluster3",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "send email update for enr  broadcasting step 2b",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "Broadcasting step 2a",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+							"method": "POST",
+							"headers": {},
+							"body": {
+								"value": "{\n \"title\":\"PIPELINE RUN FOR ENR BROADCASTING FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the enr trends broadcasting step 2a script and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "Broadcasting step 2b",
+						"type": "DatabricksNotebook",
+						"dependsOn": [
+							{
+								"activity": "Broadcasting step 2a",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Enrollment_trends/enr_trends_broadcasting_step2b"
+						},
+						"linkedServiceName": {
+							"referenceName": "AzureDatabricks4_pfcluster3",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "send email update for enr  broadcasting step 2b failed",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "Broadcasting step 2b",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+							"method": "POST",
+							"headers": {},
+							"body": {
+								"value": "{\n \"title\":\"PIPELINE RUN FOR ENR BROADCASTING FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the enr trends broadcasting step 2b script and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "Broadcasting step 2c",
+						"type": "DatabricksNotebook",
+						"dependsOn": [
+							{
+								"activity": "Broadcasting step 2b",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Enrollment_trends/enr_trends_broadcasting_step2c"
+						},
+						"linkedServiceName": {
+							"referenceName": "AzureDatabricks4_pfcluster3",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "send email update for enr  broadcasting step2c failed",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "Broadcasting step 2c",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+							"method": "POST",
+							"headers": {},
+							"body": {
+								"value": "{\n \"title\":\"PIPELINE RUN FOR ENR BROADCASTING FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the enr trends broadcasting step 2c script and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "enr_trends_post_broadcasting_step3",
+						"type": "DatabricksNotebook",
+						"dependsOn": [
+							{
+								"activity": "Broadcasting step 2c",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Enrollment_trends/Enrollment_trends_step3/Enr_trends_post_crosswalk_step3_rect2"
+						},
+						"linkedServiceName": {
+							"referenceName": "AzureDatabricks4_pfcluster3",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "Email update for succesfull execution of step3",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "enr_trends_post_broadcasting_step3",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+							"method": "POST",
+							"headers": {},
+							"body": {
+								"value": "{\n \"title\":\"PIPELINE RUN FOR ENR FINAL STEP SUCCEDED\",\n \"color\":\"GREEN\",\n \"message\":\"Debug the enr trends broadcasting step 2c script and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "Truncate_trends_cw_with_predictions",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Email update for succesfull execution of step3",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlServerSource",
+								"sqlReaderQuery": "Truncate table Trends_CW_withpredictions_backup;\n\n-- INSERT INTO dbo.Trends_CW_withpredictions_backup\n-- SELECT * FROM dbo.Trends_CW_withpredictions;\n\n-- Truncate table Trends_CW_withpredictions\n\nSELECT top 10 * from dbo.Trends_CW_withpredictions",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "SqlServerTable5",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						}
+					},
+					{
+						"name": "Successfull upload to Trends_CW_with_Predictions",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "Copy_final_data_to_trends_cw_with_predictions",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+							"method": "POST",
+							"headers": {},
+							"body": {
+								"value": "{\n \"title\":\"DATA UPLOADED TO trends_cw_with_predictions\",\n \"color\":\"GREEN\",\n \"message\":\"Data uploaded succesfully heading for data prep procedure\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "Upload failed to Trends_CW_with_Predictions_copy1",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "Copy_final_data_to_trends_cw_with_predictions",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+							"method": "POST",
+							"headers": {},
+							"body": {
+								"value": "{\n \"title\":\"DATA UPLOADED TO trends_cw_with_predictions failed\",\n \"color\":\"RED\",\n \"message\":\"Data uploaded failed pl debug\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "Email update for failure of step3",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "enr_trends_post_broadcasting_step3",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+							"method": "POST",
+							"headers": {},
+							"body": {
+								"value": "{\n \"title\":\"PIPELINE RUN FOR ENR FINAL STEP FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the enr trends broadcasting step 3 script and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "Copy_final_data_to_trends_cw_with_predictions",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "Truncate_trends_cw_with_predictions",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"wildcardFolderPath": "Enrollment_trends_dashboard/Output_files",
+									"wildcardFileName": "trends_cw_with_stabality_final_output.csv",
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "SqlServerSink",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "Contract_ID",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Contract_ID",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "County",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "County",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "EGHP",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "EGHP",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "FIPS_State_County_Code",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "FIPS_State_County_Code",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Month",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Month",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Offers_Part_D",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Offers_Part_D",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Other Dual Full Medicaid Benefit",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Other Dual Full Medicaid Benefit",
+											"type": "Double",
+											"physicalType": "float"
+										}
+									},
+									{
+										"source": {
+											"name": "Parent_Organization",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Parent_Organization",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Plan_ID",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Plan_ID",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Plan_Name",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Plan_Name",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Plan_Type",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Plan_Type",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "QDWI",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "QDWI",
+											"type": "Double",
+											"physicalType": "float"
+										}
+									},
+									{
+										"source": {
+											"name": "QI",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "QI",
+											"type": "Double",
+											"physicalType": "float"
+										}
+									},
+									{
+										"source": {
+											"name": "QMB only",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "QMB only",
+											"type": "Double",
+											"physicalType": "float"
+										}
+									},
+									{
+										"source": {
+											"name": "QMB plus Full Medicaid Benefits",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "QMB plus Full Medicaid Benefits",
+											"type": "Double",
+											"physicalType": "float"
+										}
+									},
+									{
+										"source": {
+											"name": "SLMB only",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "SLMB only",
+											"type": "Double",
+											"physicalType": "float"
+										}
+									},
+									{
+										"source": {
+											"name": "SLMB plus Full Medicaid Benefits",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "SLMB plus Full Medicaid Benefits",
+											"type": "Double",
+											"physicalType": "float"
+										}
+									},
+									{
+										"source": {
+											"name": "SNP_Eligibles",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "SNP_Eligibles",
+											"type": "Double",
+											"physicalType": "float"
+										}
+									},
+									{
+										"source": {
+											"name": "SNP_Plan",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "SNP_Plan",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "SSA_State_County_Code",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "SSA_State_County_Code",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Special_Needs_Plan_Type",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Special_Needs_Plan_Type",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "State",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "State",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Year",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Year",
+											"type": "Int32",
+											"physicalType": "int"
+										}
+									},
+									{
+										"source": {
+											"name": "enrollments",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "enrollments",
+											"type": "Double",
+											"physicalType": "float"
+										}
+									},
+									{
+										"source": {
+											"name": "Key_Cp_Id",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Key_Cp_Id",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "ma_eligibles",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "ma_eligibles",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Stability_Index",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Stability_Index",
+											"type": "Double",
+											"physicalType": "float"
+										}
+									},
+									{
+										"source": {
+											"name": "Status",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Status",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									}
+								],
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "Enr_final_file",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "SqlServerTable2",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"sql_server_dataset_name": {
+						"type": "string",
+						"defaultValue": "hwpilot.database.windows.net"
+					},
+					"db_name": {
+						"type": "string",
+						"defaultValue": "pf_data"
+					},
+					"user_name": {
+						"type": "string",
+						"defaultValue": "pladmin"
+					},
+					"password": {
+						"type": "string",
+						"defaultValue": "Goteg@12345"
+					}
+				},
+				"folder": {
+					"name": "Hwai_Refresh/Hwai_enr_trends/enr_trends_data_check/temp_data_checks"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/dataset_sql')]",
+				"[concat(variables('factoryId'), '/linkedServices/AzureDatabricks4_pfcluster3')]",
+				"[concat(variables('factoryId'), '/datasets/SqlServerTable5')]",
+				"[concat(variables('factoryId'), '/datasets/Enr_final_file')]",
+				"[concat(variables('factoryId'), '/datasets/SqlServerTable2')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Test1_gw_enr_data_push')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "start time update",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "INSERT INTO Audit(FileName, Operation, StartTime,Dashboard)\nValues('enr_trends_gw_pre_broadcasting', 'enr_trends_data_prep', (Select GETDATE()),'enr_trends');\nSelect * from Audit;",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "dataset_sql",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							}
+						}
+					},
+					{
+						"name": "pre_broadcasting_step1a",
+						"type": "DatabricksNotebook",
+						"dependsOn": [
+							{
+								"activity": "start time update",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Enrollment_trends_gateway/rectified_folders/enr_trends_gw_pre_broadcasting_step1a_tr"
+						},
+						"linkedServiceName": {
+							"referenceName": "AzureDatabricks4_pfcluster3",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "end time update for enr pre broadcasting step1a",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "pre_broadcasting_step1a",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'pass'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "dataset_sql",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							}
+						}
+					},
+					{
+						"name": "end time update for enr pre broadcasting step1a_fail",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "pre_broadcasting_step1a",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'fail'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "dataset_sql",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							}
+						}
+					},
+					{
+						"name": "pre_broadcasting_step1b",
+						"type": "DatabricksNotebook",
+						"dependsOn": [
+							{
+								"activity": "end time update for enr pre broadcasting step1a",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Enrollment_trends_gateway/Enr_trends_gw_pre_broadcasting_step1b"
+						},
+						"linkedServiceName": {
+							"referenceName": "AzureDatabricks4_pfcluster3",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "send email update for enr pre broadcasting step1a",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "end time update for enr pre broadcasting step1a_fail",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+							"method": "POST",
+							"headers": {},
+							"body": {
+								"value": "{\n \"title\":\"PIPELINE RUN FOR ENR PRE-BROADCASTING STEP 1a FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the enr trends pre-broadcasting script and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "end time update for enr pre broadcasting step1b_pass",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "pre_broadcasting_step1b",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'pass'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "dataset_sql",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							}
+						}
+					},
+					{
+						"name": "end time update for enr pre broadcasting step1b_fail",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "pre_broadcasting_step1b",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'fail'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "dataset_sql",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							}
+						}
+					},
+					{
+						"name": "pre_broadcasting_step1c_start_update",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "end time update for enr pre broadcasting step1b_pass",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "INSERT INTO Audit(FileName, Operation, StartTime,Dashboard)\nValues('enr_trends_gw_pre_broadcasting_step1c', 'enr_trends_data_prep', (Select GETDATE()),'enr_trends');\nSelect * from Audit;",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "dataset_sql",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							}
+						}
+					},
+					{
+						"name": "pre_broadcasting_step1c",
+						"type": "DatabricksNotebook",
+						"dependsOn": [
+							{
+								"activity": "pre_broadcasting_step1c_start_update",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Enrollment_trends_gateway/enr_trends_gw_pre_broadcasting_step1c"
+						},
+						"linkedServiceName": {
+							"referenceName": "AzureDatabricks4_pfcluster3",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "end time update for enr pre broadcasting step1c_pass",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "pre_broadcasting_step1c",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'pass'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "dataset_sql",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							}
+						}
+					},
+					{
+						"name": "end time update for enr pre broadcasting step1c_pass_",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "pre_broadcasting_step1c",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'pass'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "dataset_sql",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							}
+						}
+					},
+					{
+						"name": "Broadcasting_step2a",
+						"type": "DatabricksNotebook",
+						"dependsOn": [
+							{
+								"activity": "pre_broadcasting_step1d",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Enrollment_trends_gateway/gw_broadcasting_folder/Enr_gw_broadcasting_step2a"
+						},
+						"linkedServiceName": {
+							"referenceName": "AzureDatabricks4_pfcluster3",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "end time update for broadcasting step2b",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Broadcasting_step2a",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'pass'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "dataset_sql",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							}
+						}
+					},
+					{
+						"name": "end time update for enr pre broadcasting step2a_fail",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Broadcasting_step2a",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'fail'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "dataset_sql",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							}
+						}
+					},
+					{
+						"name": "Broadcasting_step2b",
+						"type": "DatabricksNotebook",
+						"dependsOn": [
+							{
+								"activity": "end time update for broadcasting step2b",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Enrollment_trends_gateway/gw_broadcasting_folder/Enr_gw_broadcasting_step2b"
+						},
+						"linkedServiceName": {
+							"referenceName": "AzureDatabricks4_pfcluster3",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "end time update for broadcasting step2b_pass",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Broadcasting_step2b",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'pass'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "dataset_sql",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							}
+						}
+					},
+					{
+						"name": "end time update for enr pre broadcasting step2b fail",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Broadcasting_step2b",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'fail'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "dataset_sql",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							}
+						}
+					},
+					{
+						"name": "Broadcasting_step2c",
+						"type": "DatabricksNotebook",
+						"dependsOn": [
+							{
+								"activity": "end time update for broadcasting step2b_pass",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Enrollment_trends_gateway/gw_broadcasting_folder/Enr_gw_broadcasting_step2c"
+						},
+						"linkedServiceName": {
+							"referenceName": "AzureDatabricks4_pfcluster3",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "end time update for broadcasting step2c_pass",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Broadcasting_step2c",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'pass'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "dataset_sql",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							}
+						}
+					},
+					{
+						"name": "end time update for enr pre broadcasting step2c fail",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Broadcasting_step2c",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'fail'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "dataset_sql",
+								"type": "DatasetReference",
+								"parameters": {
+									"sql_server_dataset": {
+										"value": "@pipeline().parameters.sql_server_dataset_name",
+										"type": "Expression"
+									},
+									"db_name_dataset": {
+										"value": "@pipeline().parameters.db_name",
+										"type": "Expression"
+									},
+									"user_name_dataset": {
+										"value": "@pipeline().parameters.user_name",
+										"type": "Expression"
+									},
+									"password_dataset": {
+										"value": "@pipeline().parameters.password",
+										"type": "Expression"
+									},
+									"sql_table_name": "Audit"
+								}
+							}
+						}
+					},
+					{
+						"name": "Post_broadcasting_step",
+						"type": "DatabricksNotebook",
+						"dependsOn": [
+							{
+								"activity": "end time update for broadcasting step2c_pass",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Enrollment_trends_gateway/rectified_folders/Enr_gw_post_broadcasting_step3_tr"
+						},
+						"linkedServiceName": {
+							"referenceName": "AzureDatabricks4_pfcluster3",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "Truncate_trends_cw_with_predictions",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Post_broadcasting_step",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlServerSource",
+								"sqlReaderQuery": "Truncate table Trends_CW_withpredictions_backup;\n\n-- INSERT INTO dbo.Trends_CW_withpredictions_backup\n-- SELECT * FROM dbo.Trends_CW_withpredictions;\n\n--Truncate table Trends_CW_withpredictions\n\nSELECT top 10 * from dbo.Trends_CW_withpredictions",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "SqlServerTable5",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						}
+					},
+					{
+						"name": "Copy_final_data_to_trends_cw_with_predictions",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "Truncate_trends_cw_with_predictions",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "SqlServerSink",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "Contract_ID",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Contract_ID",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "County",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "County",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "EGHP",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "EGHP",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "FIPS_State_County_Code",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "FIPS_State_County_Code",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Month",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Month",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Offers_Part_D",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Offers_Part_D",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Other Dual Full Medicaid Benefit",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Other Dual Full Medicaid Benefit",
+											"type": "Double",
+											"physicalType": "float"
+										}
+									},
+									{
+										"source": {
+											"name": "Parent_Organization",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Parent_Organization",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Plan_ID",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Plan_ID",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Plan_Name",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Plan_Name",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Plan_Type",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Plan_Type",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "QDWI",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "QDWI",
+											"type": "Double",
+											"physicalType": "float"
+										}
+									},
+									{
+										"source": {
+											"name": "QI",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "QI",
+											"type": "Double",
+											"physicalType": "float"
+										}
+									},
+									{
+										"source": {
+											"name": "QMB only",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "QMB only",
+											"type": "Double",
+											"physicalType": "float"
+										}
+									},
+									{
+										"source": {
+											"name": "QMB plus Full Medicaid Benefits",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "QMB plus Full Medicaid Benefits",
+											"type": "Double",
+											"physicalType": "float"
+										}
+									},
+									{
+										"source": {
+											"name": "SLMB only",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "SLMB only",
+											"type": "Double",
+											"physicalType": "float"
+										}
+									},
+									{
+										"source": {
+											"name": "SLMB plus Full Medicaid Benefits",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "SLMB plus Full Medicaid Benefits",
+											"type": "Double",
+											"physicalType": "float"
+										}
+									},
+									{
+										"source": {
+											"name": "SNP_Eligibles",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "SNP_Eligibles",
+											"type": "Double",
+											"physicalType": "float"
+										}
+									},
+									{
+										"source": {
+											"name": "SNP_Plan",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "SNP_Plan",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "SSA_State_County_Code",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "SSA_State_County_Code",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Special_Needs_Plan_Type",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Special_Needs_Plan_Type",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "State",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "State",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Year",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Year",
+											"type": "Int32",
+											"physicalType": "int"
+										}
+									},
+									{
+										"source": {
+											"name": "enrollments",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "enrollments",
+											"type": "Double",
+											"physicalType": "float"
+										}
+									},
+									{
+										"source": {
+											"name": "Key_Cp_Id",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Key_Cp_Id",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "ma_eligibles",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "ma_eligibles",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Stability_Index",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Stability_Index",
+											"type": "Double",
+											"physicalType": "float"
+										}
+									}
+								],
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "Enr_final_file",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "SqlServerTable2",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "pre_broadcasting_step1d",
+						"type": "DatabricksNotebook",
+						"dependsOn": [
+							{
+								"activity": "end time update for enr pre broadcasting step1c_pass",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Enrollment_trends_gateway/enr_trends_gw_pre_broadcasting_step1d"
+						},
+						"linkedServiceName": {
+							"referenceName": "AzureDatabricks4_pfcluster3",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"sql_server_dataset_name": {
+						"type": "string",
+						"defaultValue": "hwpilot.database.windows.net"
+					},
+					"db_name": {
+						"type": "string",
+						"defaultValue": "pf_data"
+					},
+					"user_name": {
+						"type": "string",
+						"defaultValue": "pladmin"
+					},
+					"password": {
+						"type": "string",
+						"defaultValue": "Goteg@12345"
+					}
+				},
+				"folder": {
+					"name": "Hwai_Refresh/Hwai_enr_trends/enr_trends_data_check/temp_data_checks"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/dataset_sql')]",
+				"[concat(variables('factoryId'), '/linkedServices/AzureDatabricks4_pfcluster3')]",
+				"[concat(variables('factoryId'), '/datasets/SqlServerTable5')]",
+				"[concat(variables('factoryId'), '/datasets/Enr_final_file')]",
+				"[concat(variables('factoryId'), '/datasets/SqlServerTable2')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Test2gw_push')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Truncate_trends_cw_with_predictions",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlServerSource",
+								"sqlReaderQuery": "Truncate table Trends_CW_withpredictions_backup;\n\n-- INSERT INTO dbo.Trends_CW_withpredictions_backup\n-- SELECT * FROM dbo.Trends_CW_withpredictions;\n\n--Truncate table Trends_CW_withpredictions\n\nSELECT top 10 * from dbo.Trends_CW_withpredictions",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "SqlServerTable5",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						}
+					},
+					{
+						"name": "Copy_final_data_to_trends_cw_with_predictions",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "Truncate_trends_cw_with_predictions",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "SqlServerSink",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "Contract_ID",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Contract_ID",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "County",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "County",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "EGHP",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "EGHP",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "FIPS_State_County_Code",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "FIPS_State_County_Code",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Month",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Month",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Offers_Part_D",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Offers_Part_D",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Other Dual Full Medicaid Benefit",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Other Dual Full Medicaid Benefit",
+											"type": "Double",
+											"physicalType": "float"
+										}
+									},
+									{
+										"source": {
+											"name": "Parent_Organization",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Parent_Organization",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Plan_ID",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Plan_ID",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Plan_Name",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Plan_Name",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Plan_Type",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Plan_Type",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "QDWI",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "QDWI",
+											"type": "Double",
+											"physicalType": "float"
+										}
+									},
+									{
+										"source": {
+											"name": "QI",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "QI",
+											"type": "Double",
+											"physicalType": "float"
+										}
+									},
+									{
+										"source": {
+											"name": "QMB only",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "QMB only",
+											"type": "Double",
+											"physicalType": "float"
+										}
+									},
+									{
+										"source": {
+											"name": "QMB plus Full Medicaid Benefits",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "QMB plus Full Medicaid Benefits",
+											"type": "Double",
+											"physicalType": "float"
+										}
+									},
+									{
+										"source": {
+											"name": "SLMB only",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "SLMB only",
+											"type": "Double",
+											"physicalType": "float"
+										}
+									},
+									{
+										"source": {
+											"name": "SLMB plus Full Medicaid Benefits",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "SLMB plus Full Medicaid Benefits",
+											"type": "Double",
+											"physicalType": "float"
+										}
+									},
+									{
+										"source": {
+											"name": "SNP_Eligibles",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "SNP_Eligibles",
+											"type": "Double",
+											"physicalType": "float"
+										}
+									},
+									{
+										"source": {
+											"name": "SNP_Plan",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "SNP_Plan",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "SSA_State_County_Code",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "SSA_State_County_Code",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Special_Needs_Plan_Type",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Special_Needs_Plan_Type",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "State",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "State",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Year",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Year",
+											"type": "Int32",
+											"physicalType": "int"
+										}
+									},
+									{
+										"source": {
+											"name": "enrollments",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "enrollments",
+											"type": "Double",
+											"physicalType": "float"
+										}
+									},
+									{
+										"source": {
+											"name": "Key_Cp_Id",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Key_Cp_Id",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "ma_eligibles",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "ma_eligibles",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Stability_Index",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Stability_Index",
+											"type": "Double",
+											"physicalType": "float"
+										}
+									}
+								],
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "Enr_final_file",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "SqlServerTable2",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"sql_server_dataset_name": {
+						"type": "string",
+						"defaultValue": "hwpilot.database.windows.net"
+					},
+					"db_name": {
+						"type": "string",
+						"defaultValue": "pf_data"
+					},
+					"user_name": {
+						"type": "string",
+						"defaultValue": "pladmin"
+					},
+					"password": {
+						"type": "string",
+						"defaultValue": "Goteg@12345"
+					}
+				},
+				"folder": {
+					"name": "Hwai_Refresh/Hwai_enr_trends/enr_trends_data_check/temp_data_checks"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/SqlServerTable5')]",
+				"[concat(variables('factoryId'), '/datasets/Enr_final_file')]",
+				"[concat(variables('factoryId'), '/datasets/SqlServerTable2')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/User_log_trigger')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -46060,7 +50028,14 @@
 					{
 						"name": "User_Info_Update_on_Azure",
 						"type": "Copy",
-						"dependsOn": [],
+						"dependsOn": [
+							{
+								"activity": "DeleteRecords",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
 						"policy": {
 							"timeout": "0.12:00:00",
 							"retry": 0,
@@ -46210,11 +50185,123 @@
 								"parameters": {}
 							}
 						]
+					},
+					{
+						"name": "GetUserId",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlServerSource",
+								"sqlReaderQuery": "SELECT DISTINCT  CONCAT(CHAR(39), UserId ,CHAR(39)) from OrgUser;",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "HealthWorksPlan_SQL_Analytics",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "UserId",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "GetUserId",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "UserId",
+							"value": {
+								"value": "@{activity('GetUserId').output.value}",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "QueryFormatting",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "UserId",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "v2",
+							"value": {
+								"value": "@{replace(replace(replace(replace(replace(replace(replace(replace(replace(variables('UserId'),'[','('),']',')'),'\"',''),'{',''),'}',''),'UserId:',''),':',''),'(',''),')','')}",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "DeleteRecords",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "QueryFormatting",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": {
+									"value": "DELETE FROM OrgUser WHERE UserId NOT IN (@{variables('v2')});\r\nselect 1 as abc;",
+									"type": "Expression"
+								},
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "User_table_Azure_prod",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"firstRowOnly": false
+						}
 					}
 				],
 				"policy": {
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
+				},
+				"variables": {
+					"UserId": {
+						"type": "String"
+					},
+					"v2": {
+						"type": "String"
+					}
 				},
 				"annotations": []
 			},
@@ -52916,7 +57003,7 @@
 						},
 						"userProperties": [],
 						"typeProperties": {
-							"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Enrollment_trends/Enr_trends_pre_broadcasting_step1"
+							"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Enrollment_trends/Enr_trends_pre_broadcasting_step1_new_ms"
 						},
 						"linkedServiceName": {
 							"referenceName": "AzureDatabricks4_pfcluster3",
@@ -56325,6 +60412,136 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/pipeline4')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "GetUserId",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlServerSource",
+								"sqlReaderQuery": "SELECT DISTINCT  CONCAT(CHAR(39), UserId ,CHAR(39)) from OrgUser;",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "HealthWorksPlan_SQL_Analytics",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "UserId",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "GetUserId",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "UserId",
+							"value": {
+								"value": "@{activity('GetUserId').output.value}",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "QueryFormatting",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "UserId",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "v2",
+							"value": {
+								"value": "@{replace(replace(replace(replace(replace(replace(replace(replace(replace(variables('UserId'),'[','('),']',')'),'\"',''),'{',''),'}',''),'UserId:',''),':',''),'(',''),')','')}",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "DeleteRecords",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "QueryFormatting",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": {
+									"value": "SELECT *  FROM OrgUser WHERE UserId NOT IN (@{variables('v2')})",
+									"type": "Expression"
+								},
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "User_table_Azure_prod",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"firstRowOnly": false
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"variables": {
+					"UserId": {
+						"type": "String"
+					},
+					"v2": {
+						"type": "String"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/HealthWorksPlan_SQL_Analytics')]",
+				"[concat(variables('factoryId'), '/datasets/User_table_Azure_prod')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/test_push_data')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -56413,8 +60630,8 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
-						"fileName": "Trend_CW_withpredictions.csv",
-						"folderPath": "EnrollmentTrendTechStack",
+						"fileName": "EtTerminatedPlan.csv",
+						"folderPath": "EnrollmentTrendTechStack/Output",
 						"fileSystem": "hwaicontainer"
 					},
 					"columnDelimiter": ",",
@@ -56424,131 +60641,11 @@
 				},
 				"schema": [
 					{
-						"name": "Contract_ID",
+						"name": "BidId",
 						"type": "String"
 					},
 					{
-						"name": "County",
-						"type": "String"
-					},
-					{
-						"name": "EGHP",
-						"type": "String"
-					},
-					{
-						"name": "FIPS_State_County_Code",
-						"type": "String"
-					},
-					{
-						"name": "Month",
-						"type": "String"
-					},
-					{
-						"name": "Offers_Part_D",
-						"type": "String"
-					},
-					{
-						"name": "Other Dual Full Medicaid Benefit",
-						"type": "String"
-					},
-					{
-						"name": "Parent_Organization",
-						"type": "String"
-					},
-					{
-						"name": "Plan_ID",
-						"type": "String"
-					},
-					{
-						"name": "Plan_Name",
-						"type": "String"
-					},
-					{
-						"name": "Plan_Type",
-						"type": "String"
-					},
-					{
-						"name": "QDWI",
-						"type": "String"
-					},
-					{
-						"name": "QI",
-						"type": "String"
-					},
-					{
-						"name": "QMB only",
-						"type": "String"
-					},
-					{
-						"name": "QMB plus Full Medicaid Benefits",
-						"type": "String"
-					},
-					{
-						"name": "SLMB only",
-						"type": "String"
-					},
-					{
-						"name": "SLMB plus Full Medicaid Benefits",
-						"type": "String"
-					},
-					{
-						"name": "SNP_Eligibles",
-						"type": "String"
-					},
-					{
-						"name": "SNP_Plan",
-						"type": "String"
-					},
-					{
-						"name": "SSA_State_County_Code",
-						"type": "String"
-					},
-					{
-						"name": "Special_Needs_Plan_Type",
-						"type": "String"
-					},
-					{
-						"name": "State",
-						"type": "String"
-					},
-					{
-						"name": "Year",
-						"type": "String"
-					},
-					{
-						"name": "enrollments",
-						"type": "String"
-					},
-					{
-						"name": "Key_Cp_Id",
-						"type": "String"
-					},
-					{
-						"name": "ma_eligibles",
-						"type": "String"
-					},
-					{
-						"name": "Stability_Index",
-						"type": "String"
-					},
-					{
-						"name": "Prediction",
-						"type": "String"
-					},
-					{
-						"name": "Status",
-						"type": "String"
-					},
-					{
-						"name": "IsTerminated",
-						"type": "String"
-					},
-					{
-						"name": "IsOutofArea",
-						"type": "String"
-					},
-					{
-						"name": "IsStarEnr",
+						"name": "Isterminated",
 						"type": "String"
 					}
 				]
@@ -60684,100 +64781,14 @@
 				"type": "AzureSqlTable",
 				"schema": [
 					{
-						"name": "Contract_ID",
-						"type": "varchar"
+						"name": "ETKey",
+						"type": "bigint",
+						"precision": 19
 					},
 					{
-						"name": "County",
-						"type": "varchar"
-					},
-					{
-						"name": "EGHP",
-						"type": "varchar"
-					},
-					{
-						"name": "FIPS_State_County_Code",
-						"type": "varchar"
-					},
-					{
-						"name": "Month",
-						"type": "varchar"
-					},
-					{
-						"name": "Offers_Part_D",
-						"type": "varchar"
-					},
-					{
-						"name": "Other Dual Full Medicaid Benefit",
-						"type": "float",
-						"precision": 15
-					},
-					{
-						"name": "Parent_Organization",
-						"type": "varchar"
-					},
-					{
-						"name": "Plan_ID",
-						"type": "varchar"
-					},
-					{
-						"name": "Plan_Name",
-						"type": "varchar"
-					},
-					{
-						"name": "Plan_Type",
-						"type": "varchar"
-					},
-					{
-						"name": "QDWI",
-						"type": "float",
-						"precision": 15
-					},
-					{
-						"name": "QI",
-						"type": "float",
-						"precision": 15
-					},
-					{
-						"name": "QMB only",
-						"type": "float",
-						"precision": 15
-					},
-					{
-						"name": "QMB plus Full Medicaid Benefits",
-						"type": "float",
-						"precision": 15
-					},
-					{
-						"name": "SLMB only",
-						"type": "float",
-						"precision": 15
-					},
-					{
-						"name": "SLMB plus Full Medicaid Benefits",
-						"type": "float",
-						"precision": 15
-					},
-					{
-						"name": "SNP_Eligibles",
-						"type": "float",
-						"precision": 15
-					},
-					{
-						"name": "SNP_Plan",
-						"type": "varchar"
-					},
-					{
-						"name": "SSA_State_County_Code",
-						"type": "varchar"
-					},
-					{
-						"name": "Special_Needs_Plan_Type",
-						"type": "varchar"
-					},
-					{
-						"name": "State",
-						"type": "varchar"
+						"name": "OrganizationID",
+						"type": "int",
+						"precision": 10
 					},
 					{
 						"name": "Year",
@@ -60785,50 +64796,19 @@
 						"precision": 10
 					},
 					{
-						"name": "enrollments",
-						"type": "float",
-						"precision": 15
-					},
-					{
-						"name": "Key_Cp_Id",
-						"type": "varchar"
-					},
-					{
-						"name": "ma_eligibles",
-						"type": "varchar"
-					},
-					{
-						"name": "Stability_Index",
-						"type": "float",
-						"precision": 15
-					},
-					{
-						"name": "Prediction",
-						"type": "varchar"
-					},
-					{
-						"name": "Status",
-						"type": "varchar"
-					},
-					{
-						"name": "IsTerminated",
+						"name": "MonthNumber",
 						"type": "int",
 						"precision": 10
 					},
 					{
-						"name": "IsOutofArea",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "IsStarEnr",
+						"name": "NoOfPlans",
 						"type": "int",
 						"precision": 10
 					}
 				],
 				"typeProperties": {
 					"schema": "dbo",
-					"table": "TrendsCwWithPredictions"
+					"table": "EnrollmentTrendsTerminatedPlans"
 				}
 			},
 			"dependsOn": [
@@ -61649,6 +65629,650 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/sql_analytics')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/MS_Sql_Analytics_Prod')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "prod_sql_analytics",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [
+					{
+						"name": "Contract_ID",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Plan_ID",
+						"type": "nvarchar"
+					},
+					{
+						"name": "SSA_State_County_Code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "FIPS_State_County_Code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "State",
+						"type": "nvarchar"
+					},
+					{
+						"name": "County",
+						"type": "nvarchar"
+					},
+					{
+						"name": "enrollments",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "Parent_Organization",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Organization_Type",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Plan_Type",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Offers_Part_D",
+						"type": "nvarchar"
+					},
+					{
+						"name": "SNP_Plan",
+						"type": "nvarchar"
+					},
+					{
+						"name": "EGHP",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Organization_Name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Organization_Marketing_Name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Plan_Name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Year",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "Month",
+						"type": "nvarchar"
+					},
+					{
+						"name": "ma_eligibles",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "key",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Special_Needs_Plan_Type",
+						"type": "nvarchar"
+					},
+					{
+						"name": "QMB only",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "QMB plus Full Medicaid Benefits",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "SLMB only",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "SLMB plus Full Medicaid Benefits",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "QDWI",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "QI",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "Other Dual Full Medicaid Benefit",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "SNP_Eligibles",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "Sex_And_Age_Population_65_To_74_Years",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "Sex_And_Age_Population_75_To_84_Years",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "Sex_And_Age_Population_85_Years_And_Over",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "Sex_And_Age_Population_Above_65",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "Sex_And_Age_Population_Above_65_Male",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "Sex_And_Age_Population_Above_65_Female",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "Total_In_Households_Above_65",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "Total_Above_65_Has_A_Computer",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "Total_Male_Above_65_With_Employer-Based_Health_Insurance",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "Total_Female_Above_65_With_Employer-Based_Health_Insurance",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "Total_Male_Above_65_With_Medicare_Coverage",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "Total_Male_Above_65_No_Medicare_Coverage",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "Total_Female_Above_65_With_Medicare_Coverage",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "Total_Female_Above_65_No_Medicare_Coverage",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "Total_Income_In_The_Past_12_Months_Below_Poverty_Level_Male_65_To_74_Years",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "Total_Income_In_The_Past_12_Months_Below_Poverty_Level_Male_75_Years_And_Over",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "Total_Income_In_The_Past_12_Months_Below_Poverty_Level_Female_65_To_74_Years",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "Total_Income_In_The_Past_12_Months_Below_Poverty_Level_Female_75_Years_And_Over",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "Total_Male_65_To_74_Years_With_A_Disability",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "Total_Male_75_Years_And_Over_With_A_Disability",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "Total_Female_65_To_74_Years_With_A_Disability",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "Total_Female_75_Years_And_Over_With_A_Disability",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "Household_Received_Snap_In_The_Past_12_Months_At_Least_One_Person_In_Household_60_Years_Or_Over",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "Not_Received_Snap_In_The_Past_12_Months_At_Least_One_Person_In_Household_60_Years_Or_Over",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "Total_Above_65_Literate",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "D-SNP Type",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Out of Area",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Termination Status",
+						"type": "nvarchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "ms_allstatesallyears"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/prod_sql_analytics')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/MS_asay_az_Prod')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase2",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "Contract_ID",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Plan_ID",
+						"type": "nvarchar"
+					},
+					{
+						"name": "SSA_State_County_Code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "FIPS_State_County_Code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "State",
+						"type": "nvarchar"
+					},
+					{
+						"name": "County",
+						"type": "nvarchar"
+					},
+					{
+						"name": "enrollments",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "Parent_Organization",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Organization_Type",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Plan_Type",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Offers_Part_D",
+						"type": "nvarchar"
+					},
+					{
+						"name": "SNP_Plan",
+						"type": "nvarchar"
+					},
+					{
+						"name": "EGHP",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Organization_Name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Organization_Marketing_Name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Plan_Name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Year",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "Month",
+						"type": "nvarchar"
+					},
+					{
+						"name": "ma_eligibles",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "key",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Special_Needs_Plan_Type",
+						"type": "nvarchar"
+					},
+					{
+						"name": "QMB only",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "QMB plus Full Medicaid Benefits",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "SLMB only",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "SLMB plus Full Medicaid Benefits",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "QDWI",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "QI",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "Other Dual Full Medicaid Benefit",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "SNP_Eligibles",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "Sex_And_Age_Population_65_To_74_Years",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "Sex_And_Age_Population_75_To_84_Years",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "Sex_And_Age_Population_85_Years_And_Over",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "Sex_And_Age_Population_Above_65",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "Sex_And_Age_Population_Above_65_Male",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "Sex_And_Age_Population_Above_65_Female",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "Total_In_Households_Above_65",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "Total_Above_65_Has_A_Computer",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "Total_Male_Above_65_With_Employer-Based_Health_Insurance",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "Total_Female_Above_65_With_Employer-Based_Health_Insurance",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "Total_Male_Above_65_With_Medicare_Coverage",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "Total_Male_Above_65_No_Medicare_Coverage",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "Total_Female_Above_65_With_Medicare_Coverage",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "Total_Female_Above_65_No_Medicare_Coverage",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "Total_Income_In_The_Past_12_Months_Below_Poverty_Level_Male_65_To_74_Years",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "Total_Income_In_The_Past_12_Months_Below_Poverty_Level_Male_75_Years_And_Over",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "Total_Income_In_The_Past_12_Months_Below_Poverty_Level_Female_65_To_74_Years",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "Total_Income_In_The_Past_12_Months_Below_Poverty_Level_Female_75_Years_And_Over",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "Total_Male_65_To_74_Years_With_A_Disability",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "Total_Male_75_Years_And_Over_With_A_Disability",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "Total_Female_65_To_74_Years_With_A_Disability",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "Total_Female_75_Years_And_Over_With_A_Disability",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "Household_Received_Snap_In_The_Past_12_Months_At_Least_One_Person_In_Household_60_Years_Or_Over",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "Not_Received_Snap_In_The_Past_12_Months_At_Least_One_Person_In_Household_60_Years_Or_Over",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "Total_Above_65_Literate",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "D-SNP Type",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Out of Area",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Termination Status",
+						"type": "nvarchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "ms_allstatesallyears_prod"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabase2')]"
 			]
 		},
 		{
@@ -62759,6 +67383,190 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/SQL_analytics_HWai_Dashboards')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "prod_sql_analytics",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [
+					{
+						"name": "Contract_ID",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Plan_ID",
+						"type": "nvarchar"
+					},
+					{
+						"name": "SSA_State_County_Code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "FIPS_State_County_Code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "State",
+						"type": "nvarchar"
+					},
+					{
+						"name": "County",
+						"type": "nvarchar"
+					},
+					{
+						"name": "enrollments",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "Parent_Organization",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Organization_Type",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Plan_Type",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Offers_Part_D",
+						"type": "nvarchar"
+					},
+					{
+						"name": "SNP_Plan",
+						"type": "nvarchar"
+					},
+					{
+						"name": "EGHP",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Organization_Name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Organization_Marketing_Name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Plan_Name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Year",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "Month",
+						"type": "nvarchar"
+					},
+					{
+						"name": "ma_eligibles",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "key",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Special_Needs_Plan_Type",
+						"type": "nvarchar"
+					},
+					{
+						"name": "QMB only",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "QMB plus Full Medicaid Benefits",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "SLMB only",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "SLMB plus Full Medicaid Benefits",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "QDWI",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "QI",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "Other Dual Full Medicaid Benefit",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "SNP_Eligibles",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "MA Sales Region",
+						"type": "nvarchar"
+					},
+					{
+						"name": "MA Product Region",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Double County",
+						"type": "nvarchar"
+					},
+					{
+						"name": "POA",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Note",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Acquisition_Type",
+						"type": "nvarchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "ca_allstatesallyears"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/prod_sql_analytics')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/Section_C_OON_final_data')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -62840,6 +67648,190 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Sink_Ca_Az_Prod')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase2",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "Contract_ID",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Plan_ID",
+						"type": "nvarchar"
+					},
+					{
+						"name": "SSA_State_County_Code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "FIPS_State_County_Code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "State",
+						"type": "nvarchar"
+					},
+					{
+						"name": "County",
+						"type": "nvarchar"
+					},
+					{
+						"name": "enrollments",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "Parent_Organization",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Organization_Type",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Plan_Type",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Offers_Part_D",
+						"type": "nvarchar"
+					},
+					{
+						"name": "SNP_Plan",
+						"type": "nvarchar"
+					},
+					{
+						"name": "EGHP",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Organization_Name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Organization_Marketing_Name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Plan_Name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Year",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "Month",
+						"type": "nvarchar"
+					},
+					{
+						"name": "ma_eligibles",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "key",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Special_Needs_Plan_Type",
+						"type": "nvarchar"
+					},
+					{
+						"name": "QMB only",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "QMB plus Full Medicaid Benefits",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "SLMB only",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "SLMB plus Full Medicaid Benefits",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "QDWI",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "QI",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "Other Dual Full Medicaid Benefit",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "SNP_Eligibles",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "MA Sales Region",
+						"type": "nvarchar"
+					},
+					{
+						"name": "MA Product Region",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Double County",
+						"type": "nvarchar"
+					},
+					{
+						"name": "POA",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Note",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Acquisition_Type",
+						"type": "nvarchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "ca_allstatesallyears_prod"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabase2')]"
 			]
 		},
 		{
@@ -63319,7 +68311,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "sql_analytics_HWAIETDB",
+					"referenceName": "sql_analytics_HWAIETV2DB",
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
@@ -63459,7 +68451,7 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/sql_analytics_HWAIETDB')]"
+				"[concat(variables('factoryId'), '/linkedServices/sql_analytics_HWAIETV2DB')]"
 			]
 		},
 		{
@@ -63468,7 +68460,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "datalake_sql_gw",
+					"referenceName": "datalake_sql",
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
@@ -63608,7 +68600,7 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/datalake_sql_gw')]"
+				"[concat(variables('factoryId'), '/linkedServices/datalake_sql')]"
 			]
 		},
 		{
@@ -63617,7 +68609,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "sql_analytics_HWAIETDB",
+					"referenceName": "sql_analytics_HWAIETV2DB",
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
@@ -63757,7 +68749,7 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/sql_analytics_HWAIETDB')]"
+				"[concat(variables('factoryId'), '/linkedServices/sql_analytics_HWAIETV2DB')]"
 			]
 		},
 		{
@@ -66527,7 +71519,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "datalake_sql",
+					"referenceName": "sql_analytics_HWAIETDB",
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
@@ -66667,7 +71659,7 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/datalake_sql')]"
+				"[concat(variables('factoryId'), '/linkedServices/sql_analytics_HWAIETDB')]"
 			]
 		},
 		{

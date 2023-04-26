@@ -384,6 +384,26 @@
 			"dependsOn": [
 				"[resourceId('Microsoft.Resources/deployments', 'planfinder_ArmTemplate_10')]"
 			]
+		},
+		{
+			"name": "planfinder_ArmTemplate_12",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_12.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'planfinder_ArmTemplate_11')]"
+			]
 		}
 	]
 }
