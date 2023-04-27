@@ -28,7 +28,7 @@
 					},
 					"sink": {
 						"type": "AzureSqlSink",
-						"preCopyScript": "TRUNCATE TABLE [dbo].[EnrollmentTrendsTerminatedPlans]",
+						"preCopyScript": "TRUNCATE TABLE [dbo].[FiltersMapping]",
 						"writeBehavior": "insert",
 						"sqlWriterUseTableLock": false,
 						"disableMetricsCollection": false
@@ -39,24 +39,84 @@
 						"mappings": [
 							{
 								"source": {
-									"name": "BidId",
+									"name": "StateID",
 									"type": "String",
 									"physicalType": "String"
 								},
 								"sink": {
-									"name": "BidId",
-									"type": "String",
-									"physicalType": "varchar"
+									"name": "StateID",
+									"type": "Int32",
+									"physicalType": "int"
 								}
 							},
 							{
 								"source": {
-									"name": "Isterminated",
+									"name": "CountyID",
 									"type": "String",
 									"physicalType": "String"
 								},
 								"sink": {
-									"name": "IsTerminated",
+									"name": "CountyID",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							},
+							{
+								"source": {
+									"name": "OrganizationID",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "OrganizationID",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							},
+							{
+								"source": {
+									"name": "IndGrpPlansID",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "IndGrpPlansID",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							},
+							{
+								"source": {
+									"name": "PlanTypeID",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PlanTypeID",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							},
+							{
+								"source": {
+									"name": "MAPDPID",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "MAPDPID",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							},
+							{
+								"source": {
+									"name": "SNPID",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SNPID",
 									"type": "Int32",
 									"physicalType": "int"
 								}
