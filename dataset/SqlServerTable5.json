@@ -2,7 +2,7 @@
 	"name": "SqlServerTable5",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "sql_analytics_HWAIETV2DB",
+			"referenceName": "datalake_sql_gw",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
@@ -138,7 +138,7 @@
 		],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "Trends_CW_withpredictions_backup"
+			"table": "Trends_CW_withpredictions"
 		}
 	}
 }
