@@ -20,7 +20,7 @@
 					},
 					{
 						"name": "Destination",
-						"value": "dbo.@{'pi_landscape_2023'}"
+						"value": "dbo.@{'pi_landscape_test_2023'}"
 					}
 				],
 				"typeProperties": {
@@ -39,8 +39,10 @@
 					},
 					"sink": {
 						"type": "AzureSqlSink",
+						"preCopyScript": "DECLARE @month VARCHAR(20) = DATENAME(MONTH, GETDATE()) + '_' + CAST(YEAR(GETDATE()) AS VARCHAR(4))\nDECLARE @sql NVARCHAR(MAX)\n\nSET @sql = 'ALTER TABLE [dbo].[pi_landscape_test_2023] ADD ' + @month + ' DECIMAL(18,0)'\nIF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'pi_landscape_test_2023' AND COLUMN_NAME = @month)\nBEGIN\n  EXEC(@sql)\nEND",
 						"writeBehavior": "insert",
-						"sqlWriterUseTableLock": false
+						"sqlWriterUseTableLock": false,
+						"disableMetricsCollection": false
 					},
 					"enableStaging": false,
 					"translator": {
@@ -3841,7 +3843,7 @@
 							"db_name_dataset": "HWai_Dashboards",
 							"user_name_dataset": "pladmin",
 							"password_dataset": "Goteg@12345",
-							"sql_table_name": "pi_landscape_2023"
+							"sql_table_name": "pi_landscape_test_2023"
 						}
 					}
 				]
