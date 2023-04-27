@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "GlobalFiltersData.csv",
+				"fileName": "EnrollmentTrendData.csv",
 				"folderPath": "EnrollmentTrendTechStack/Output",
 				"fileSystem": "hwaicontainer"
 			},
@@ -21,6 +21,10 @@
 		},
 		"schema": [
 			{
+				"name": "ETKey",
+				"type": "String"
+			},
+			{
 				"name": "StateID",
 				"type": "String"
 			},
@@ -29,15 +33,7 @@
 				"type": "String"
 			},
 			{
-				"name": "OrganizationID",
-				"type": "String"
-			},
-			{
 				"name": "IndGrpPlansID",
-				"type": "String"
-			},
-			{
-				"name": "PlanTypeID",
 				"type": "String"
 			},
 			{
@@ -46,6 +42,122 @@
 			},
 			{
 				"name": "SNPID",
+				"type": "String"
+			},
+			{
+				"name": "PlanTypeID",
+				"type": "String"
+			},
+			{
+				"name": "OrganizationID",
+				"type": "String"
+			},
+			{
+				"name": "PlanName",
+				"type": "String"
+			},
+			{
+				"name": "BidId",
+				"type": "String"
+			},
+			{
+				"name": "Year",
+				"type": "String"
+			},
+			{
+				"name": "Enrollments",
+				"type": "String"
+			},
+			{
+				"name": "MAEligibles",
+				"type": "String"
+			},
+			{
+				"name": "StabilityIndex",
+				"type": "String"
+			},
+			{
+				"name": "Prediction",
+				"type": "String"
+			},
+			{
+				"name": "EGHP",
+				"type": "String"
+			},
+			{
+				"name": "FIPS_State_County_Code",
+				"type": "String"
+			},
+			{
+				"name": "Offers_Part_D",
+				"type": "String"
+			},
+			{
+				"name": "Other_Dual_Full_Medicaid_Benefit",
+				"type": "String"
+			},
+			{
+				"name": "Plan_ID",
+				"type": "String"
+			},
+			{
+				"name": "QDWI",
+				"type": "String"
+			},
+			{
+				"name": "QI",
+				"type": "String"
+			},
+			{
+				"name": "QMB_Only",
+				"type": "String"
+			},
+			{
+				"name": "QMB_Plus_Full_Medicaid_Benefits",
+				"type": "String"
+			},
+			{
+				"name": "SLMB_only",
+				"type": "String"
+			},
+			{
+				"name": "SLMB_Plus_Full_Medicaid_Benefits",
+				"type": "String"
+			},
+			{
+				"name": "SNP_Eligibles",
+				"type": "String"
+			},
+			{
+				"name": "SNP_Plan",
+				"type": "String"
+			},
+			{
+				"name": "SSA_State_County_Code",
+				"type": "String"
+			},
+			{
+				"name": "Contract_ID",
+				"type": "String"
+			},
+			{
+				"name": "MonthNumber",
+				"type": "String"
+			},
+			{
+				"name": "IsTerminated",
+				"type": "String"
+			},
+			{
+				"name": "IsOutofArea",
+				"type": "String"
+			},
+			{
+				"name": "IsStarEnr",
+				"type": "String"
+			},
+			{
+				"name": "Status",
 				"type": "String"
 			}
 		]
