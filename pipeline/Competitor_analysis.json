@@ -176,7 +176,7 @@
 				}
 			},
 			{
-				"name": "Copy Crosswalk to Db",
+				"name": "Copy Competitor to Db",
 				"type": "Copy",
 				"dependsOn": [
 					{
@@ -757,7 +757,7 @@
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "Copy Crosswalk to Db",
+						"activity": "Copy Competitor to Db",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -808,7 +808,7 @@
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "Copy Crosswalk to Db",
+						"activity": "Copy Competitor to Db",
 						"dependencyConditions": [
 							"Failed"
 						]
