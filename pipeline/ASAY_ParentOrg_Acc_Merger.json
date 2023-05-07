@@ -1,0 +1,32 @@
+{
+	"name": "ASAY_ParentOrg_Acc_Merger",
+	"properties": {
+		"description": "This Pipeline will compare the current month contract info with last month contract info. ",
+		"activities": [
+			{
+				"name": "Qc_Parent_Org",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Competitor Analysis/QC_ParentOrg_Merger_Acq_Rename"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks4_pfcluster3",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"folder": {
+			"name": "Hwai_Refresh/Hwai_Competitor_analysis"
+		},
+		"annotations": []
+	}
+}
