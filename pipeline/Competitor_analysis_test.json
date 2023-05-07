@@ -228,8 +228,6 @@
 						"storeSettings": {
 							"type": "AzureBlobFSReadSettings",
 							"recursive": true,
-							"wildcardFolderPath": "Competitor_Analysis/Output/AllstateAllyears",
-							"wildcardFileName": "p*",
 							"enablePartitionDiscovery": false
 						},
 						"formatSettings": {
@@ -633,7 +631,7 @@
 							},
 							{
 								"source": {
-									"name": "GeographyID",
+									"name": "Geography_Id",
 									"type": "String",
 									"physicalType": "String"
 								},
