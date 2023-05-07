@@ -10,8 +10,8 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "AllstatesAllyears_April.csv",
-				"folderPath": "AllstateAllYears/ASAY_Directory",
+				"fileName": "AllstatesAllyears.csv",
+				"folderPath": "AllstateAllYears/ASAY_Directory/Output_Files",
 				"fileSystem": "hwaicontainer"
 			},
 			"columnDelimiter": ",",
