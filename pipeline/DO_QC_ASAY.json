@@ -1,5 +1,5 @@
 {
-	"name": "ASAY_ParentOrg_Acc_Merger",
+	"name": "DO_QC_ASAY",
 	"properties": {
 		"description": "This Pipeline will compare the current month contract info with last month contract info. ",
 		"activities": [
@@ -16,7 +16,7 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Competitor Analysis/QC_ParentOrg_Merger_Acq_Rename"
+					"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Competitor Analysis/ASAY-QC-PARENTORG-ACQ-MERGER"
 				},
 				"linkedServiceName": {
 					"referenceName": "AzureDatabricks4_pfcluster3",
