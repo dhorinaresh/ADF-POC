@@ -2,7 +2,7 @@
 	"name": "SqlServerTable4",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "datalake_sql_gw",
+			"referenceName": "datalake_sql",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
