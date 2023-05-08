@@ -727,7 +727,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "DELETE FROM HWAI_ASAY;\nSELECT TOP 10 * FROM HWAI_ASAY;",
+						"sqlReaderQuery": "TRUNCATE TABLE HWAI_ASAY;\nSELECT TOP 10 * FROM HWAI_ASAY;",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
