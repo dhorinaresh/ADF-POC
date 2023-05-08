@@ -501,7 +501,7 @@
 						"partitionOption": "None"
 					},
 					"dataset": {
-						"referenceName": "SqlServerTable5",
+						"referenceName": "SqlServerTable5a",
 						"type": "DatasetReference"
 					}
 				}
@@ -984,7 +984,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "SqlServerTable2",
+						"referenceName": "SqlServerTable2a",
 						"type": "DatasetReference"
 					}
 				]
