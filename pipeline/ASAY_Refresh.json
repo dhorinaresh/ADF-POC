@@ -357,7 +357,7 @@
 				}
 			},
 			{
-				"name": "send email update for crosswalk data load fail",
+				"name": "send email update for ASAY Pipeline fail",
 				"type": "WebActivity",
 				"dependsOn": [
 					{
@@ -385,7 +385,7 @@
 				}
 			},
 			{
-				"name": "send email update for ACrosswalk pipeline success",
+				"name": "send email update for ASAY Pipeline Success",
 				"type": "WebActivity",
 				"dependsOn": [
 					{
