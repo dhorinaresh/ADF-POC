@@ -1,0 +1,31 @@
+{
+	"name": "ASAY_QC",
+	"properties": {
+		"activities": [
+			{
+				"name": "Qc_Parent_Org",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Competitor Analysis/ASAY-QC-PARENTORG-ACQ-MERGER"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks4_pfcluster3",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"folder": {
+			"name": "Hwai_Refresh/Hwai_ASAY"
+		},
+		"annotations": []
+	}
+}
