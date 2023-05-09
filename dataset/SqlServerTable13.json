@@ -1,0 +1,12 @@
+{
+	"name": "SqlServerTable13",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "datalake_sql_gw",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": []
+	}
+}

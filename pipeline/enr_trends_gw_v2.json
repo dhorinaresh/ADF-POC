@@ -953,7 +953,7 @@
 						"partitionOption": "None"
 					},
 					"dataset": {
-						"referenceName": "SqlServerTable5",
+						"referenceName": "SqlServerTable11",
 						"type": "DatasetReference"
 					}
 				}
@@ -1338,7 +1338,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "SqlServerTable2",
+						"referenceName": "SqlServerTable12",
 						"type": "DatasetReference"
 					}
 				]
@@ -1397,7 +1397,7 @@
 						"partitionOption": "None"
 					},
 					"dataset": {
-						"referenceName": "SqlServerTable4",
+						"referenceName": "SqlServerTable13",
 						"type": "DatasetReference"
 					}
 				}
