@@ -66,7 +66,7 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Product_Insight/Product_Insight_script_testing_code"
+					"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Product_Insight/Product_Insight_script"
 				},
 				"linkedServiceName": {
 					"referenceName": "AzureDatabricks4_pfcluster3",
