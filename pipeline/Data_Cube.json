@@ -208,7 +208,7 @@
 				"type": "DatabricksNotebook",
 				"dependsOn": [
 					{
-						"activity": "start time update for datacube divide ",
+						"activity": "start time update for datacube divide",
 						"dependencyConditions": [
 							"Succeeded"
 						]
