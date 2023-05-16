@@ -1,0 +1,179 @@
+{
+	"name": "Azure_Tableau_Prod_Server",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Tableau_Prod_Sql_Server",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "Contract_ID",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Plan_ID",
+				"type": "nvarchar"
+			},
+			{
+				"name": "SSA_State_County_Code",
+				"type": "nvarchar"
+			},
+			{
+				"name": "FIPS_State_County_Code",
+				"type": "nvarchar"
+			},
+			{
+				"name": "State",
+				"type": "nvarchar"
+			},
+			{
+				"name": "County",
+				"type": "nvarchar"
+			},
+			{
+				"name": "enrollments",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "Parent_Organization",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Organization_Type",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Plan_Type",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Offers_Part_D",
+				"type": "nvarchar"
+			},
+			{
+				"name": "SNP_Plan",
+				"type": "nvarchar"
+			},
+			{
+				"name": "EGHP",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Organization_Name",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Organization_Marketing_Name",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Plan_Name",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Year",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "Month",
+				"type": "nvarchar"
+			},
+			{
+				"name": "ma_eligibles",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "key",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Special_Needs_Plan_Type",
+				"type": "nvarchar"
+			},
+			{
+				"name": "QMB only",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "QMB plus Full Medicaid Benefits",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "SLMB only",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "SLMB plus Full Medicaid Benefits",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "QDWI",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "QI",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "Other Dual Full Medicaid Benefit",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "SNP_Eligibles",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "MA Sales Region",
+				"type": "nvarchar"
+			},
+			{
+				"name": "MA Product Region",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Double County",
+				"type": "nvarchar"
+			},
+			{
+				"name": "POA",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Note",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Acquisition_Type",
+				"type": "nvarchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "ca_allstatesallyears"
+		}
+	}
+}
