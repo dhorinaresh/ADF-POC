@@ -1,0 +1,103 @@
+{
+	"name": "SqlServerTable14",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "datalake_Hwai",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "Contract_ID",
+				"type": "nvarchar"
+			},
+			{
+				"name": "County",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Month",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Offers_Part_D",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Organization_Marketing_Name",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Organization_Name",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Organization_Type",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Parent_Organization",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Plan_ID",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "Plan_Name",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Plan_Type",
+				"type": "nvarchar"
+			},
+			{
+				"name": "SNP_Plan",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Special_Needs_Plan_Type",
+				"type": "nvarchar"
+			},
+			{
+				"name": "State",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Year",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "Enrollments",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "Key_Cp_Id",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Termination Status",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Out of Area",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Star_Plan",
+				"type": "nvarchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "et_crosswalk_gw"
+		}
+	}
+}
