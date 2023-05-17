@@ -173,7 +173,7 @@
 		],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "ca_allstatesallyears"
+			"table": "winning_plans"
 		}
 	}
 }
