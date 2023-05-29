@@ -2,23 +2,52 @@
 	"name": "WinningPlans",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "Linked_service_AzureDataLakeStorage2",
+			"referenceName": "ET_Tech_Stack_Blob_Csv",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
 			"location": {
-				"type": "AzureBlobFSLocation",
-				"fileName": "enr_final2.csv",
-				"folderPath": "WinningPlans/Output",
-				"fileSystem": "hwaicontainer"
+				"type": "AzureBlobStorageLocation",
+				"fileName": "GlobalFiltersData.csv",
+				"folderPath": "EnrollmentTrendTechStack/Output",
+				"container": "hwaicontainer"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
 			"firstRowAsHeader": true,
 			"quoteChar": "\""
 		},
-		"schema": []
+		"schema": [
+			{
+				"name": "StateID",
+				"type": "String"
+			},
+			{
+				"name": "CountyID",
+				"type": "String"
+			},
+			{
+				"name": "OrganizationID",
+				"type": "String"
+			},
+			{
+				"name": "IndGrpPlansID",
+				"type": "String"
+			},
+			{
+				"name": "PlanTypeID",
+				"type": "String"
+			},
+			{
+				"name": "MAPDPID",
+				"type": "String"
+			},
+			{
+				"name": "SNPID",
+				"type": "String"
+			}
+		]
 	}
 }
