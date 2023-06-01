@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "EnrollmentTrendPlan.csv",
+				"fileName": "GlobalFiltersData.csv",
 				"folderPath": "EnrollmentTrendTechStack/Output",
 				"container": "hwaicontainer"
 			},
@@ -21,19 +21,31 @@
 		},
 		"schema": [
 			{
+				"name": "StateID",
+				"type": "String"
+			},
+			{
+				"name": "CountyID",
+				"type": "String"
+			},
+			{
 				"name": "OrganizationID",
 				"type": "String"
 			},
 			{
-				"name": "Year",
+				"name": "IndGrpPlansID",
 				"type": "String"
 			},
 			{
-				"name": "MonthNumber",
+				"name": "PlanTypeID",
 				"type": "String"
 			},
 			{
-				"name": "NoOfPlans",
+				"name": "MAPDPID",
+				"type": "String"
+			},
+			{
+				"name": "SNPID",
 				"type": "String"
 			}
 		]
