@@ -943,7 +943,7 @@
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "start time update_copy_Competitor_Analysis_data",
+						"activity": "Copy Competitor to Datalake DB",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -988,6 +988,99 @@
 						}
 					}
 				}
+			},
+			{
+				"name": "Truncate CA in datalake",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "start time update_copy_Competitor_Analysis_data",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": "Truncate table ca_allstatesallyears;\nSELECT TOP 10 * FROM ca_allstatesallyears;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "CA_datalake",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "Copy Competitor to Datalake DB",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Truncate CA in datalake",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"wildcardFolderPath": "Competitor_Analysis/Output/Competitor_Analysis",
+							"wildcardFileName": "p*",
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "SqlServerSink",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Competitor_final",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "CA_datalake",
+						"type": "DatasetReference"
+					}
+				]
 			}
 		],
 		"parameters": {
