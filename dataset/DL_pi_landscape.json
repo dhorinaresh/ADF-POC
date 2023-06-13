@@ -1,0 +1,16 @@
+{
+	"name": "DL_pi_landscape",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Datalake_HWai",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "pi_landscape_2023"
+		}
+	}
+}

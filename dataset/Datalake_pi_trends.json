@@ -1,0 +1,16 @@
+{
+	"name": "Datalake_pi_trends",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Datalake_HWai",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "pi_trends_2023"
+		}
+	}
+}
