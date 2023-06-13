@@ -1,0 +1,443 @@
+{
+	"name": "PI_trends_datalake",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "datalake_Hwai",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "State",
+				"type": "nvarchar"
+			},
+			{
+				"name": "County",
+				"type": "nvarchar"
+			},
+			{
+				"name": "bid_id",
+				"type": "nvarchar"
+			},
+			{
+				"name": "key_segment2",
+				"type": "nvarchar"
+			},
+			{
+				"name": "CP_ID_2021",
+				"type": "nvarchar"
+			},
+			{
+				"name": "statecode",
+				"type": "nvarchar"
+			},
+			{
+				"name": "plan_name",
+				"type": "nvarchar"
+			},
+			{
+				"name": "plan_type",
+				"type": "nvarchar"
+			},
+			{
+				"name": "parent_organization",
+				"type": "nvarchar"
+			},
+			{
+				"name": "SNP",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Special_Needs_Plan_Type",
+				"type": "nvarchar"
+			},
+			{
+				"name": "cp_id_2020",
+				"type": "nvarchar"
+			},
+			{
+				"name": "cp_id_2019",
+				"type": "nvarchar"
+			},
+			{
+				"name": "cp_id_2018",
+				"type": "nvarchar"
+			},
+			{
+				"name": "cp_id_2017",
+				"type": "nvarchar"
+			},
+			{
+				"name": "cp_id_2016",
+				"type": "nvarchar"
+			},
+			{
+				"name": "contract_id",
+				"type": "nvarchar"
+			},
+			{
+				"name": "plan_id",
+				"type": "nvarchar"
+			},
+			{
+				"name": "segment_id",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Monthly_Consolidated_Premium_C_D",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Annual_drug_deductible",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Overall_Star_Rating",
+				"type": "nvarchar"
+			},
+			{
+				"name": "partc_premium2",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "PartD_Total_Premium5",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "star_rating",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Premium_C_new",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Premium_D_new",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Year",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "April_2017",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "August_2017",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "December_2017",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "February_2017",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "January_2017",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "July_2017",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "June_2017",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "March_2017",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "May_2017",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "November_2017",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "October_2017",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "September_2017",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "April_2018",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "August_2018",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "December_2018",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "February_2018",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "January_2018",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "July_2018",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "June_2018",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "March_2018",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "May_2018",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "November_2018",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "October_2018",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "September_2018",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "April_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "August_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "December_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "February_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "January_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "July_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "June_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "March_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "May_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "November_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "October_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "September_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "January_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "February_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "March_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "April_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "May_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "June_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "July_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "August_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "September_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "October_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "November_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "December_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "January_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "February_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "March_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "April_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "May_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "June_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "July_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "August_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "September_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "October_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "November_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "December_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "In_network_MOOP_Amount",
+				"type": "float",
+				"precision": 15
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "pi_trends"
+		}
+	}
+}

@@ -1,0 +1,1350 @@
+{
+	"name": "PI_Lscape_datalake",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "datalake_Hwai",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "bid_id",
+				"type": "nvarchar"
+			},
+			{
+				"name": "State",
+				"type": "nvarchar"
+			},
+			{
+				"name": "County",
+				"type": "nvarchar"
+			},
+			{
+				"name": "CP_ID_2019",
+				"type": "nvarchar"
+			},
+			{
+				"name": "cp_id_2020",
+				"type": "nvarchar"
+			},
+			{
+				"name": "CP_ID_2021",
+				"type": "nvarchar"
+			},
+			{
+				"name": "statecode",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Contract_ID",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Plan_ID",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Segment_ID",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Organization_Name",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Plan_Name",
+				"type": "nvarchar"
+			},
+			{
+				"name": "plan_type",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Monthly_Consolidated_Premium_C_D",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "Drug_Benefit_Type",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Add_Cvrg_Offrd_in_Gap",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Drug_Benefit_Type_Detail",
+				"type": "nvarchar"
+			},
+			{
+				"name": "In_network_MOOP_Amount",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "Overall_Star_Rating",
+				"type": "nvarchar"
+			},
+			{
+				"name": "MMP",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Organization_Type",
+				"type": "nvarchar"
+			},
+			{
+				"name": "plan_type_p",
+				"type": "nvarchar"
+			},
+			{
+				"name": "PartD_Basic_Prm_Blw_Rgnl_bnchmrk",
+				"type": "nvarchar"
+			},
+			{
+				"name": "partc_premium2",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "PartD_Basic_Premium3",
+				"type": "nvarchar"
+			},
+			{
+				"name": "PartD_Supplemental_Premium4",
+				"type": "nvarchar"
+			},
+			{
+				"name": "PartD_Total_Premium5",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "PartD_Prm_oblgtn_Full_prm_assist",
+				"type": "nvarchar"
+			},
+			{
+				"name": "PartD_Prm_oblgtn_75_prm_assist",
+				"type": "nvarchar"
+			},
+			{
+				"name": "PartD_Prm_oblgtn_50_prm_assist",
+				"type": "nvarchar"
+			},
+			{
+				"name": "PartD_Prm_oblgtn_25_prm_assist",
+				"type": "nvarchar"
+			},
+			{
+				"name": "PartD_Drug_Deductible",
+				"type": "nvarchar"
+			},
+			{
+				"name": "key_segment2",
+				"type": "nvarchar"
+			},
+			{
+				"name": "star_rating",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "parent_organization",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Premium_C_new",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "Premium_D_new",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "SNP",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Special_Needs_Plan_Type",
+				"type": "nvarchar"
+			},
+			{
+				"name": "PartD",
+				"type": "nvarchar"
+			},
+			{
+				"name": "April_2017",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "August_2017",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "December_2017",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "February_2017",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "January_2017",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "July_2017",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "June_2017",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "March_2017",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "May_2017",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "November_2017",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "October_2017",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "September_2017",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "April_2018",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "August_2018",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "December_2018",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "February_2018",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "January_2018",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "July_2018",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "June_2018",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "March_2018",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "May_2018",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "November_2018",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "October_2018",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "September_2018",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "April_2019",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "August_2019",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "December_2019",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "February_2019",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "January_2019",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "July_2019",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "June_2019",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "March_2019",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "May_2019",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "November_2019",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "October_2019",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "September_2019",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "January_2020",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "February_2020",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "March_2020",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "April_2020",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "May_2020",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "June_2020",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "July_2020",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "August_2020",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "September_2020",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "October_2020",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "November_2020",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "December_2020",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "January_2021",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "February_2021",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "March_2021",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "April_2021",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "May_2021",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "June_2021",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "July_2021",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "August_2021",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "September_2021",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "October_2021",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "November_2021",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "December_2021",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "Inpatient_Hospital_YN",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "Snf_YN",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "Cardiac_YN",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "Emergency_YN",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "Chiropractor_YN",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "Podiatry_YN",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "Outpatient_Blood_Services_YN",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "Transportation_YN",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "Accupuncture_YN",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "Over_the_Counter_YN",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "Meal_Services_YN",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "Annual_Physical_Exam_YN",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "Pre_Dental_YN",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "Comp_Dental_YN",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "Eye_Exam_YN",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "Eye_Wear_YN",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "Hear_Exam_YN",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "Hear_Aid_YN",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "Giveback_YN",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Alternative_Therapy_YN",
+				"type": "nvarchar"
+			},
+			{
+				"name": "PERS_YN",
+				"type": "nvarchar"
+			},
+			{
+				"name": "flag",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Contract_Number_2020",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Plan_ID_2020",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Segment_ID_2020",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Organization_Marketing_Name_2020",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Plan_Name_2020",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Benefit_Year_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Inpatient_Hospital_Acute_Care_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Inpatient_Mental_Health_Care_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Skilled_Nursing_Facility_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Cardiac_Rehabilitation_Services_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Pulmonary_Rehab_Services_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Emergency_Care_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Urgently_Needed_Care_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Home_Health_Agency_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Primary_Care_Physician_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Chiropractic_Services_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Occupational_Therapy_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Physician_Specialists_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Outpatient_Mental_Health_Care_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Podiatry_Services_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Other_Health_Professionals_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Psychiatric_Care_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Physical_and_Speech_Therapy_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Outpatient_Lab_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Diagnostic_Tests_and_Procedures_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Therapeutic_Radiation_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Outpatient_X_Rays_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Diagnostic_Radiological_Services_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Outpatient_Hospital_Services_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Ambulatory_Surgical_Center_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Chemotherapy_Drugs_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Ambulance_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Durable_Medical_Equipment_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Prosthetic_Devices_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Renal_Dialysis_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Diabetes_Education_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Medicare_Covered_Part_B_Drugs_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Preventative_Dental_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Comprehensive_Dental_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Eye_Exams_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Hearing_Exams_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Opioid_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Total_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "PartD_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Grand_Total_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "PBP_Version_Date_2020",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Organization_Marketing_Name_2021",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Plan_Name_2021",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Benefit_Year_2021",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Inpatient_Hospital_Acute_Care_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Inpatient_Mental_Health_Care_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Skilled_Nursing_Facility_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Cardiac_Rehabilitation_Services_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Pulmonary_Rehab_Services_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Emergency_Care_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Urgently_Needed_Care_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Home_Health_Agency_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Primary_Care_Physician_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Chiropractic_Services_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Occupational_Therapy_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Physician_Specialists_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Outpatient_Mental_Health_Care_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Podiatry_Services_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Other_Health_Professionals_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Psychiatric_Care_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Physical_and_Speech_Therapy_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Outpatient_Lab_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Diagnostic_Tests_and_Procedures_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Therapeutic_Radiation_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Outpatient_X_Rays_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Diagnostic_Radiological_Services_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Outpatient_Hospital_Services_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Ambulatory_Surgical_Center_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Chemotherapy_Drugs_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Ambulance_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Durable_Medical_Equipment_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Prosthetic_Devices_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Renal_Dialysis_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Diabetes_Education_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Medicare_Covered_Part_B_Drugs_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Preventative_Dental_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Comprehensive_Dental_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Eye_Exams_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Hearing_Exams_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Opioid_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Total_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "PartD_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Grand_Total_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "PBP_Version_Date_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "description",
+				"type": "nvarchar"
+			},
+			{
+				"name": "All_Other_Services_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Ambulance_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Ambulatory_Surgical_Center_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Benefit_Year_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Cardiac_Rehabilitation_Services_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Chemotherapy_Drugs_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Chiropractic_Services_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Comprehensive_Dental_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Contract_Number_2019",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Dental_Services_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Diabetes_Education_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Diagnostic_Radiological_Services_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Diagnostic_Tests_and_Procedures_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Durable_Medical_Equipment_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Emergency_Care_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Eye_Exams_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Grand_Total_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Hearing_Exams_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Home_Health_Agency_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Inpatient_Hospital_Acute_Care_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Inpatient_Mental_Health_Care_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Inpatient_Services_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Medicare_Covered_Part_B_Drugs_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Occupational_Therapy_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Other_Health_Professionals_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Outpatient_Hospital_Services_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Outpatient_Lab_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Outpatient_Mental_Health_Care_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Outpatient_X_Rays_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "PartD_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "pbp_d_mco_pay_reduct_amt_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Persona_2019",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Physical_and_Speech_Therapy_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Physician_Specialists_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Podiatry_Services_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Preventative_Dental_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Primary_Care_Physician_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Prosthetic_Devices_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Psychiatric_Care_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Pulmonary_Rehab_Services_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Renal_Dialysis_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Skilled_Nursing_Facility_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Therapeutic_Radiation_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Total_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Urgently_Needed_Care_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "health_deductible",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Annual_Drug_Deductible",
+				"type": "nvarchar"
+			},
+			{
+				"name": "PDSS_YN",
+				"type": "nvarchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "pi_landscape"
+		}
+	}
+}

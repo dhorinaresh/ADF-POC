@@ -1,0 +1,315 @@
+{
+	"name": "PI_pivot_datalake",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "datalake_Hwai",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "bid_id",
+				"type": "nvarchar"
+			},
+			{
+				"name": "State",
+				"type": "nvarchar"
+			},
+			{
+				"name": "County",
+				"type": "nvarchar"
+			},
+			{
+				"name": "CP_ID_2019",
+				"type": "nvarchar"
+			},
+			{
+				"name": "cp_id_2020",
+				"type": "nvarchar"
+			},
+			{
+				"name": "CP_ID_2021",
+				"type": "nvarchar"
+			},
+			{
+				"name": "statecode",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Contract_ID",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Plan_ID",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Segment_ID",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Organization_Name",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Plan_Name",
+				"type": "nvarchar"
+			},
+			{
+				"name": "plan_type",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Monthly_Consolidated_Premium_C_D",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "Drug_Benefit_Type",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Add_Cvrg_Offrd_in_Gap",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Drug_Benefit_Type_Detail",
+				"type": "nvarchar"
+			},
+			{
+				"name": "In_network_MOOP_Amount",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "Overall_Star_Rating",
+				"type": "nvarchar"
+			},
+			{
+				"name": "MMP",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Organization_Type",
+				"type": "nvarchar"
+			},
+			{
+				"name": "plan_type_p",
+				"type": "nvarchar"
+			},
+			{
+				"name": "PartD_Basic_Prm_Blw_Rgnl_bnchmrk",
+				"type": "nvarchar"
+			},
+			{
+				"name": "partc_premium2",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "PartD_Basic_Premium3",
+				"type": "nvarchar"
+			},
+			{
+				"name": "PartD_Supplemental_Premium4",
+				"type": "nvarchar"
+			},
+			{
+				"name": "PartD_Total_Premium5",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "PartD_Prm_oblgtn_Full_prm_assist",
+				"type": "nvarchar"
+			},
+			{
+				"name": "PartD_Prm_oblgtn_75_prm_assist",
+				"type": "nvarchar"
+			},
+			{
+				"name": "PartD_Prm_oblgtn_50_prm_assist",
+				"type": "nvarchar"
+			},
+			{
+				"name": "PartD_Prm_oblgtn_25_prm_assist",
+				"type": "nvarchar"
+			},
+			{
+				"name": "PartD_Drug_Deductible",
+				"type": "nvarchar"
+			},
+			{
+				"name": "key_segment2",
+				"type": "nvarchar"
+			},
+			{
+				"name": "star_rating",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "parent_organization",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Premium_C_new",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "Premium_D_new",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "SNP",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Special_Needs_Plan_Type",
+				"type": "nvarchar"
+			},
+			{
+				"name": "PartD",
+				"type": "nvarchar"
+			},
+			{
+				"name": "August_2020",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "September_2020",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "October_2020",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "November_2020",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "December_2020",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "January_2021",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "February_2021",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "March_2021",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "April_2021",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "May_2021",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "June_2021",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "July_2021",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "August_2021",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "September_2021",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "October_2021",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "November_2021",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "December_2021",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "description",
+				"type": "nvarchar"
+			},
+			{
+				"name": "health_deductible",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Annual_Drug_Deductible",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Pivot_Field_Names",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Pivot_Field_Values",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "pi_pivot"
+		}
+	}
+}
