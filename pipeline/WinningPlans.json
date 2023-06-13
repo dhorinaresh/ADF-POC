@@ -259,7 +259,7 @@
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "start time update_data_upload_DB",
+						"activity": "Copy WinningPlans to DL DB",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -1994,6 +1994,109 @@
 						"type": "Expression"
 					}
 				}
+			},
+			{
+				"name": "Delete Existing record from DL DB",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "start time update_data_upload_DB",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": "Truncate table winning_plans;\nSELECT TOP 10 * FROM winning_plans;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "WP_Datalake",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "Copy WinningPlans to DL DB",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Delete Existing record from DL DB",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [
+					{
+						"name": "Source",
+						"value": "hwaicontainer/WinningPlans/Output/enr_final2.csv"
+					},
+					{
+						"name": "Destination",
+						"value": "dbo.@{'winning_plans'}"
+					}
+				],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"modifiedDatetimeStart": "2023-03-07T00:00:00.000Z",
+							"wildcardFolderPath": "WinningPlans/Output",
+							"wildcardFileName": "enr_final2.csv",
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "SqlServerSink",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "WinningPlans",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "WP_Datalake",
+						"type": "DatasetReference"
+					}
+				]
 			}
 		],
 		"parameters": {

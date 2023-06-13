@@ -1,0 +1,604 @@
+{
+	"name": "WP_Datalake",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Datalake_HWai",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "State",
+				"type": "nvarchar"
+			},
+			{
+				"name": "County",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Statecode",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Plan_Name",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Plan_Type",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Bid_ID",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Special_Needs_Plan_Type",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Key_Segment",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Parent_Organization",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Monthly_Consolidated_Premium_C_D",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Annual_Drug_Deductible",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Deductible_Health",
+				"type": "nvarchar"
+			},
+			{
+				"name": "MOOP",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Star_rating",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Inpatient Hospital-Acute Copay Tier 1",
+				"type": "nvarchar"
+			},
+			{
+				"name": "SNF MC stay Tier1 Copay",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Cardiac and Pulmonary Rehabilitation Services Coinsurance/Copay",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Emergency Care Coinsurance/Copay",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Transport Coinsurance/Copay",
+				"type": "nvarchar"
+			},
+			{
+				"name": "OTC Coinsurance/Copay",
+				"type": "nvarchar"
+			},
+			{
+				"name": "OTC Max Coverage Amt",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Meal Benefit Coinsurance/Copay",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Preventive Dental Coinsurance/Copay",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Comprehensive Dental Coinsurance/Copay",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Eye Exams Coinsurance/Copay",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Eyewear Coinsurance/Copay",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Hearing Aids Coinsurance/Copay",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Hearing Exams Coinsurance/Copay",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Chiropractic Services Coinsurance/Copay",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Podiatry Services Coinsurance/Copay",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Acupuncture Coinsurance/Copay",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Annual Physical Exam Coinsurance/Copay",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Outpatient Blood Services Coinsurance/Copay",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Alternative Therapy Coins/Copay",
+				"type": "nvarchar"
+			},
+			{
+				"name": "PERS Coins/Copay",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Grand_Total",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Inpatient_Hospital_YN",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "Snf_YN",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "Cardiac_YN",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "Emergency_YN",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "Chiropractor_YN",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "Podiatry_YN",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "Outpatient_Blood_Services_YN",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "Transportation_YN",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "Accupuncture_YN",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "Over_the_Counter_YN",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "Meal_Services_YN",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "Annual_Physical_Exam_YN",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "Pre_Dental_YN",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "Comp_Dental_YN",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "Eye_Exam_YN",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "Eye_Wear_YN",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "Hear_Exam_YN",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "Hear_Aid_YN",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "Giveback_YN",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "Alternative_Therapy_YN",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "PERS_YN",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "PDSS_YN",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "DESCRIPTION",
+				"type": "nvarchar"
+			},
+			{
+				"name": "pbp_d_mco_pay_reduct_amt",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "April_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "August_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "December_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "February_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "January_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "July_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "June_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "March_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "May_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "November_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "October_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "September_2019",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "January_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "February_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "March_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "April_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "May_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "June_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "July_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "August_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "September_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "October_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "November_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "December_2020",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "January_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "February_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "March_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "April_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "May_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "June_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "July_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "August_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "September_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "October_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "November_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "December_2021",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "January_2022",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "February_2022",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "March_2022",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "April_2022",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "May_2022",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "June_2022",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "July_2022",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "August_2022",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "September_2022",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "October_2022",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "November_2022",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "December_2022",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "January_2023",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "February_2023",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "March_2023",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "April_2023",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "May_2023",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "June_2023",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "July_2023",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "August_2023",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "September_2023",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "October_2023",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "November_2023",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "December_2023",
+				"type": "float",
+				"precision": 15
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "winning_plans"
+		}
+	}
+}
