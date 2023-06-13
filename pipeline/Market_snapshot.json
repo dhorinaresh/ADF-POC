@@ -1363,7 +1363,7 @@
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "start time update_copy_MS_data",
+						"activity": "Copy MS data to DatalakeDB",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -1408,6 +1408,99 @@
 						}
 					}
 				}
+			},
+			{
+				"name": "Truncate table MS Datalake",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "start time update_copy_MS_data",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": "Truncate table ms_allstatesallyears;\nSelect Top 10 * from ms_allstatesallyears;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "MS_Datalake",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "Copy MS data to DatalakeDB",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Truncate table MS Datalake",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"wildcardFolderPath": "Market_Snapshot/Output/MS_Final_Dataset",
+							"wildcardFileName": "p*",
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "SqlServerSink",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Crosswalk",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "MS_Datalake",
+						"type": "DatasetReference"
+					}
+				]
 			}
 		],
 		"parameters": {
