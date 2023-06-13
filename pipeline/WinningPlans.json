@@ -259,7 +259,7 @@
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "start time update_data_upload_DB",
+						"activity": "Copy WinningPlans to Datalake DB",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -337,7 +337,7 @@
 					"source": {
 						"type": "DelimitedTextSource",
 						"storeSettings": {
-							"type": "AzureBlobFSReadSettings",
+							"type": "AzureBlobStorageReadSettings",
 							"recursive": true,
 							"modifiedDatetimeStart": "2023-03-07T00:00:00.000Z",
 							"wildcardFolderPath": "WinningPlans/Output",
@@ -1994,6 +1994,1595 @@
 						"type": "Expression"
 					}
 				}
+			},
+			{
+				"name": "Delete Existing record from Datalake DB",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "start time update_data_upload_DB",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": "Truncate table WinningPlans;\nSELECT TOP 10 * FROM WinningPlans;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "WP_Datalake",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "Copy WinningPlans to Datalake DB",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Delete Existing record from Datalake DB",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [
+					{
+						"name": "Source",
+						"value": "hwaicontainer/WinningPlans/Output/enr_final2.csv"
+					},
+					{
+						"name": "Destination",
+						"value": "dbo.@{'WinningPlans'}"
+					}
+				],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true,
+							"modifiedDatetimeStart": "2023-03-07T00:00:00.000Z",
+							"wildcardFolderPath": "WinningPlans/Output",
+							"wildcardFileName": "enr_final2.csv",
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "SqlServerSink",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "State",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "State",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "County",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "County",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Statecode",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Statecode",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Plan_Name",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Plan_Name",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Plan_Type",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Plan_Type",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Bid_ID",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Bid_ID",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Special_Needs_Plan_Type",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Special_Needs_Plan_Type",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Key_Segment",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Key_Segment",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Parent_Organization",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Parent_Organization",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Monthly_Consolidated_Premium_C_D",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Monthly_Consolidated_Premium_C_D",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Annual_Drug_Deductible",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Annual_Drug_Deductible",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Deductible_Health",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Deductible_Health",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "MOOP",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "MOOP",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Star_rating",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Star_rating",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Inpatient Hospital-Acute Copay Tier 1",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Inpatient Hospital-Acute Copay Tier 1",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "SNF MC stay Tier1 Copay",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SNF MC stay Tier1 Copay",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Cardiac and Pulmonary Rehabilitation Services Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Cardiac and Pulmonary Rehabilitation Services Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Emergency Care Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Emergency Care Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Transport Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Transport Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "OTC Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "OTC Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "OTC Max Coverage Amt",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "OTC Max Coverage Amt",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Meal Benefit Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Meal Benefit Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Preventive Dental Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Preventive Dental Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Comprehensive Dental Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Comprehensive Dental Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Eye Exams Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Eye Exams Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Eyewear Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Eyewear Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Hearing Aids Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Hearing Aids Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Hearing Exams Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Hearing Exams Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Chiropractic Services Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Chiropractic Services Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Podiatry Services Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Podiatry Services Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Acupuncture Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Acupuncture Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Annual Physical Exam Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Annual Physical Exam Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Outpatient Blood Services Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Outpatient Blood Services Coinsurance/Copay",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Alternative Therapy Coins/Copay",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Alternative Therapy Coins/Copay",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "PERS Coins/Copay",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PERS Coins/Copay",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Grand_Total",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Grand_Total",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "Inpatient_Hospital_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Inpatient_Hospital_YN",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Snf_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Snf_YN",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Cardiac_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Cardiac_YN",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Emergency_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Emergency_YN",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Chiropractor_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Chiropractor_YN",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Podiatry_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Podiatry_YN",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Outpatient_Blood_Services_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Outpatient_Blood_Services_YN",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Transportation_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Transportation_YN",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Accupuncture_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Accupuncture_YN",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Over_the_Counter_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Over_the_Counter_YN",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Meal_Services_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Meal_Services_YN",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Annual_Physical_Exam_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Annual_Physical_Exam_YN",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Pre_Dental_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Pre_Dental_YN",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Comp_Dental_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Comp_Dental_YN",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Eye_Exam_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Eye_Exam_YN",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Eye_Wear_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Eye_Wear_YN",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Hear_Exam_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Hear_Exam_YN",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Hear_Aid_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Hear_Aid_YN",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Giveback_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Giveback_YN",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Alternative_Therapy_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Alternative_Therapy_YN",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "PERS_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PERS_YN",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "PDSS_YN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PDSS_YN",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "DESCRIPTION",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "DESCRIPTION",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "pbp_d_mco_pay_reduct_amt",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "pbp_d_mco_pay_reduct_amt",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "April_2019",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "April_2019",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "August_2019",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "August_2019",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "December_2019",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "December_2019",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "February_2019",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "February_2019",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "January_2019",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "January_2019",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "July_2019",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "July_2019",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "June_2019",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "June_2019",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "March_2019",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "March_2019",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "May_2019",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "May_2019",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "November_2019",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "November_2019",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "October_2019",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "October_2019",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "September_2019",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "September_2019",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "January_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "January_2020",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "February_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "February_2020",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "March_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "March_2020",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "April_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "April_2020",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "May_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "May_2020",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "June_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "June_2020",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "July_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "July_2020",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "August_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "August_2020",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "September_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "September_2020",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "October_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "October_2020",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "November_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "November_2020",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "December_2020",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "December_2020",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "January_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "January_2021",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "February_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "February_2021",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "March_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "March_2021",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "April_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "April_2021",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "May_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "May_2021",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "June_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "June_2021",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "July_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "July_2021",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "August_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "August_2021",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "September_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "September_2021",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "October_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "October_2021",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "November_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "November_2021",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "December_2021",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "December_2021",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "January_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "January_2022",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "February_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "February_2022",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "March_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "March_2022",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "April_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "April_2022",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "May_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "May_2022",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "June_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "June_2022",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "July_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "July_2022",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "August_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "August_2022",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "September_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "September_2022",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "October_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "October_2022",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "November_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "November_2022",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "December_2022",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "December_2022",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "January_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "January_2023",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "February_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "February_2023",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "March_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "March_2023",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "April_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "April_2023",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "May_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "May_2023",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "June_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "June_2023",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "July_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "July_2023",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "August_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "August_2023",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "September_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "September_2023",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "October_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "October_2023",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "November_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "November_2023",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "December_2023",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "December_2023",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "WinningPlans",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "WP_Datalake",
+						"type": "DatasetReference"
+					}
+				]
 			}
 		],
 		"parameters": {
