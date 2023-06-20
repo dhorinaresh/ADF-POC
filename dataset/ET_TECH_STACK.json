@@ -9,9 +9,19 @@
 		"type": "AzureSqlTable",
 		"schema": [
 			{
-				"name": "ETKey",
-				"type": "bigint",
-				"precision": 19
+				"name": "FilterID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "StateID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "CountyID",
+				"type": "int",
+				"precision": 10
 			},
 			{
 				"name": "OrganizationID",
@@ -19,24 +29,29 @@
 				"precision": 10
 			},
 			{
-				"name": "Year",
+				"name": "IndGrpPlansID",
 				"type": "int",
 				"precision": 10
 			},
 			{
-				"name": "MonthNumber",
+				"name": "PlanTypeID",
 				"type": "int",
 				"precision": 10
 			},
 			{
-				"name": "NoOfPlans",
+				"name": "MAPDPID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "SNPID",
 				"type": "int",
 				"precision": 10
 			}
 		],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "EnrollmentTrendsTerminatedPlans"
+			"table": "FiltersMapping"
 		}
 	},
 	"type": "Microsoft.DataFactory/factories/datasets"
