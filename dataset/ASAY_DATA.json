@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "EtTerminatedPlan.csv",
+				"fileName": "GlobalFiltersData.csv",
 				"folderPath": "EnrollmentTrendTechStack/Output",
 				"fileSystem": "hwaicontainer"
 			},
@@ -21,11 +21,31 @@
 		},
 		"schema": [
 			{
-				"name": "BidId",
+				"name": "StateID",
 				"type": "String"
 			},
 			{
-				"name": "Isterminated",
+				"name": "CountyID",
+				"type": "String"
+			},
+			{
+				"name": "OrganizationID",
+				"type": "String"
+			},
+			{
+				"name": "IndGrpPlansID",
+				"type": "String"
+			},
+			{
+				"name": "PlanTypeID",
+				"type": "String"
+			},
+			{
+				"name": "MAPDPID",
+				"type": "String"
+			},
+			{
+				"name": "SNPID",
 				"type": "String"
 			}
 		]
