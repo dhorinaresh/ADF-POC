@@ -50,5 +50,6 @@
 			"schema": "dbo",
 			"table": "HWAI_Enrollments"
 		}
-	}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
 }

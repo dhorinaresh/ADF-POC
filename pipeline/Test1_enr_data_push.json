@@ -501,7 +501,7 @@
 						"partitionOption": "None"
 					},
 					"dataset": {
-						"referenceName": "SqlServerTable5a",
+						"referenceName": "SqlServerTable5",
 						"type": "DatasetReference"
 					}
 				}
@@ -984,7 +984,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "SqlServerTable2a",
+						"referenceName": "SqlServerTable2",
 						"type": "DatasetReference"
 					}
 				]
@@ -1011,6 +1011,8 @@
 		"folder": {
 			"name": "Hwai_Refresh/Hwai_enr_trends/enr_trends_data_check/temp_data_checks"
 		},
-		"annotations": []
-	}
+		"annotations": [],
+		"lastPublishTime": "2023-04-26T12:55:43Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
 }

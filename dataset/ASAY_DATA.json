@@ -10,8 +10,8 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "AllstatesAllyears.csv",
-				"folderPath": "AllstateAllYears/ASAY_Directory/Output_Files",
+				"fileName": "EtTerminatedPlan.csv",
+				"folderPath": "EnrollmentTrendTechStack/Output",
 				"fileSystem": "hwaicontainer"
 			},
 			"columnDelimiter": ",",
@@ -21,137 +21,14 @@
 		},
 		"schema": [
 			{
-				"name": "Contract_ID",
+				"name": "BidId",
 				"type": "String"
 			},
 			{
-				"name": "Plan_ID",
-				"type": "String"
-			},
-			{
-				"name": "SSA_State_County_Code",
-				"type": "String"
-			},
-			{
-				"name": "FIPS_State_County_Code",
-				"type": "String"
-			},
-			{
-				"name": "State",
-				"type": "String"
-			},
-			{
-				"name": "County",
-				"type": "String"
-			},
-			{
-				"name": "enrollments",
-				"type": "String"
-			},
-			{
-				"name": "Parent_Organization",
-				"type": "String"
-			},
-			{
-				"name": "Organization_Type",
-				"type": "String"
-			},
-			{
-				"name": "Plan_Type",
-				"type": "String"
-			},
-			{
-				"name": "Offers_Part_D",
-				"type": "String"
-			},
-			{
-				"name": "SNP_Plan",
-				"type": "String"
-			},
-			{
-				"name": "EGHP",
-				"type": "String"
-			},
-			{
-				"name": "Organization_Name",
-				"type": "String"
-			},
-			{
-				"name": "Organization_Marketing_Name",
-				"type": "String"
-			},
-			{
-				"name": "Plan_Name",
-				"type": "String"
-			},
-			{
-				"name": "Year",
-				"type": "String"
-			},
-			{
-				"name": "Month",
-				"type": "String"
-			},
-			{
-				"name": "ma_eligibles",
-				"type": "String"
-			},
-			{
-				"name": "key",
-				"type": "String"
-			},
-			{
-				"name": "Special_Needs_Plan_Type",
-				"type": "String"
-			},
-			{
-				"name": "QMB only",
-				"type": "String"
-			},
-			{
-				"name": "QMB plus Full Medicaid Benefits",
-				"type": "String"
-			},
-			{
-				"name": "SLMB only",
-				"type": "String"
-			},
-			{
-				"name": "SLMB plus Full Medicaid Benefits",
-				"type": "String"
-			},
-			{
-				"name": "QDWI",
-				"type": "String"
-			},
-			{
-				"name": "QI",
-				"type": "String"
-			},
-			{
-				"name": "Other Dual Full Medicaid Benefit",
-				"type": "String"
-			},
-			{
-				"name": "SNP_Eligibles",
-				"type": "String"
-			},
-			{
-				"name": "MA Sales Region",
-				"type": "String"
-			},
-			{
-				"name": "MA Product Region",
-				"type": "String"
-			},
-			{
-				"name": "Double County",
-				"type": "String"
-			},
-			{
-				"name": "cpid",
+				"name": "Isterminated",
 				"type": "String"
 			}
 		]
-	}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
 }

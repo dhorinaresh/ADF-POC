@@ -47,11 +47,38 @@
 				}
 			},
 			{
+				"name": "Competitor_Analysis_file_processing",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "start time update",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Competitor Analysis/Competitor_Analysis"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks4_pfcluster3",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
 				"name": "end time update for Competitor_Analysis_file_processing",
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "Competitor_Analysis_Final",
+						"activity": "Competitor_Analysis_file_processing",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -102,7 +129,7 @@
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "Competitor_Analysis_Final",
+						"activity": "Competitor_Analysis_file_processing",
 						"dependencyConditions": [
 							"Failed"
 						]
@@ -149,7 +176,7 @@
 				}
 			},
 			{
-				"name": "Copy Competitor to Db",
+				"name": "Copy Crosswalk to Db",
 				"type": "Copy",
 				"dependsOn": [
 					{
@@ -679,7 +706,7 @@
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "end time update for Competitor_Analysis_file_processing",
+						"activity": "Competitor_Analysis_Final",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -730,7 +757,7 @@
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "Copy Competitor to Db",
+						"activity": "Copy Crosswalk to Db",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -781,7 +808,7 @@
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "Copy Competitor to Db",
+						"activity": "Copy Crosswalk to Db",
 						"dependencyConditions": [
 							"Failed"
 						]
@@ -912,11 +939,144 @@
 				}
 			},
 			{
+				"name": "Copy ASAY DATA to DB",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Delete record from existing table",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"wildcardFolderPath": "Competitor_Analysis/Output/AllstateAllyears",
+							"wildcardFileName": "p*",
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false,
+						"tableOption": "autoCreate",
+						"disableMetricsCollection": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "ASAY_DATA",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "dataset_sql",
+						"type": "DatasetReference",
+						"parameters": {
+							"sql_server_dataset": {
+								"value": "@pipeline().parameters.sql_server_dataset_name",
+								"type": "Expression"
+							},
+							"db_name_dataset": {
+								"value": "@pipeline().parameters.db_name",
+								"type": "Expression"
+							},
+							"user_name_dataset": {
+								"value": "@pipeline().parameters.user_name",
+								"type": "Expression"
+							},
+							"password_dataset": {
+								"value": "@pipeline().parameters.password",
+								"type": "Expression"
+							},
+							"sql_table_name": "HWAI_ASAY"
+						}
+					}
+				]
+			},
+			{
+				"name": "Delete record from existing table",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "end time update for Competitor_Analysis_file_processing",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "DELETE FROM HWAI_ASAY where Month = (SELECT DATENAME(month,GETDATE())) and Year = (SELECT YEAR(GETDATE()));\nSELECT TOP 10 * FROM HWAI_ASAY;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "dataset_sql",
+						"type": "DatasetReference",
+						"parameters": {
+							"sql_server_dataset": {
+								"value": "@pipeline().parameters.sql_server_dataset_name",
+								"type": "Expression"
+							},
+							"db_name_dataset": {
+								"value": "@pipeline().parameters.db_name",
+								"type": "Expression"
+							},
+							"user_name_dataset": {
+								"value": "@pipeline().parameters.user_name",
+								"type": "Expression"
+							},
+							"password_dataset": {
+								"value": "@pipeline().parameters.password",
+								"type": "Expression"
+							},
+							"sql_table_name": "HWAI_ASAY"
+						}
+					}
+				}
+			},
+			{
 				"name": "Competitor_Analysis_Final",
 				"type": "DatabricksNotebook",
 				"dependsOn": [
 					{
-						"activity": "start time update",
+						"activity": "Copy ASAY DATA to DB",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -943,7 +1103,7 @@
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "Copy Competitor to Datalake DB",
+						"activity": "start time update_copy_Competitor_Analysis_data",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -988,99 +1148,6 @@
 						}
 					}
 				}
-			},
-			{
-				"name": "Truncate CA in datalake",
-				"type": "Lookup",
-				"dependsOn": [
-					{
-						"activity": "start time update_copy_Competitor_Analysis_data",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"policy": {
-					"timeout": "0.12:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"source": {
-						"type": "SqlServerSource",
-						"sqlReaderQuery": "Truncate table ca_allstatesallyears;\nSELECT TOP 10 * FROM ca_allstatesallyears;",
-						"queryTimeout": "02:00:00",
-						"partitionOption": "None"
-					},
-					"dataset": {
-						"referenceName": "CA_datalake",
-						"type": "DatasetReference"
-					}
-				}
-			},
-			{
-				"name": "Copy Competitor to Datalake DB",
-				"type": "Copy",
-				"dependsOn": [
-					{
-						"activity": "Truncate CA in datalake",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"policy": {
-					"timeout": "0.12:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"source": {
-						"type": "DelimitedTextSource",
-						"storeSettings": {
-							"type": "AzureBlobFSReadSettings",
-							"recursive": true,
-							"wildcardFolderPath": "Competitor_Analysis/Output/Competitor_Analysis",
-							"wildcardFileName": "p*",
-							"enablePartitionDiscovery": false
-						},
-						"formatSettings": {
-							"type": "DelimitedTextReadSettings"
-						}
-					},
-					"sink": {
-						"type": "SqlServerSink",
-						"writeBehavior": "insert",
-						"sqlWriterUseTableLock": false
-					},
-					"enableStaging": false,
-					"translator": {
-						"type": "TabularTranslator",
-						"typeConversion": true,
-						"typeConversionSettings": {
-							"allowDataTruncation": true,
-							"treatBooleanAsNumber": false
-						}
-					}
-				},
-				"inputs": [
-					{
-						"referenceName": "Competitor_final",
-						"type": "DatasetReference"
-					}
-				],
-				"outputs": [
-					{
-						"referenceName": "CA_datalake",
-						"type": "DatasetReference"
-					}
-				]
 			}
 		],
 		"parameters": {
@@ -1105,7 +1172,7 @@
 			"name": "Hwai_Refresh/Hwai_Competitor_analysis"
 		},
 		"annotations": [],
-		"lastPublishTime": "2023-03-17T04:36:04Z"
+		"lastPublishTime": "2023-04-18T12:23:03Z"
 	},
 	"type": "Microsoft.DataFactory/factories/pipelines"
 }

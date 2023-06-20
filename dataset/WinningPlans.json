@@ -2,40 +2,24 @@
 	"name": "WinningPlans",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "ET_Tech_Stack_Blob_Csv",
+			"referenceName": "Linked_service_AzureDataLakeStorage2",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
 			"location": {
-				"type": "AzureBlobStorageLocation",
-				"fileName": "EnrollmentTrendPlan.csv",
-				"folderPath": "EnrollmentTrendTechStack/Output",
-				"container": "hwaicontainer"
+				"type": "AzureBlobFSLocation",
+				"fileName": "enr_final2.csv",
+				"folderPath": "WinningPlans/Output",
+				"fileSystem": "hwaicontainer"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
 			"firstRowAsHeader": true,
 			"quoteChar": "\""
 		},
-		"schema": [
-			{
-				"name": "OrganizationID",
-				"type": "String"
-			},
-			{
-				"name": "Year",
-				"type": "String"
-			},
-			{
-				"name": "MonthNumber",
-				"type": "String"
-			},
-			{
-				"name": "NoOfPlans",
-				"type": "String"
-			}
-		]
-	}
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
 }

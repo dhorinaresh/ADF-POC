@@ -2,7 +2,7 @@
 	"name": "SqlServerTable2",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "sql_analytics_HWAIETDB",
+			"referenceName": "sql_analytics_HWAIETV2DB",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
@@ -138,7 +138,8 @@
 		],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "Trends_CW_withpredictions"
+			"table": "Trends_CW_withpredictions_backup"
 		}
-	}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
 }

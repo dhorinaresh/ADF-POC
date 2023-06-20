@@ -198,6 +198,12 @@
 						]
 					}
 				],
+				"policy": {
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
 				"userProperties": [],
 				"typeProperties": {
 					"variableName": "UserId",
@@ -218,6 +224,12 @@
 						]
 					}
 				],
+				"policy": {
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
 				"userProperties": [],
 				"typeProperties": {
 					"variableName": "v2",
@@ -249,7 +261,10 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "DELETE FROM OrgUser WHERE UserId NOT IN (@{variables('v2')});\r\nselect 1 as abc;",
+						"sqlReaderQuery": {
+							"value": "DELETE FROM OrgUser WHERE UserId NOT IN (@{variables('v2')});\r\nselect 1 as abc;",
+							"type": "Expression"
+						},
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -269,6 +284,8 @@
 				"type": "String"
 			}
 		},
-		"annotations": []
-	}
+		"annotations": [],
+		"lastPublishTime": "2023-04-26T12:55:43Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
 }

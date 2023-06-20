@@ -319,5 +319,6 @@
 			"schema": "dbo",
 			"table": "ms_allstatesallyears_az"
 		}
-	}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
 }

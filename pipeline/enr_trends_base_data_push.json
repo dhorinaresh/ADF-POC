@@ -486,6 +486,8 @@
 		"folder": {
 			"name": "Hwai_Refresh/Hwai_enr_trends/enr_trends_data_check"
 		},
-		"annotations": []
-	}
+		"annotations": [],
+		"lastPublishTime": "2023-04-18T12:23:03Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
 }

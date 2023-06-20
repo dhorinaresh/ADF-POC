@@ -65,5 +65,6 @@
 			"schema": "dbo",
 			"table": "Eligible"
 		}
-	}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
 }

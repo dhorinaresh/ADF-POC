@@ -495,7 +495,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "DELETE FROM HWAI_Enrollments where Month = (SELECT DATENAME(month,GETDATE()-15)) and Year = (SELECT YEAR(GETDATE()));\nSELECT TOP 10 * FROM HWAI_Enrollments;",
+						"sqlReaderQuery": "DELETE FROM HWAI_Enrollments where Month = (SELECT DATENAME(month,GETDATE())) and Year = (SELECT YEAR(GETDATE()));\nSELECT TOP 10 * FROM HWAI_Enrollments;",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -546,6 +546,8 @@
 		"folder": {
 			"name": "Hwai_Refresh/Hwai_enr"
 		},
-		"annotations": []
-	}
+		"annotations": [],
+		"lastPublishTime": "2023-04-18T12:23:03Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
 }

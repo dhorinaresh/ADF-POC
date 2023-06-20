@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "ET_TechStack_Data_Push",
+				"name": "test_copy_data",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
@@ -18,7 +18,7 @@
 					"source": {
 						"type": "DelimitedTextSource",
 						"storeSettings": {
-							"type": "AzureBlobStorageReadSettings",
+							"type": "AzureBlobFSReadSettings",
 							"recursive": true,
 							"enablePartitionDiscovery": false
 						},
@@ -28,6 +28,7 @@
 					},
 					"sink": {
 						"type": "AzureSqlSink",
+						"preCopyScript": "truncate table winning_plans",
 						"writeBehavior": "insert",
 						"sqlWriterUseTableLock": false,
 						"disableMetricsCollection": false
@@ -35,56 +36,6 @@
 					"enableStaging": false,
 					"translator": {
 						"type": "TabularTranslator",
-						"mappings": [
-							{
-								"source": {
-									"name": "OrganizationID",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "OrganizationID",
-									"type": "Int32",
-									"physicalType": "int"
-								}
-							},
-							{
-								"source": {
-									"name": "Year",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "Year",
-									"type": "Int32",
-									"physicalType": "int"
-								}
-							},
-							{
-								"source": {
-									"name": "MonthNumber",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "MonthNumber",
-									"type": "Int32",
-									"physicalType": "int"
-								}
-							},
-							{
-								"source": {
-									"name": "NoOfPlans",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "NoOfPlans",
-									"type": "Int32",
-									"physicalType": "int"
-								}
-							}
-						],
 						"typeConversion": true,
 						"typeConversionSettings": {
 							"allowDataTruncation": true,
@@ -94,20 +45,20 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "WinningPlans",
+						"referenceName": "b10a_final_data",
 						"type": "DatasetReference"
 					}
 				],
 				"outputs": [
 					{
-						"referenceName": "ET_TECH_STACK",
+						"referenceName": "AzureSqlTable1",
 						"type": "DatasetReference"
 					}
 				]
 			}
 		],
 		"annotations": [],
-		"lastPublishTime": "2023-03-22T11:28:16Z"
+		"lastPublishTime": "2023-04-18T12:23:02Z"
 	},
 	"type": "Microsoft.DataFactory/factories/pipelines"
 }
