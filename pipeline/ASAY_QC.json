@@ -44,7 +44,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "INSERT INTO Audit(FileName, Operation, StartTime,Dashboard)\nValues('ASAY', 'ASAY_Data_Prep', (Select GETDATE()),'ASAY');\nSelect * from Audit;",
+						"sqlReaderQuery": "INSERT INTO Audit(FileName, Operation, StartTime,Dashboard)\nValues('ASAY', 'ASAY_QC', (Select GETDATE()),'ASAY');\nSelect * from Audit;",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
