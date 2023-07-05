@@ -10,8 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "enr_final2.csv",
-				"folderPath": "WinningPlans/Output",
+				"folderPath": "WinningPlans/Output/TopPlans_June2023.csv",
 				"fileSystem": "hwaicontainer"
 			},
 			"columnDelimiter": ",",
