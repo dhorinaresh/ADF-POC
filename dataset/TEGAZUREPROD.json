@@ -1,0 +1,57 @@
+{
+	"name": "TEGAZUREPROD",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase4",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "FilterID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "StateID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "CountyID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "OrganizationID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "IndGrpPlansID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "PlanTypeID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "MAPDPID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "SNPID",
+				"type": "int",
+				"precision": 10
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "FiltersMapping"
+		}
+	}
+}
