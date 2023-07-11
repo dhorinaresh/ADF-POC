@@ -915,7 +915,7 @@
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "start time update_copy_Competitor_Analysis_data",
+						"activity": "Copy Crosswalk to DL DB",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -958,6 +958,543 @@
 							},
 							"sql_table_name": "ca_allstatesallyears"
 						}
+					}
+				}
+			},
+			{
+				"name": "Copy Crosswalk to DL DB",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Truncate competitor final DL Table",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"wildcardFolderPath": "Competitor_Analysis/Output/Competitor_Analysis",
+							"wildcardFileName": "p*",
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "SqlServerSink",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "Contract_ID",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Contract_ID",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Plan_ID",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Plan_ID",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "SSA_State_County_Code",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SSA_State_County_Code",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "FIPS_State_County_Code",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "FIPS_State_County_Code",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "State",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "State",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "County",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "County",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "enrollments",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "enrollments",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Parent_Organization",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Parent_Organization",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Organization_Type",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Organization_Type",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Plan_Type",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Plan_Type",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Offers_Part_D",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Offers_Part_D",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "SNP_Plan",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SNP_Plan",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "EGHP",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "EGHP",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Organization_Name",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Organization_Name",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Organization_Marketing_Name",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Organization_Marketing_Name",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Plan_Name",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Plan_Name",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Year",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Year",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Month",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Month",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "ma_eligibles",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "ma_eligibles",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "key",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "key",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Special_Needs_Plan_Type",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Special_Needs_Plan_Type",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "QMB only",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "QMB only",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "QMB plus Full Medicaid Benefits",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "QMB plus Full Medicaid Benefits",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "SLMB only",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SLMB only",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "SLMB plus Full Medicaid Benefits",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SLMB plus Full Medicaid Benefits",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "QDWI",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "QDWI",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "QI",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "QI",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Other Dual Full Medicaid Benefit",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Other Dual Full Medicaid Benefit",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "SNP_Eligibles",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SNP_Eligibles",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "MA Sales Region",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "MA Sales Region",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "MA Product Region",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "MA Product Region",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Double County",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Double County",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "POA",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "POA",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Note",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Note",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Acquisition_Type",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Acquisition_Type",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Competitor_final",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "CA_datalake",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "Truncate competitor final DL Table",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "start time update_copy_Competitor_Analysis_data",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": "Truncate table ca_allstatesallyears;\nSELECT TOP 10 * FROM ca_allstatesallyears;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "CA_datalake",
+						"type": "DatasetReference"
 					}
 				}
 			}
