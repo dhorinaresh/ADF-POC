@@ -1363,7 +1363,7 @@
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "start time update_copy_MS_data",
+						"activity": "Copy MS data to DL DB",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -1406,6 +1406,885 @@
 							},
 							"sql_table_name": "ms_allstatesallyears"
 						}
+					}
+				}
+			},
+			{
+				"name": "Truncate table MS Data_DL",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "start time update_copy_MS_data",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": "Truncate table ms_allstatesallyears;\nSelect Top 10 * from ms_allstatesallyears;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "MS_Datalake",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "Copy MS data to DL DB",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Truncate table MS Data_DL",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"wildcardFolderPath": "Market_Snapshot/Output/MS_Final_Dataset",
+							"wildcardFileName": "p*",
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "SqlServerSink",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "Contract_ID",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Contract_ID",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Plan_ID",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Plan_ID",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "SSA_State_County_Code",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SSA_State_County_Code",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "FIPS_State_County_Code",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "FIPS_State_County_Code",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "State",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "State",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "County",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "County",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Enrollments",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "enrollments",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Parent_Organization",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Parent_Organization",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Organization_Type",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Organization_Type",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Plan_Type",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Plan_Type",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Offers_Part_D",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Offers_Part_D",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "SNP_Plan",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SNP_Plan",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Eghp",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "EGHP",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Organization_Name",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Organization_Name",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Organization_Marketing_Name",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Organization_Marketing_Name",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Plan_Name",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Plan_Name",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Year",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Year",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Month",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Month",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Ma_Eligibles",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "ma_eligibles",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Key",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "key",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Special_Needs_Plan_Type",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Special_Needs_Plan_Type",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "QMB only",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "QMB only",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "QMB plus Full Medicaid Benefits",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "QMB plus Full Medicaid Benefits",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "SLMB only",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SLMB only",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "SLMB plus Full Medicaid Benefits",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SLMB plus Full Medicaid Benefits",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Qdwi",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "QDWI",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "QI",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "QI",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Other Dual Full Medicaid Benefit",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Other Dual Full Medicaid Benefit",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "SNP_Eligibles",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SNP_Eligibles",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Sex_And_Age_Population_65_To_74_Years",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Sex_And_Age_Population_65_To_74_Years",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Sex_And_Age_Population_75_To_84_Years",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Sex_And_Age_Population_75_To_84_Years",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Sex_And_Age_Population_85_Years_And_Over",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Sex_And_Age_Population_85_Years_And_Over",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Sex_And_Age_Population_Above_65",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Sex_And_Age_Population_Above_65",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Sex_And_Age_Population_Above_65_Male",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Sex_And_Age_Population_Above_65_Male",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Sex_And_Age_Population_Above_65_Female",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Sex_And_Age_Population_Above_65_Female",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Total_In_Households_Above_65",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Total_In_Households_Above_65",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Total_Above_65_Has_A_Computer",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Total_Above_65_Has_A_Computer",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Total_Male_Above_65_With_Employer-Based_Health_Insurance",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Total_Male_Above_65_With_Employer-Based_Health_Insurance",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Total_Female_Above_65_With_Employer-Based_Health_Insurance",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Total_Female_Above_65_With_Employer-Based_Health_Insurance",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Total_Male_Above_65_With_Medicare_Coverage",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Total_Male_Above_65_With_Medicare_Coverage",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Total_Male_Above_65_No_Medicare_Coverage",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Total_Male_Above_65_No_Medicare_Coverage",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Total_Female_Above_65_With_Medicare_Coverage",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Total_Female_Above_65_With_Medicare_Coverage",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Total_Female_Above_65_No_Medicare_Coverage",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Total_Female_Above_65_No_Medicare_Coverage",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Total_Income_In_The_Past_12_Months_Below_Poverty_Level_Male_65_To_74_Years",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Total_Income_In_The_Past_12_Months_Below_Poverty_Level_Male_65_To_74_Years",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Total_Income_In_The_Past_12_Months_Below_Poverty_Level_Male_75_Years_And_Over",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Total_Income_In_The_Past_12_Months_Below_Poverty_Level_Male_75_Years_And_Over",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Total_Income_In_The_Past_12_Months_Below_Poverty_Level_Female_65_To_74_Years",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Total_Income_In_The_Past_12_Months_Below_Poverty_Level_Female_65_To_74_Years",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Total_Income_In_The_Past_12_Months_Below_Poverty_Level_Female_75_Years_And_Over",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Total_Income_In_The_Past_12_Months_Below_Poverty_Level_Female_75_Years_And_Over",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Total_Male_65_To_74_Years_With_A_Disability",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Total_Male_65_To_74_Years_With_A_Disability",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Total_Male_75_Years_And_Over_With_A_Disability",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Total_Male_75_Years_And_Over_With_A_Disability",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Total_Female_65_To_74_Years_With_A_Disability",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Total_Female_65_To_74_Years_With_A_Disability",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Total_Female_75_Years_And_Over_With_A_Disability",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Total_Female_75_Years_And_Over_With_A_Disability",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Household_Received_Snap_In_The_Past_12_Months_At_Least_One_Person_In_Household_60_Years_Or_Over",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Household_Received_Snap_In_The_Past_12_Months_At_Least_One_Person_In_Household_60_Years_Or_Over",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Not_Received_Snap_In_The_Past_12_Months_At_Least_One_Person_In_Household_60_Years_Or_Over",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Not_Received_Snap_In_The_Past_12_Months_At_Least_One_Person_In_Household_60_Years_Or_Over",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Total_Above_65_Literate",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Total_Above_65_Literate",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "D-SNP Type",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "D-SNP Type",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Out of Area",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Out of Area",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Termination Status",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Termination Status",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Crosswalk",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "MS_Datalake",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "send email update for MS data DL load fail",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "Copy MS data to DL DB",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+					"method": "POST",
+					"body": {
+						"value": "{\n \"title\":\"PIPELINE RUN FOR MS data in Datalake load FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the MS Data Load and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+						"type": "Expression"
 					}
 				}
 			}
