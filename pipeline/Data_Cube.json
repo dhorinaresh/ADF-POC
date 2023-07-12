@@ -78,7 +78,7 @@
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "Data_Cube_script",
+						"activity": "Data_Cube_Staging code",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -129,7 +129,7 @@
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "Data_Cube_script",
+						"activity": "Data_Cube_Staging code",
 						"dependencyConditions": [
 							"Failed"
 						]
@@ -229,6 +229,87 @@
 						"value": "{\n \"title\":\"PIPELINE RUN FOR Data Cube data SUCCESS\",\n \"color\":\"GREEN\",\n \"message\":\"Check the QC Output\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
 						"type": "Expression"
 					}
+				}
+			},
+			{
+				"name": "Data_Cube_Divide",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Data_Cube_script",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Data_Cube/datacube_divide"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks4_pfcluster3",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Data_Cube_Renaming",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Data_Cube_Divide",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Data_Cube/Renaming Files"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks4_pfcluster3",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Data_Cube_Staging code",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Data_Cube_Renaming",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Data_Cube/Datacubestaging code"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks4_pfcluster3",
+					"type": "LinkedServiceReference"
 				}
 			}
 		],
