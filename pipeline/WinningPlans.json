@@ -340,7 +340,7 @@
 							"type": "AzureBlobFSReadSettings",
 							"recursive": true,
 							"modifiedDatetimeStart": "2023-03-07T00:00:00.000Z",
-							"wildcardFolderPath": "WinningPlans/Output",
+							"wildcardFolderPath": "WinningPlans/Output/TopPlans_July2023",
 							"wildcardFileName": "p*",
 							"enablePartitionDiscovery": false
 						},
