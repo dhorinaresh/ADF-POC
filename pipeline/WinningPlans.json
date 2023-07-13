@@ -326,7 +326,7 @@
 				"userProperties": [
 					{
 						"name": "Source",
-						"value": "hwaicontainer/WinningPlans/Output/enr_final2.csv"
+						"value": "hwaicontainer/WinningPlans/Output/TopPlans_July2023/p*"
 					},
 					{
 						"name": "Destination",
@@ -2092,7 +2092,7 @@
 				"userProperties": [
 					{
 						"name": "Source",
-						"value": "hwaicontainer/WinningPlans/Output/enr_final2.csv"
+						"value": "hwaicontainer/WinningPlans/Output/TopPlans_July2023/p*"
 					},
 					{
 						"name": "Destination",

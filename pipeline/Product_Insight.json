@@ -718,7 +718,7 @@
 				"userProperties": [
 					{
 						"name": "Source",
-						"value": "hwaicontainer/Product_Insights / Output / pi_lscape/p*"
+						"value": "hwaicontainer/Product_Insights/Output/pi_lscape_July2023/p*"
 					},
 					{
 						"name": "Destination",
@@ -1414,7 +1414,7 @@
 				"userProperties": [
 					{
 						"name": "Source",
-						"value": "hwaicontainer/Product_Insights / Output / pi_lscape/p*"
+						"value": "hwaicontainer/Product_Insights/Output/pi_lscape_July2023/p*"
 					},
 					{
 						"name": "Destination",
