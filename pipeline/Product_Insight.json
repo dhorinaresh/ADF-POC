@@ -731,7 +731,7 @@
 						"storeSettings": {
 							"type": "AzureBlobFSReadSettings",
 							"recursive": true,
-							"wildcardFolderPath": "Product_Insights/Output/pi_lscape",
+							"wildcardFolderPath": "Product_Insights/Output/pi_lscape_July2023",
 							"wildcardFileName": "p*",
 							"enablePartitionDiscovery": false
 						},
@@ -1427,7 +1427,7 @@
 						"storeSettings": {
 							"type": "AzureBlobFSReadSettings",
 							"recursive": true,
-							"wildcardFolderPath": "Product_Insights/Output/pi_lscape",
+							"wildcardFolderPath": "Product_Insights/Output/pi_lscape_July2023",
 							"wildcardFileName": "p*",
 							"enablePartitionDiscovery": false
 						},
