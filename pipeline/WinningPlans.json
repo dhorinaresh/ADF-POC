@@ -276,7 +276,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "Truncate table WinningPlans;\nSELECT TOP 10 * FROM WinningPlans;",
+						"sqlReaderQuery": "Truncate table winning_Plans;\nSELECT TOP 10 * FROM winning_plans;",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
