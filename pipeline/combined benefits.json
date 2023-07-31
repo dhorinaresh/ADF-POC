@@ -938,6 +938,9 @@
 				"defaultValue": "Goteg@12345"
 			}
 		},
+		"folder": {
+			"name": "PF_Pipelines/AEP_Refresh"
+		},
 		"annotations": [],
 		"lastPublishTime": "2023-04-18T12:23:03Z"
 	},
