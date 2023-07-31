@@ -57,6 +57,9 @@
 				]
 			}
 		],
+		"folder": {
+			"name": "Test"
+		},
 		"annotations": [],
 		"lastPublishTime": "2023-04-18T12:23:02Z"
 	},

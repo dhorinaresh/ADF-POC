@@ -78,8 +78,6 @@
 							"type": "SetVariable",
 							"dependsOn": [],
 							"policy": {
-								"retry": 0,
-								"retryIntervalInSeconds": 30,
 								"secureOutput": false,
 								"secureInput": false
 							},
@@ -126,6 +124,9 @@
 			"Y": {
 				"type": "String"
 			}
+		},
+		"folder": {
+			"name": "Unused_Pipelines"
 		},
 		"annotations": [],
 		"lastPublishTime": "2023-04-18T12:22:35Z"
