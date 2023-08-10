@@ -1102,7 +1102,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "INSERT INTO Audit(FileName, Operation, StartTime,Dashboard)\nValues('b6', 'Upload data to db', (Select GETDATE()),'Plan_Finder');\nSelect * from Audit;",
+						"sqlReaderQuery": "INSERT INTO Audit(FileName, Operation, StartTime,Dashboard)\nValues('b7b', 'Upload data to db', (Select GETDATE()),'Plan_Finder');\nSelect * from Audit;",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
