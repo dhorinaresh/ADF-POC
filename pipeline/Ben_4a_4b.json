@@ -1166,7 +1166,7 @@
 					},
 					"sink": {
 						"type": "AzureSqlSink",
-						"preCopyScript": "DELETE FROM HWAI_Benefits\nWHERE BenefitType='b4a' and Year=YEAR(CURRENT_DATE);",
+						"preCopyScript": "DELETE FROM HWAI_Benefits\nWHERE BenefitType='b4a' and Year=YEAR(GETDATE( ));",
 						"writeBehavior": "insert",
 						"sqlWriterUseTableLock": false,
 						"disableMetricsCollection": false
@@ -1533,7 +1533,7 @@
 					},
 					"sink": {
 						"type": "AzureSqlSink",
-						"preCopyScript": "DELETE FROM HWAI_Benefits\nWHERE BenefitType='b4b' and Year=YEAR(CURRENT_DATE);",
+						"preCopyScript": "DELETE FROM HWAI_Benefits\nWHERE BenefitType='b4b' and Year=YEAR(GETDATE());",
 						"writeBehavior": "insert",
 						"sqlWriterUseTableLock": false,
 						"disableMetricsCollection": false
