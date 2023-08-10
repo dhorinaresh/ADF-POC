@@ -1081,7 +1081,7 @@
 				}
 			},
 			{
-				"name": "start_time_update_upload data to db",
+				"name": "start_time_update_upload b4a_data to db",
 				"type": "Lookup",
 				"dependsOn": [
 					{
@@ -1132,11 +1132,11 @@
 				}
 			},
 			{
-				"name": "Copy data1",
+				"name": "Copy b4a_data_to_db",
 				"type": "Copy",
 				"dependsOn": [
 					{
-						"activity": "start_time_update_upload data to db",
+						"activity": "start_time_update_upload b4a_data to db",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -1288,11 +1288,11 @@
 				]
 			},
 			{
-				"name": "Pass_status_update_Copy_Data",
+				"name": "Pass_status_update_Copy_b4a_Data_to_DB",
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "Copy data1",
+						"activity": "Copy b4a_data_to_db",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -1340,11 +1340,11 @@
 				}
 			},
 			{
-				"name": "Fail_status_update_copy_data",
+				"name": "Fail_status_update_copy_b4a_data_to_DB",
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "Copy data1",
+						"activity": "Copy b4a_data_to_db",
 						"dependencyConditions": [
 							"Failed"
 						]
@@ -1396,7 +1396,7 @@
 				"type": "WebActivity",
 				"dependsOn": [
 					{
-						"activity": "Pass_status_update_Copy_Data",
+						"activity": "Pass_status_update_Copy_b4a_Data_to_DB",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -1424,7 +1424,7 @@
 				"type": "WebActivity",
 				"dependsOn": [
 					{
-						"activity": "Fail_status_update_copy_data",
+						"activity": "Fail_status_update_copy_b4a_data_to_DB",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -1443,6 +1443,373 @@
 					"method": "POST",
 					"body": {
 						"value": "{\n \"title\":\"PIPELINE RUN FOR Benefit_file_b4a_to_DB FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the Benefit_file_b4a_to_DB and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "start_time_update_upload b4b_data to db",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Pass_status_update_Drop_Melt_Final_b4b",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "INSERT INTO Audit(FileName, Operation, StartTime,Dashboard)\nValues('b4b', 'Upload data to db', (Select GETDATE()),'Plan_Finder');\nSelect * from Audit;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "dataset_sql",
+						"type": "DatasetReference",
+						"parameters": {
+							"sql_server_dataset": {
+								"value": "@pipeline().parameters.sql_server_dataset_name",
+								"type": "Expression"
+							},
+							"db_name_dataset": {
+								"value": "@pipeline().parameters.db_name",
+								"type": "Expression"
+							},
+							"user_name_dataset": {
+								"value": "@pipeline().parameters.user_name",
+								"type": "Expression"
+							},
+							"password_dataset": {
+								"value": "@pipeline().parameters.password",
+								"type": "Expression"
+							},
+							"sql_table_name": "Audit"
+						}
+					}
+				}
+			},
+			{
+				"name": "Copy b4b_data_to_db",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "start_time_update_upload b4b_data to db",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"wildcardFolderPath": "Output/Output_drop_melt_final/b4b_final",
+							"wildcardFileName": "p*",
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"preCopyScript": "DELETE FROM HWAI_Benefits\nWHERE BenefitType='b4b' and Year=YEAR(CURRENT_DATE);",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false,
+						"disableMetricsCollection": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "Bid_Id",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Bid_Id",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Benefits",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Benefits",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "BenefitValue",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "BenefitValue",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "BenefitType",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "BenefitType",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CPID",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "CPID",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Year",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Year",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Benefit_Files",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "dataset_sql",
+						"type": "DatasetReference",
+						"parameters": {
+							"sql_server_dataset": {
+								"value": "@pipeline().parameters.sql_server_dataset_name",
+								"type": "Expression"
+							},
+							"db_name_dataset": {
+								"value": "@pipeline().parameters.db_name",
+								"type": "Expression"
+							},
+							"user_name_dataset": {
+								"value": "@pipeline().parameters.user_name",
+								"type": "Expression"
+							},
+							"password_dataset": {
+								"value": "@pipeline().parameters.password",
+								"type": "Expression"
+							},
+							"sql_table_name": "HWAI_Benefits"
+						}
+					}
+				]
+			},
+			{
+				"name": "Pass_status_update_Copy_b4b_data_to_DB",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Copy b4b_data_to_db",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'pass'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "dataset_sql",
+						"type": "DatasetReference",
+						"parameters": {
+							"sql_server_dataset": {
+								"value": "@pipeline().parameters.sql_server_dataset_name",
+								"type": "Expression"
+							},
+							"db_name_dataset": {
+								"value": "@pipeline().parameters.db_name",
+								"type": "Expression"
+							},
+							"user_name_dataset": {
+								"value": "@pipeline().parameters.user_name",
+								"type": "Expression"
+							},
+							"password_dataset": {
+								"value": "@pipeline().parameters.password",
+								"type": "Expression"
+							},
+							"sql_table_name": "Audit"
+						}
+					},
+					"firstRowOnly": true
+				}
+			},
+			{
+				"name": "Fail_status_update_copy_b4b_data_to_DB",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Copy b4b_data_to_db",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'Fail'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "dataset_sql",
+						"type": "DatasetReference",
+						"parameters": {
+							"sql_server_dataset": {
+								"value": "@pipeline().parameters.sql_server_dataset_name",
+								"type": "Expression"
+							},
+							"db_name_dataset": {
+								"value": "@pipeline().parameters.db_name",
+								"type": "Expression"
+							},
+							"user_name_dataset": {
+								"value": "@pipeline().parameters.user_name",
+								"type": "Expression"
+							},
+							"password_dataset": {
+								"value": "@pipeline().parameters.password",
+								"type": "Expression"
+							},
+							"sql_table_name": "Audit"
+						}
+					},
+					"firstRowOnly": true
+				}
+			},
+			{
+				"name": "Benefit file-b4b pipeline run successfully",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "Pass_status_update_Copy_b4b_data_to_DB",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+					"method": "POST",
+					"body": {
+						"value": "{\n \"title\":\"PIPELINE RUN FOR Benefit_file_b4b_to_DB IS SUCCESS\",\n \"color\":\"GREEN\",\n \"message\":\"Benefit_file_b4b_to_DB completed sccessfully\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "send email update for fail Benefit File b4b to db",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "Fail_status_update_copy_b4b_data_to_DB",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+					"method": "POST",
+					"body": {
+						"value": "{\n \"title\":\"PIPELINE RUN FOR Benefit_file_b4b_to_DB FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the Benefit_file_b4b_to_DB and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
 						"type": "Expression"
 					}
 				}
