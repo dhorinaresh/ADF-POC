@@ -1499,7 +1499,7 @@
 				}
 			},
 			{
-				"name": "Copy b10b_ata_to_db",
+				"name": "Copy b10b_data_to_db",
 				"type": "Copy",
 				"dependsOn": [
 					{
@@ -1659,7 +1659,7 @@
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "Copy b10b_ata_to_db",
+						"activity": "Copy b10b_data_to_db",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -1711,7 +1711,7 @@
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "Copy b10b_ata_to_db",
+						"activity": "Copy b10b_data_to_db",
 						"dependencyConditions": [
 							"Failed"
 						]
