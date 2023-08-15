@@ -718,7 +718,7 @@
 				"userProperties": [
 					{
 						"name": "Source",
-						"value": "hwaicontainer/Product_Insights/Output/pi_lscape_July2023/p*"
+						"value": "hwaicontainer/Product_Insights/Output/pi_lscape_August2023/p*"
 					},
 					{
 						"name": "Destination",
@@ -731,7 +731,7 @@
 						"storeSettings": {
 							"type": "AzureBlobFSReadSettings",
 							"recursive": true,
-							"wildcardFolderPath": "Product_Insights/Output/pi_lscape_July2023",
+							"wildcardFolderPath": "Product_Insights/Output/pi_lscape_August2023",
 							"wildcardFileName": "p*",
 							"enablePartitionDiscovery": false
 						},
@@ -1414,7 +1414,7 @@
 				"userProperties": [
 					{
 						"name": "Source",
-						"value": "hwaicontainer/Product_Insights/Output/pi_lscape_July2023/p*"
+						"value": "hwaicontainer/Product_Insights/Output/pi_lscape_August2023/p*"
 					},
 					{
 						"name": "Destination",
@@ -1427,7 +1427,7 @@
 						"storeSettings": {
 							"type": "AzureBlobFSReadSettings",
 							"recursive": true,
-							"wildcardFolderPath": "Product_Insights/Output/pi_lscape_July2023",
+							"wildcardFolderPath": "Product_Insights/Output/pi_lscape_August2023",
 							"wildcardFileName": "p*",
 							"enablePartitionDiscovery": false
 						},
