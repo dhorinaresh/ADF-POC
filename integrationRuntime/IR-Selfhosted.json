@@ -1,7 +1,0 @@
-{
-	"name": "IR-Selfhosted",
-	"properties": {
-		"type": "SelfHosted",
-		"description": "Self hosted IR to connect to Azure VM for data movement"
-	}
-}
