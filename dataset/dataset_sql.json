@@ -45,7 +45,7 @@
 		"schema": [],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "HWAI_Benefits"
+			"table": ""
 		}
 	},
 	"type": "Microsoft.DataFactory/factories/datasets"
