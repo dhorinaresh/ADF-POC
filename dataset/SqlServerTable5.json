@@ -2,7 +2,7 @@
 	"name": "SqlServerTable5",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "sql_analytics_HWAIETDB",
+			"referenceName": "sql_analytics_HWAIETV2DB",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
