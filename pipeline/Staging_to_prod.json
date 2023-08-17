@@ -3,8 +3,8 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Copy data1",
-				"type": "Copy",
+				"name": "staging to prod",
+				"type": "DatabricksNotebook",
 				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
@@ -15,7 +15,11 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"enableStaging": false
+					"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Data_Cube/Staging To Production"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks4_pfcluster3",
+					"type": "LinkedServiceReference"
 				}
 			}
 		],
