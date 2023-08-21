@@ -10,8 +10,43 @@
 		"schema": [
 			{
 				"name": "ETKey",
-				"type": "bigint",
-				"precision": 19
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "FilterID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "StateID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "CountyID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "IndGrpPlansID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "MAPDPID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "SNPID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "PlanTypeID",
+				"type": "int",
+				"precision": 10
 			},
 			{
 				"name": "OrganizationID",
@@ -19,9 +54,104 @@
 				"precision": 10
 			},
 			{
+				"name": "PlanName",
+				"type": "varchar"
+			},
+			{
+				"name": "BidId",
+				"type": "varchar"
+			},
+			{
 				"name": "Year",
 				"type": "int",
 				"precision": 10
+			},
+			{
+				"name": "Enrollments",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "MAEligibles",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "StabilityIndex",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Prediction",
+				"type": "varchar"
+			},
+			{
+				"name": "EGHP",
+				"type": "varchar"
+			},
+			{
+				"name": "FIPS_State_County_Code",
+				"type": "varchar"
+			},
+			{
+				"name": "Offers_Part_D",
+				"type": "varchar"
+			},
+			{
+				"name": "Other_Dual_Full_Medicaid_Benefit",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Plan_ID",
+				"type": "varchar"
+			},
+			{
+				"name": "QDWI",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "QI",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "QMB_Only",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "QMB_Plus_Full_Medicaid_Benefits",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "SLMB_only",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "SLMB_Plus_Full_Medicaid_Benefits",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "SNP_Eligibles",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "SNP_Plan",
+				"type": "varchar"
+			},
+			{
+				"name": "SSA_State_County_Code",
+				"type": "varchar"
+			},
+			{
+				"name": "Contract_ID",
+				"type": "varchar"
 			},
 			{
 				"name": "MonthNumber",
@@ -29,14 +159,28 @@
 				"precision": 10
 			},
 			{
-				"name": "NoOfPlans",
+				"name": "IsTerminated",
 				"type": "int",
 				"precision": 10
+			},
+			{
+				"name": "IsOutofArea",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "IsStarEnr",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Status",
+				"type": "varchar"
 			}
 		],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "FiltersMapping"
+			"table": "EnrollmentTrendsData"
 		}
 	},
 	"type": "Microsoft.DataFactory/factories/datasets"
