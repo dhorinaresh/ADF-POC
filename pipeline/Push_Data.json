@@ -38,6 +38,30 @@
 						"mappings": [
 							{
 								"source": {
+									"name": "StateID",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "StateID",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							},
+							{
+								"source": {
+									"name": "CountyID",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "CountyID",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							},
+							{
+								"source": {
 									"name": "OrganizationID",
 									"type": "String",
 									"physicalType": "String"
@@ -50,36 +74,48 @@
 							},
 							{
 								"source": {
-									"name": "Year",
+									"name": "IndGrpPlansID",
 									"type": "String",
 									"physicalType": "String"
 								},
 								"sink": {
-									"name": "Year",
+									"name": "IndGrpPlansID",
 									"type": "Int32",
 									"physicalType": "int"
 								}
 							},
 							{
 								"source": {
-									"name": "MonthNumber",
+									"name": "PlanTypeID",
 									"type": "String",
 									"physicalType": "String"
 								},
 								"sink": {
-									"name": "MonthNumber",
+									"name": "PlanTypeID",
 									"type": "Int32",
 									"physicalType": "int"
 								}
 							},
 							{
 								"source": {
-									"name": "NoOfPlans",
+									"name": "MAPDPID",
 									"type": "String",
 									"physicalType": "String"
 								},
 								"sink": {
-									"name": "NoOfPlans",
+									"name": "MAPDPID",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							},
+							{
+								"source": {
+									"name": "SNPID",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SNPID",
 									"type": "Int32",
 									"physicalType": "int"
 								}
