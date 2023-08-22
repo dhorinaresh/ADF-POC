@@ -21,31 +21,19 @@
 		},
 		"schema": [
 			{
-				"name": "StateID",
-				"type": "String"
-			},
-			{
-				"name": "CountyID",
-				"type": "String"
-			},
-			{
 				"name": "OrganizationID",
 				"type": "String"
 			},
 			{
-				"name": "IndGrpPlansID",
+				"name": "Year",
 				"type": "String"
 			},
 			{
-				"name": "PlanTypeID",
+				"name": "MonthNumber",
 				"type": "String"
 			},
 			{
-				"name": "MAPDPID",
-				"type": "String"
-			},
-			{
-				"name": "SNPID",
+				"name": "NoOfPlans",
 				"type": "String"
 			}
 		]
