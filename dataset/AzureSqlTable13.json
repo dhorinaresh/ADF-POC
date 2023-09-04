@@ -1,0 +1,81 @@
+{
+	"name": "AzureSqlTable13",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase3",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "FILE",
+				"type": "varchar"
+			},
+			{
+				"name": "NAME",
+				"type": "varchar"
+			},
+			{
+				"name": "TYPE",
+				"type": "varchar"
+			},
+			{
+				"name": "LENGTH",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "FIELD_TITLE",
+				"type": "varchar"
+			},
+			{
+				"name": "TITLE",
+				"type": "varchar"
+			},
+			{
+				"name": "CODES",
+				"type": "varchar"
+			},
+			{
+				"name": "CODE_VALUES",
+				"type": "varchar"
+			},
+			{
+				"name": "Groups",
+				"type": "varchar"
+			},
+			{
+				"name": "GroupType",
+				"type": "varchar"
+			},
+			{
+				"name": "GroupName",
+				"type": "varchar"
+			},
+			{
+				"name": "Position",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "DefaultValue",
+				"type": "varchar"
+			},
+			{
+				"name": "TextBefore",
+				"type": "varchar"
+			},
+			{
+				"name": "TextAfter",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "Hwai_pbp_dictionary_BU"
+		}
+	}
+}

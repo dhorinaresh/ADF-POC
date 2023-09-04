@@ -1,0 +1,246 @@
+{
+	"name": "Copy Data",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy data1",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "ExcelSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						}
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "FILE",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "FILE",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "NAME",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "NAME",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "TYPE",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "TYPE",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "LENGTH",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "LENGTH",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "FIELD_TITLE",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "FIELD_TITLE",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "TITLE",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "TITLE",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CODES",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "CODES",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CODE_VALUES",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "CODE_VALUES",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Groups",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Groups",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "GroupType",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "GroupType",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "GroupName",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "GroupName",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Position",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Position",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "DefaultValue",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "DefaultValue",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "TextBefore",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "TextBefore",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "TextAfter",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "TextAfter",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Excel1",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "AzureSqlTable13",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"folder": {
+			"name": "Test"
+		},
+		"annotations": []
+	}
+}

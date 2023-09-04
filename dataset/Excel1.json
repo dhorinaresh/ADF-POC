@@ -1,0 +1,91 @@
+{
+	"name": "Excel1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Linked_service_AzureDataLakeStorage2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"sheetName": "Sheet1",
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "PBP2024_dictionary_Framework_draft3.xlsx",
+				"folderPath": "Practice",
+				"fileSystem": "hwaicontainer"
+			},
+			"firstRowAsHeader": true
+		},
+		"schema": [
+			{
+				"name": "FILE",
+				"type": "String"
+			},
+			{
+				"name": "NAME",
+				"type": "String"
+			},
+			{
+				"name": "TYPE",
+				"type": "String"
+			},
+			{
+				"name": "LENGTH",
+				"type": "String"
+			},
+			{
+				"name": "SERVICE CATEGORY",
+				"type": "String"
+			},
+			{
+				"name": "FIELD_TITLE",
+				"type": "String"
+			},
+			{
+				"name": "JSON QUESTION",
+				"type": "String"
+			},
+			{
+				"name": "TITLE",
+				"type": "String"
+			},
+			{
+				"name": "CODES",
+				"type": "String"
+			},
+			{
+				"name": "CODE_VALUES",
+				"type": "String"
+			},
+			{
+				"name": "Groups",
+				"type": "String"
+			},
+			{
+				"name": "GroupType",
+				"type": "String"
+			},
+			{
+				"name": "GroupName",
+				"type": "String"
+			},
+			{
+				"name": "Position",
+				"type": "String"
+			},
+			{
+				"name": "DefaultValue",
+				"type": "String"
+			},
+			{
+				"name": "TextBefore",
+				"type": "String"
+			},
+			{
+				"name": "TextAfter",
+				"type": "String"
+			}
+		]
+	}
+}
