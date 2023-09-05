@@ -25,7 +25,7 @@
 					},
 					"sink": {
 						"type": "AzureSqlSink",
-						"preCopyScript": "Truncate table Hwai_pbp_dictionary_BU;",
+						"preCopyScript": "Truncate table Hwai_pbp_dictionary_BU;\nselect * from Hwai_pbp_dictionary_BU;",
 						"writeBehavior": "insert",
 						"sqlWriterUseTableLock": false,
 						"disableMetricsCollection": false
