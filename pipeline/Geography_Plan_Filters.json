@@ -17,7 +17,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "INSERT INTO Audit(FileName, Operation, StartTime,Dashboard)\nValues('ASAY', 'ASAY_Data_Prep', (Select GETDATE()),'ASAY');\nSelect * from Audit;",
+						"sqlReaderQuery": "INSERT INTO Audit(FileName, Operation, StartTime,Dashboard)\nValues('Geo_Plan_Details', 'Plan_Details_Part1', (Select GETDATE()),'PF');\nSelect * from Audit;",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -47,7 +47,7 @@
 				}
 			},
 			{
-				"name": "ASAY_Base_Data",
+				"name": "Plan_Details_Part1",
 				"type": "DatabricksNotebook",
 				"dependsOn": [
 					{
@@ -66,7 +66,7 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Competitor Analysis/CREATE BASE DATA:ASAY"
+					"notebookPath": "/Users/hwaitech@healthworksai.com/Plan_Finder/Geography_Scripts/Plan_details_part1"
 				},
 				"linkedServiceName": {
 					"referenceName": "AzureDatabricks4_pfcluster3",
@@ -74,11 +74,11 @@
 				}
 			},
 			{
-				"name": "end time update for Competitor_Analysis_file_processing",
+				"name": "end time update for PF Plan details1",
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "ASAY_Base_Data",
+						"activity": "Plan_Details_Part1",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -125,11 +125,11 @@
 				}
 			},
 			{
-				"name": "end time update for Competitor_Analysisfail",
+				"name": "end time update for PF Plan details1 fail",
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "ASAY_Base_Data",
+						"activity": "Plan_Details_Part1",
 						"dependencyConditions": [
 							"Failed"
 						]
@@ -176,11 +176,11 @@
 				}
 			},
 			{
-				"name": "start time for ASAY Geo addition",
+				"name": "start time for PF plan details addition",
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "end time update for Competitor_Analysis_file_processing",
+						"activity": "end time update for PF Plan details1",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -227,11 +227,11 @@
 				}
 			},
 			{
-				"name": "end time update for ASAY_Geo_add",
+				"name": "end time update for PF Plan Table",
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "ASAY_GEO_CPID",
+						"activity": "Plan_Table",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -278,11 +278,11 @@
 				}
 			},
 			{
-				"name": "end time update for ASAY Geo fail",
+				"name": "end time update for PF Plan Table fail",
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "ASAY_GEO_CPID",
+						"activity": "Plan_Table",
 						"dependencyConditions": [
 							"Failed"
 						]
@@ -329,11 +329,11 @@
 				}
 			},
 			{
-				"name": "send email update for Competitor_Analysis script fail",
+				"name": "send email update for PF Plan details script",
 				"type": "WebActivity",
 				"dependsOn": [
 					{
-						"activity": "end time update for Competitor_Analysisfail",
+						"activity": "end time update for PF Plan details1 fail",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -351,17 +351,17 @@
 					"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
 					"method": "POST",
 					"body": {
-						"value": "{\n \"title\":\"PIPELINE RUN FOR ASAY Base Data Creation Script FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the ASAY_BASE_DATA Script and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+						"value": "{\n \"title\":\"PIPELINE RUN FOR Plan details part 1 Script FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the Geo Plan Details Script and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
 						"type": "Expression"
 					}
 				}
 			},
 			{
-				"name": "send email update for ASAY Pipeline fail",
+				"name": "send email update for PF Plan table Pipeline fail",
 				"type": "WebActivity",
 				"dependsOn": [
 					{
-						"activity": "end time update for ASAY Geo fail",
+						"activity": "end time update for PF Plan Table fail",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -385,11 +385,11 @@
 				}
 			},
 			{
-				"name": "send email update for ASAY Pipeline Success",
+				"name": "send email update for PF Plan table Pipeline Success",
 				"type": "WebActivity",
 				"dependsOn": [
 					{
-						"activity": "end time update for ASAY_Geo_add",
+						"activity": "end time update for PF Plan Table_copy",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -413,11 +413,11 @@
 				}
 			},
 			{
-				"name": "ASAY_GEO_CPID",
+				"name": "Plan_Table",
 				"type": "DatabricksNotebook",
 				"dependsOn": [
 					{
-						"activity": "start time for ASAY Geo addition",
+						"activity": "start time for PF plan details addition",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -432,11 +432,274 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Competitor Analysis/ADD GEO_ID TO ASAY"
+					"notebookPath": "/Users/hwaitech@healthworksai.com/Plan_Finder/Geography_Scripts/Plan_table"
 				},
 				"linkedServiceName": {
 					"referenceName": "AzureDatabricks4_pfcluster3",
 					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Start_time_update_planCopy",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "end time update for PF Plan Table",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "INSERT INTO Audit(FileName, Operation, StartTime,Dashboard)\nValues('Plan_Table', 'Copy Plan Table to DB', (Select GETDATE()),'PF');\nSelect * from Audit;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "dataset_sql",
+						"type": "DatasetReference",
+						"parameters": {
+							"sql_server_dataset": {
+								"value": "@pipeline().parameters.sql_server_dataset_name",
+								"type": "Expression"
+							},
+							"db_name_dataset": {
+								"value": "@pipeline().parameters.db_name",
+								"type": "Expression"
+							},
+							"user_name_dataset": {
+								"value": "@pipeline().parameters.user_name",
+								"type": "Expression"
+							},
+							"password_dataset": {
+								"value": "@pipeline().parameters.password",
+								"type": "Expression"
+							},
+							"sql_table_name": "Audit"
+						}
+					}
+				}
+			},
+			{
+				"name": "Copy_Plan_data",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Start_time_update_planCopy",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"wildcardFolderPath": "Output_Plan_details/Plan_details_final",
+							"wildcardFileName": "p*",
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"preCopyScript": "Truncate table [dbo].[Plan_Table];\nselect * from [dbo].[Plan_Table];",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false,
+						"disableMetricsCollection": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Plan_Table",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "dataset_sql",
+						"type": "DatasetReference",
+						"parameters": {
+							"sql_server_dataset": {
+								"value": "@pipeline().parameters.sql_server_dataset_name",
+								"type": "Expression"
+							},
+							"db_name_dataset": {
+								"value": "@pipeline().parameters.db_name",
+								"type": "Expression"
+							},
+							"user_name_dataset": {
+								"value": "@pipeline().parameters.user_name",
+								"type": "Expression"
+							},
+							"password_dataset": {
+								"value": "@pipeline().parameters.password",
+								"type": "Expression"
+							},
+							"sql_table_name": "GeographyPlanFilters"
+						}
+					}
+				]
+			},
+			{
+				"name": "end time update for PF Plan Table_copy",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Copy_Plan_data",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'pass'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "dataset_sql",
+						"type": "DatasetReference",
+						"parameters": {
+							"sql_server_dataset": {
+								"value": "@pipeline().parameters.sql_server_dataset_name",
+								"type": "Expression"
+							},
+							"db_name_dataset": {
+								"value": "@pipeline().parameters.db_name",
+								"type": "Expression"
+							},
+							"user_name_dataset": {
+								"value": "@pipeline().parameters.user_name",
+								"type": "Expression"
+							},
+							"password_dataset": {
+								"value": "@pipeline().parameters.password",
+								"type": "Expression"
+							},
+							"sql_table_name": "Audit"
+						}
+					}
+				}
+			},
+			{
+				"name": "end time update for PF Plan Table fail_copy",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Copy_Plan_data",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'Fail'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "dataset_sql",
+						"type": "DatasetReference",
+						"parameters": {
+							"sql_server_dataset": {
+								"value": "@pipeline().parameters.sql_server_dataset_name",
+								"type": "Expression"
+							},
+							"db_name_dataset": {
+								"value": "@pipeline().parameters.db_name",
+								"type": "Expression"
+							},
+							"user_name_dataset": {
+								"value": "@pipeline().parameters.user_name",
+								"type": "Expression"
+							},
+							"password_dataset": {
+								"value": "@pipeline().parameters.password",
+								"type": "Expression"
+							},
+							"sql_table_name": "Audit"
+						}
+					}
+				}
+			},
+			{
+				"name": "send email update for PF Plan table Pipeline fail_copy",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "end time update for PF Plan Table fail_copy",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+					"method": "POST",
+					"body": {
+						"value": "{\n \"title\":\"PIPELINE RUN FOR ASAY Geo Scrip FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the ASAY Geo Script and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+						"type": "Expression"
+					}
 				}
 			}
 		],
