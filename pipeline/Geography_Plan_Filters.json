@@ -525,7 +525,7 @@
 					},
 					"sink": {
 						"type": "AzureSqlSink",
-						"preCopyScript": "Truncate table [dbo].[Plan_Table];\nselect * from [dbo].[Plan_Table];",
+						"preCopyScript": "Truncate table [dbo].[GeographyPlanFilters];\nselect * from [dbo].[GeographyPlanFilters];",
 						"writeBehavior": "insert",
 						"sqlWriterUseTableLock": false,
 						"disableMetricsCollection": false
