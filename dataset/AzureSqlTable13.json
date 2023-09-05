@@ -75,7 +75,7 @@
 		],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "Hwai_pbp_dictionary_BU"
+			"table": "HWai_pbp_dictionary"
 		}
 	}
 }
