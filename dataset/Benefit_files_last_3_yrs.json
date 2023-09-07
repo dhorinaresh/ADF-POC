@@ -1,0 +1,44 @@
+{
+	"name": "Benefit_files_last_3_yrs",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Linked_service_AzureDataLakeStorage2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "Output/Output_Benefit_File",
+				"fileSystem": "pfcontainer"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "Bid_Id",
+				"type": "String"
+			},
+			{
+				"name": "Plan_Name",
+				"type": "String"
+			},
+			{
+				"name": "Year",
+				"type": "String"
+			},
+			{
+				"name": "Benefits",
+				"type": "String"
+			},
+			{
+				"name": "BenefitValue",
+				"type": "String"
+			}
+		]
+	}
+}
