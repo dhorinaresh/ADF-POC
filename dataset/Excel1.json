@@ -11,7 +11,7 @@
 			"sheetName": "Sheet1",
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "PBP2024_dictionary_Framework_draft9.xlsx",
+				"fileName": "PBP2024_dictionary_Framework_draft10_after_stripping.xlsx",
 				"folderPath": "Practice",
 				"fileSystem": "hwaicontainer"
 			},
