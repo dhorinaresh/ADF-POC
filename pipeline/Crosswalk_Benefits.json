@@ -360,7 +360,7 @@
 				}
 			},
 			{
-				"name": "start_time_update_upload Section_C_POS_data to db",
+				"name": "start_time_update_last_3years_Benefits_to_db",
 				"type": "Lookup",
 				"dependsOn": [
 					{
@@ -381,7 +381,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "INSERT INTO Audit(FileName, Operation, StartTime,Dashboard)\nValues('Section_C_POS', 'Upload data to db', (Select GETDATE()),'Plan_Finder');\nSelect * from Audit;",
+						"sqlReaderQuery": "INSERT INTO Audit(FileName, Operation, StartTime,Dashboard)\nValues('Org_Benefits', 'Upload data to db', (Select GETDATE()),'Plan_Finder');\nSelect * from Audit;",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -411,11 +411,11 @@
 				}
 			},
 			{
-				"name": "Copy Section_C_POS_data_to_db",
+				"name": "Copy org_final_ben_curr_yr to Org_Benefits_New",
 				"type": "Copy",
 				"dependsOn": [
 					{
-						"activity": "start_time_update_upload Section_C_POS_data to db",
+						"activity": "start_time_update_last_3years_Benefits_to_db",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -435,8 +435,8 @@
 						"storeSettings": {
 							"type": "AzureBlobFSReadSettings",
 							"recursive": true,
-							"wildcardFolderPath": " Output/Output_Section_C/Section_C_POS_final",
-							"wildcardFileName": "p*",
+							"wildcardFolderPath": "Output/Output_Benefit_File",
+							"wildcardFileName": "org_final_ben_curr_yr.csv",
 							"enablePartitionDiscovery": false
 						},
 						"formatSettings": {
@@ -445,7 +445,7 @@
 					},
 					"sink": {
 						"type": "AzureSqlSink",
-						"preCopyScript": "DELETE FROM HWAI_Benefits\nWHERE BenefitType='Section_C_POS' and Year=YEAR(GETDATE( ));",
+						"preCopyScript": "Truncate table Org_Benefits_New;",
 						"writeBehavior": "insert",
 						"sqlWriterUseTableLock": false,
 						"disableMetricsCollection": false
@@ -468,48 +468,12 @@
 							},
 							{
 								"source": {
-									"name": "Benefits",
+									"name": "Plan_Name",
 									"type": "String",
 									"physicalType": "String"
 								},
 								"sink": {
-									"name": "Benefits",
-									"type": "String",
-									"physicalType": "varchar"
-								}
-							},
-							{
-								"source": {
-									"name": "BenefitValue",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "BenefitValue",
-									"type": "String",
-									"physicalType": "varchar"
-								}
-							},
-							{
-								"source": {
-									"name": "BenefitType",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "BenefitType",
-									"type": "String",
-									"physicalType": "varchar"
-								}
-							},
-							{
-								"source": {
-									"name": "CPID",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "CPID",
+									"name": "Plan_Name",
 									"type": "String",
 									"physicalType": "varchar"
 								}
@@ -525,6 +489,30 @@
 									"type": "Int32",
 									"physicalType": "int"
 								}
+							},
+							{
+								"source": {
+									"name": "Benefits",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Benefits",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "BenefitValue",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "BenefitValue",
+									"type": "String",
+									"physicalType": "varchar"
+								}
 							}
 						],
 						"typeConversion": true,
@@ -536,7 +524,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "Benefit_Files",
+						"referenceName": "Benefit_files_last_3_yrs",
 						"type": "DatasetReference"
 					}
 				],
@@ -561,17 +549,17 @@
 								"value": "@pipeline().parameters.password",
 								"type": "Expression"
 							},
-							"sql_table_name": "HWAI_Benefits"
+							"sql_table_name": "Org_Benefits_New"
 						}
 					}
 				]
 			},
 			{
-				"name": "Pass_status_update_Copy_Section_C_POS_Data_to_DB",
+				"name": "Pass_status_update_Copy_data_last_3yrs_to_DB",
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "Copy Section_C_POS_data_to_db",
+						"activity": "Copy org_final_ben_oldest_yr to Org_Benefits_New",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -619,11 +607,11 @@
 				}
 			},
 			{
-				"name": "Fail_status_update_copy_Section_C_POS_data_to_DB",
+				"name": "Fail_status_update_copy_data_last_3yrs_to_DB",
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "Copy Section_C_POS_data_to_db",
+						"activity": "Copy org_final_ben_oldest_yr to Org_Benefits_New",
 						"dependencyConditions": [
 							"Failed"
 						]
@@ -671,11 +659,11 @@
 				}
 			},
 			{
-				"name": "Benefit file-Section_C_POS pipeline run successfully",
+				"name": "Crosswalk pipeline run successfully",
 				"type": "WebActivity",
 				"dependsOn": [
 					{
-						"activity": "Pass_status_update_Copy_Section_C_POS_Data_to_DB",
+						"activity": "Pass_status_update_Copy_data_last_3yrs_to_DB",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -693,17 +681,17 @@
 					"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
 					"method": "POST",
 					"body": {
-						"value": "{\n \"title\":\"PIPELINE RUN FOR Benefit_file_Section_C_POS_to_DB IS SUCCESS\",\n \"color\":\"GREEN\",\n \"message\":\"Benefit_file_Section_C_POS_to_DB completed sccessfully\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+						"value": "{\n \"title\":\"PIPELINE RUN FOR Crosswalk_Benefits IS SUCCESS\",\n \"color\":\"GREEN\",\n \"message\":\"Crosswalk_Benefits completed sccessfully\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
 						"type": "Expression"
 					}
 				}
 			},
 			{
-				"name": "send email update for Section_C_POS to db fail",
+				"name": "send email update for Crosswalk_Benefits fail",
 				"type": "WebActivity",
 				"dependsOn": [
 					{
-						"activity": "Fail_status_update_copy_Section_C_POS_data_to_DB",
+						"activity": "Fail_status_update_copy_data_last_3yrs_to_DB",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -725,20 +713,306 @@
 						"type": "Expression"
 					}
 				}
+			},
+			{
+				"name": "Copy org_final_ben_prev_yr to Org_Benefits_New",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Copy org_final_ben_curr_yr to Org_Benefits_New",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"wildcardFolderPath": "Output/Output_Benefit_File",
+							"wildcardFileName": "org_final_ben_prev_yr.csv",
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false,
+						"disableMetricsCollection": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "Bid_Id",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Bid_Id",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Plan_Name",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Plan_Name",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Year",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Year",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							},
+							{
+								"source": {
+									"name": "Benefits",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Benefits",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "BenefitValue",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "BenefitValue",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Benefit_files_last_3_yrs",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "dataset_sql",
+						"type": "DatasetReference",
+						"parameters": {
+							"sql_server_dataset": {
+								"value": "@pipeline().parameters.sql_server_dataset_name",
+								"type": "Expression"
+							},
+							"db_name_dataset": {
+								"value": "@pipeline().parameters.db_name",
+								"type": "Expression"
+							},
+							"user_name_dataset": {
+								"value": "@pipeline().parameters.user_name",
+								"type": "Expression"
+							},
+							"password_dataset": {
+								"value": "@pipeline().parameters.password",
+								"type": "Expression"
+							},
+							"sql_table_name": "Org_Benefits_New"
+						}
+					}
+				]
+			},
+			{
+				"name": "Copy org_final_ben_oldest_yr to Org_Benefits_New",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Copy org_final_ben_prev_yr to Org_Benefits_New",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"wildcardFolderPath": "Output/Output_Benefit_File",
+							"wildcardFileName": "org_final_ben_oldest_yr.csv",
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false,
+						"disableMetricsCollection": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "Bid_Id",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Bid_Id",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Plan_Name",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Plan_Name",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Year",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Year",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							},
+							{
+								"source": {
+									"name": "Benefits",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Benefits",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "BenefitValue",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "BenefitValue",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Benefit_files_last_3_yrs",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "dataset_sql",
+						"type": "DatasetReference",
+						"parameters": {
+							"sql_server_dataset": {
+								"value": "@pipeline().parameters.sql_server_dataset_name",
+								"type": "Expression"
+							},
+							"db_name_dataset": {
+								"value": "@pipeline().parameters.db_name",
+								"type": "Expression"
+							},
+							"user_name_dataset": {
+								"value": "@pipeline().parameters.user_name",
+								"type": "Expression"
+							},
+							"password_dataset": {
+								"value": "@pipeline().parameters.password",
+								"type": "Expression"
+							},
+							"sql_table_name": "Org_Benefits_New"
+						}
+					}
+				]
 			}
 		],
 		"parameters": {
 			"sql_server_dataset_name": {
 				"type": "string",
-				"defaultValue": "hwpilot.database.windows.net"
+				"defaultValue": "teghws.database.windows.net"
 			},
 			"db_name": {
 				"type": "string",
-				"defaultValue": "HWai_Dashboards"
+				"defaultValue": "hwai_production_db_AEP"
 			},
 			"user_name": {
 				"type": "string",
-				"defaultValue": "pladmin"
+				"defaultValue": "hwstegadmin"
 			},
 			"password": {
 				"type": "string",
