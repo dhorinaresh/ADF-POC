@@ -1636,15 +1636,15 @@
 		"parameters": {
 			"sql_server_dataset_name": {
 				"type": "string",
-				"defaultValue": "hwpilot.database.windows.net"
+				"defaultValue": "teghws.database.windows.net"
 			},
 			"db_name": {
 				"type": "string",
-				"defaultValue": "HWai_Dashboards"
+				"defaultValue": "hwai_production_db_AEP"
 			},
 			"user_name": {
 				"type": "string",
-				"defaultValue": "pladmin"
+				"defaultValue": "hwstegadmin"
 			},
 			"password": {
 				"type": "string",
