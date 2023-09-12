@@ -1,0 +1,189 @@
+{
+	"name": "pipeline7",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy_Plan_data",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"wildcardFolderPath": "Output_Plan_details/Plan_details_final",
+							"wildcardFileName": "p*",
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"preCopyScript": "Delete From [dbo].[GeographyPlanFilters];\nselect * from [dbo].[GeographyPlanFilters];",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false,
+						"disableMetricsCollection": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "BidId",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "BidId",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "PlanName",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PlanName",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "StateId",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "StateId",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							},
+							{
+								"source": {
+									"name": "CountyId",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "CountyId",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							},
+							{
+								"source": {
+									"name": "PlanTypeId",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PlanTypeId",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							},
+							{
+								"source": {
+									"name": "SnpTypeId",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SnpTypeId",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							},
+							{
+								"source": {
+									"name": "CrosswalkId",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "CrosswalkId",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							},
+							{
+								"source": {
+									"name": "ParentOrganizationId",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "ParentOrganizationId",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							},
+							{
+								"source": {
+									"name": "Active_Ind",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Active_Ind",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							},
+							{
+								"source": {
+									"name": "Geography_Id",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Geography_Id",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Plan_Table",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "AzureSqlTable15",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"folder": {
+			"name": "PF_Pipelines/AEP_Refresh/Plan_Details_Processing"
+		},
+		"annotations": []
+	}
+}
