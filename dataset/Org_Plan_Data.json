@@ -1,0 +1,36 @@
+{
+	"name": "Org_Plan_Data",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Linked_service_AzureDataLakeStorage2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "Output_final",
+				"fileSystem": "pfcontainer"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "Bid_Id",
+				"type": "String"
+			},
+			{
+				"name": "Benefits",
+				"type": "String"
+			},
+			{
+				"name": "BenefitValue",
+				"type": "String"
+			}
+		]
+	}
+}
