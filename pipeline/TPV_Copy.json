@@ -15,8 +15,156 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"enableStaging": false
-				}
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"preCopyScript": "Truncate table OrgTPV_YOY;\nselect * from OrgTPV_YOY",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false,
+						"disableMetricsCollection": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "BidId",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "BidId",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Supplemental Benefit Value",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Supplemental Benefit Value",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "HWAI True Plan Value Part C",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "HWAI True Plan Value Part C",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "HWAI True Plan Value Part D",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "HWAI True Plan Value Part D",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "HWAI True Plan Value Total",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "HWAI True Plan Value Total",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Actuarial (%)",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Actuarial (%)",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Year",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Year",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							},
+							{
+								"source": {
+									"name": "StateId",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "StateId",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							},
+							{
+								"source": {
+									"name": "CountyId",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "CountyId",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "DelimitedText10",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "AzureSqlTable16",
+						"type": "DatasetReference"
+					}
+				]
 			}
 		],
 		"folder": {
