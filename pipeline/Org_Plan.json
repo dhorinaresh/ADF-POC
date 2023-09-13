@@ -532,6 +532,18 @@
 							},
 							{
 								"source": {
+									"name": "TEGPlanValue",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "TEGPlanValue",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
 									"name": "OOPC",
 									"type": "String",
 									"physicalType": "String"
