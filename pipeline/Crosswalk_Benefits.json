@@ -445,7 +445,7 @@
 					},
 					"sink": {
 						"type": "AzureSqlSink",
-						"preCopyScript": "Truncate table Org_Benefits_New;",
+						"preCopyScript": "Truncate table OrgBenefits;",
 						"writeBehavior": "insert",
 						"sqlWriterUseTableLock": false,
 						"disableMetricsCollection": false
@@ -549,7 +549,7 @@
 								"value": "@pipeline().parameters.password",
 								"type": "Expression"
 							},
-							"sql_table_name": "Org_Benefits_New"
+							"sql_table_name": "OrgBenefits"
 						}
 					}
 				]
@@ -852,7 +852,7 @@
 								"value": "@pipeline().parameters.password",
 								"type": "Expression"
 							},
-							"sql_table_name": "Org_Benefits_New"
+							"sql_table_name": "OrgBenefits"
 						}
 					}
 				]
@@ -995,7 +995,7 @@
 								"value": "@pipeline().parameters.password",
 								"type": "Expression"
 							},
-							"sql_table_name": "Org_Benefits_New"
+							"sql_table_name": "OrgBenefits"
 						}
 					}
 				]
