@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"folderPath": "Product_Insights/Output/pi_lscape_August2023",
+				"folderPath": "Product_Insights/Output/pi_lscape_September2023",
 				"fileSystem": "hwaicontainer"
 			},
 			"columnDelimiter": ",",

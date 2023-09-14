@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"folderPath": "WinningPlans/Output/TopPlans_August2023",
+				"folderPath": "WinningPlans/Output/TopPlans_September2023",
 				"fileSystem": "hwaicontainer"
 			},
 			"columnDelimiter": ",",
