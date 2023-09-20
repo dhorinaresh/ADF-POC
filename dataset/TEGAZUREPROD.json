@@ -2,7 +2,7 @@
 	"name": "TEGAZUREPROD",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "AzureSqlDatabase4",
+			"referenceName": "AzureSqlDatabase5",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
