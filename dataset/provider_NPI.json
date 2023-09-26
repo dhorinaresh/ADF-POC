@@ -1,0 +1,46 @@
+{
+	"name": "provider_NPI",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "providerSQL",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "specialty_code",
+				"type": "varchar"
+			},
+			{
+				"name": "specialty_category",
+				"type": "varchar"
+			},
+			{
+				"name": "specialty_name",
+				"type": "varchar"
+			},
+			{
+				"name": "specialty_subspecialty",
+				"type": "varchar"
+			},
+			{
+				"name": "New_Flag",
+				"type": "varchar"
+			},
+			{
+				"name": "DAC_specialty_name",
+				"type": "varchar"
+			},
+			{
+				"name": "id",
+				"type": "int",
+				"precision": 10
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "NPISearchProviderNetworkData_physicianSpecialist_mjhs"
+		}
+	}
+}
