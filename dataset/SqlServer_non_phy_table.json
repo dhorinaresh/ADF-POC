@@ -1,0 +1,138 @@
+{
+	"name": "SqlServer_non_phy_table",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "providerSQL",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "npi",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "npis",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "type",
+				"type": "varchar"
+			},
+			{
+				"name": "presentation_name",
+				"type": "varchar"
+			},
+			{
+				"name": "first_name",
+				"type": "varchar"
+			},
+			{
+				"name": "last_name",
+				"type": "varchar"
+			},
+			{
+				"name": "network_id",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "network_name",
+				"type": "varchar"
+			},
+			{
+				"name": "carrier_name",
+				"type": "varchar"
+			},
+			{
+				"name": "specialty_category",
+				"type": "varchar"
+			},
+			{
+				"name": "specialty_name",
+				"type": "varchar"
+			},
+			{
+				"name": "specialty_subspecialty",
+				"type": "varchar"
+			},
+			{
+				"name": "specialty_code",
+				"type": "varchar"
+			},
+			{
+				"name": "New_Flag",
+				"type": "varchar"
+			},
+			{
+				"name": "Address_First_Line",
+				"type": "varchar"
+			},
+			{
+				"name": "Address_Second_Line",
+				"type": "varchar"
+			},
+			{
+				"name": "city",
+				"type": "varchar"
+			},
+			{
+				"name": "state",
+				"type": "varchar"
+			},
+			{
+				"name": "zip_code",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "county_name",
+				"type": "varchar"
+			},
+			{
+				"name": "FIPS_State_County_Code",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "latitude",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "longitude",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "accepting_new_patients",
+				"type": "varchar"
+			},
+			{
+				"name": "Comments",
+				"type": "varchar"
+			},
+			{
+				"name": "NDF_specialty",
+				"type": "varchar"
+			},
+			{
+				"name": "Data_flag",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "id",
+				"type": "int",
+				"precision": 10
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "NPISearchProviderNetworkData_non_physicianSpecialist_mjhs"
+		}
+	}
+}
