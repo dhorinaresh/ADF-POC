@@ -675,26 +675,6 @@
 				}
 			},
 			{
-				"name": "Combining Section_C_OON and Section_C_POS_copy1",
-				"type": "DatabricksNotebook",
-				"dependsOn": [],
-				"policy": {
-					"timeout": "0.12:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"notebookPath": "/Users/hwaitech@healthworksai.com/Plan_Finder/Benefit_scripts_new/Section C/Combining Section_C_OON and Section_C_POS"
-				},
-				"linkedServiceName": {
-					"referenceName": "AzureDatabricks4_pfcluster3",
-					"type": "LinkedServiceReference"
-				}
-			},
-			{
 				"name": "Fail_status_update_Combining_OON and POS",
 				"type": "Lookup",
 				"dependsOn": [
