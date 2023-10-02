@@ -75,7 +75,7 @@
 		],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "HWai_pbp_dictionary"
+			"table": "Section_D_Framework_Changes"
 		}
 	}
 }

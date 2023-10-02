@@ -8,10 +8,10 @@
 		"annotations": [],
 		"type": "Excel",
 		"typeProperties": {
-			"sheetName": "Sheet2",
+			"sheetName": "Sheet1",
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "Section_D_Framework_Changes.xlsx",
+				"fileName": "SectionC.xlsx",
 				"folderPath": "Practice",
 				"fileSystem": "hwaicontainer"
 			},
