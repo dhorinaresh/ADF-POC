@@ -284,7 +284,7 @@
 				}
 			},
 			{
-				"name": "Pipeline_SEC_C and SEC_C_OON",
+				"name": "Pipeline_SEC_C and SEC_C_OON and SEC_C_POS",
 				"type": "ExecutePipeline",
 				"dependsOn": [
 					{
@@ -297,7 +297,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"pipeline": {
-						"referenceName": "Ben_Section_C_and_Section_C_OON",
+						"referenceName": "Ben_Section_C_and_Section_C_OON_Section_C_POS",
 						"type": "PipelineReference"
 					},
 					"waitOnCompletion": true
@@ -308,7 +308,7 @@
 				"type": "WebActivity",
 				"dependsOn": [
 					{
-						"activity": "Pipeline_SEC_C and SEC_C_OON",
+						"activity": "Pipeline_SEC_C and SEC_C_OON and SEC_C_POS",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -326,17 +326,17 @@
 					"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
 					"method": "POST",
 					"body": {
-						"value": "{\n \"title\":\"PIPELINE RUN FOR BENEFITS DATA UPDATE FAILED IN Ben_SECTION_C_AND_SEC_C_OON\",\n \"color\":\"RED\",\n \"message\":\"@{activity('Pipeline_SEC_C and SEC_C_OON').output.error.message}\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+						"value": "{\n \"title\":\"PIPELINE RUN FOR BENEFITS DATA UPDATE FAILED IN Ben_SECTION_C_AND_SEC_C_OON\",\n \"color\":\"RED\",\n \"message\":\"@{activity('Pipeline_SEC_C and SEC_C_OON and SEC_C_POS').output.error.message}\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
 						"type": "Expression"
 					}
 				}
 			},
 			{
-				"name": "Pipeline_SEC_C_POS",
+				"name": "Pipeline_Benefits_OON to db",
 				"type": "ExecutePipeline",
 				"dependsOn": [
 					{
-						"activity": "Pipeline_SEC_C and SEC_C_OON",
+						"activity": "Pipeline_SEC_C and SEC_C_OON and SEC_C_POS",
 						"dependencyConditions": [
 							"Completed"
 						]
@@ -345,7 +345,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"pipeline": {
-						"referenceName": "Ben_Section_C_POS",
+						"referenceName": "Benifits_OON_to_db",
 						"type": "PipelineReference"
 					},
 					"waitOnCompletion": true
@@ -356,7 +356,7 @@
 				"type": "WebActivity",
 				"dependsOn": [
 					{
-						"activity": "Pipeline_SEC_C_POS",
+						"activity": "Pipeline_Benefits_OON to db",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -374,7 +374,7 @@
 					"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
 					"method": "POST",
 					"body": {
-						"value": "{\n \"title\":\"PIPELINE RUN FOR BENEFITS DATA UPDATE FAILED IN Ben_SECTION_C_POS\",\n \"color\":\"RED\",\n \"message\":\"@{activity('Pipeline_SEC_C_POS').output.error.message}\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+						"value": "{\n \"title\":\"PIPELINE RUN FOR BENEFITS DATA UPDATE FAILED IN Ben_SECTION_C_POS\",\n \"color\":\"RED\",\n \"message\":\"@{activity('Pipeline_Benefits_OON to db').output.error.message}\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
 						"type": "Expression"
 					}
 				}
