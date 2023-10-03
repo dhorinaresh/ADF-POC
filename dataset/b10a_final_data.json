@@ -10,8 +10,8 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "enr_final2.csv",
-				"folderPath": "WinningPlans/Output",
+				"fileName": "AEP_Landscape24_22_MOOP update.csv",
+				"folderPath": "EnrollmentTrendTechStack",
 				"fileSystem": "hwaicontainer"
 			},
 			"columnDelimiter": ",",
@@ -21,7 +21,11 @@
 		},
 		"schema": [
 			{
-				"name": "State",
+				"name": "Contract_ID",
+				"type": "String"
+			},
+			{
+				"name": "statecode",
 				"type": "String"
 			},
 			{
@@ -29,7 +33,19 @@
 				"type": "String"
 			},
 			{
-				"name": "Statecode",
+				"name": "State",
+				"type": "String"
+			},
+			{
+				"name": "Plan_ID",
+				"type": "String"
+			},
+			{
+				"name": "Segment_ID",
+				"type": "String"
+			},
+			{
+				"name": "Organization_Name",
 				"type": "String"
 			},
 			{
@@ -37,23 +53,7 @@
 				"type": "String"
 			},
 			{
-				"name": "Plan_Type",
-				"type": "String"
-			},
-			{
-				"name": "Bid_ID",
-				"type": "String"
-			},
-			{
-				"name": "Special_Needs_Plan_Type",
-				"type": "String"
-			},
-			{
-				"name": "Key_Segment",
-				"type": "String"
-			},
-			{
-				"name": "Parent_Organization",
+				"name": "plan_type",
 				"type": "String"
 			},
 			{
@@ -65,439 +65,111 @@
 				"type": "String"
 			},
 			{
-				"name": "Deductible_Health",
+				"name": "Drug_Benefit_Type",
 				"type": "String"
 			},
 			{
-				"name": "MOOP",
+				"name": "Add_Cvrg_Offrd_in_Gap",
 				"type": "String"
 			},
 			{
-				"name": "Star_rating",
-				"type": "Float"
-			},
-			{
-				"name": "Inpatient Hospital-Acute Copay Tier 1",
-				"type": "String"
-			},
-			{
-				"name": "SNF MC stay Tier1 Copay",
-				"type": "String"
-			},
-			{
-				"name": "Cardiac and Pulmonary Rehabilitation Services Coinsurance/Copay",
-				"type": "String"
-			},
-			{
-				"name": "Emergency Care Coinsurance/Copay",
-				"type": "String"
-			},
-			{
-				"name": "Transport Coinsurance/Copay",
-				"type": "String"
-			},
-			{
-				"name": "OTC Coinsurance/Copay",
-				"type": "String"
-			},
-			{
-				"name": "OTC Max Coverage Amt",
-				"type": "String"
-			},
-			{
-				"name": "Meal Benefit Coinsurance/Copay",
-				"type": "String"
-			},
-			{
-				"name": "Preventive Dental Coinsurance/Copay",
-				"type": "String"
-			},
-			{
-				"name": "Comprehensive Dental Coinsurance/Copay",
-				"type": "String"
-			},
-			{
-				"name": "Eye Exams Coinsurance/Copay",
-				"type": "String"
-			},
-			{
-				"name": "Eyewear Coinsurance/Copay",
-				"type": "String"
-			},
-			{
-				"name": "Hearing Aids Coinsurance/Copay",
-				"type": "String"
-			},
-			{
-				"name": "Hearing Exams Coinsurance/Copay",
-				"type": "String"
-			},
-			{
-				"name": "Chiropractic Services Coinsurance/Copay",
-				"type": "String"
-			},
-			{
-				"name": "Podiatry Services Coinsurance/Copay",
-				"type": "String"
-			},
-			{
-				"name": "Acupuncture Coinsurance/Copay",
-				"type": "String"
-			},
-			{
-				"name": "Annual Physical Exam Coinsurance/Copay",
-				"type": "String"
-			},
-			{
-				"name": "Outpatient Blood Services Coinsurance/Copay",
-				"type": "String"
-			},
-			{
-				"name": "Alternative Therapy Coins/Copay",
-				"type": "String"
-			},
-			{
-				"name": "PERS Coins/Copay",
-				"type": "String"
-			},
-			{
-				"name": "Grand_Total",
-				"type": "String"
-			},
-			{
-				"name": "Inpatient_Hospital_YN",
-				"type": "String"
-			},
-			{
-				"name": "Snf_YN",
-				"type": "String"
-			},
-			{
-				"name": "Cardiac_YN",
-				"type": "String"
-			},
-			{
-				"name": "Emergency_YN",
-				"type": "String"
-			},
-			{
-				"name": "Chiropractor_YN",
-				"type": "String"
-			},
-			{
-				"name": "Podiatry_YN",
-				"type": "String"
-			},
-			{
-				"name": "Outpatient_Blood_Services_YN",
-				"type": "String"
-			},
-			{
-				"name": "Transportation_YN",
-				"type": "String"
-			},
-			{
-				"name": "Accupuncture_YN",
-				"type": "String"
-			},
-			{
-				"name": "Over_the_Counter_YN",
-				"type": "String"
-			},
-			{
-				"name": "Meal_Services_YN",
-				"type": "String"
-			},
-			{
-				"name": "Annual_Physical_Exam_YN",
-				"type": "String"
-			},
-			{
-				"name": "Pre_Dental_YN",
-				"type": "String"
-			},
-			{
-				"name": "Comp_Dental_YN",
-				"type": "String"
-			},
-			{
-				"name": "Eye_Exam_YN",
-				"type": "String"
-			},
-			{
-				"name": "Eye_Wear_YN",
-				"type": "String"
-			},
-			{
-				"name": "Hear_Exam_YN",
-				"type": "String"
-			},
-			{
-				"name": "Hear_Aid_YN",
-				"type": "String"
-			},
-			{
-				"name": "Giveback_YN",
-				"type": "String"
-			},
-			{
-				"name": "Alternative_Therapy_YN",
-				"type": "String"
-			},
-			{
-				"name": "PERS_YN",
-				"type": "String"
-			},
-			{
-				"name": "PDSS_YN",
-				"type": "String"
-			},
-			{
-				"name": "DESCRIPTION",
-				"type": "String"
-			},
-			{
-				"name": "pbp_d_mco_pay_reduct_amt",
-				"type": "String"
-			},
-			{
-				"name": "April_2019",
-				"type": "String"
-			},
-			{
-				"name": "August_2019",
-				"type": "String"
-			},
-			{
-				"name": "December_2019",
-				"type": "String"
-			},
-			{
-				"name": "February_2019",
-				"type": "String"
-			},
-			{
-				"name": "January_2019",
-				"type": "String"
-			},
-			{
-				"name": "July_2019",
-				"type": "String"
-			},
-			{
-				"name": "June_2019",
-				"type": "String"
-			},
-			{
-				"name": "March_2019",
-				"type": "String"
-			},
-			{
-				"name": "May_2019",
-				"type": "String"
-			},
-			{
-				"name": "November_2019",
-				"type": "String"
-			},
-			{
-				"name": "October_2019",
-				"type": "String"
-			},
-			{
-				"name": "September_2019",
-				"type": "String"
-			},
-			{
-				"name": "January_2020",
-				"type": "String"
-			},
-			{
-				"name": "February_2020",
-				"type": "String"
-			},
-			{
-				"name": "March_2020",
-				"type": "String"
-			},
-			{
-				"name": "April_2020",
-				"type": "String"
-			},
-			{
-				"name": "May_2020",
-				"type": "String"
-			},
-			{
-				"name": "June_2020",
-				"type": "String"
-			},
-			{
-				"name": "July_2020",
-				"type": "String"
-			},
-			{
-				"name": "August_2020",
-				"type": "String"
-			},
-			{
-				"name": "September_2020",
-				"type": "String"
-			},
-			{
-				"name": "October_2020",
-				"type": "String"
-			},
-			{
-				"name": "November_2020",
-				"type": "String"
-			},
-			{
-				"name": "December_2020",
-				"type": "String"
-			},
-			{
-				"name": "January_2021",
-				"type": "String"
-			},
-			{
-				"name": "February_2021",
-				"type": "String"
-			},
-			{
-				"name": "March_2021",
-				"type": "String"
-			},
-			{
-				"name": "April_2021",
-				"type": "String"
-			},
-			{
-				"name": "May_2021",
-				"type": "String"
-			},
-			{
-				"name": "June_2021",
-				"type": "String"
-			},
-			{
-				"name": "July_2021",
-				"type": "String"
-			},
-			{
-				"name": "August_2021",
-				"type": "String"
-			},
-			{
-				"name": "September_2021",
-				"type": "String"
-			},
-			{
-				"name": "October_2021",
-				"type": "String"
-			},
-			{
-				"name": "November_2021",
-				"type": "String"
-			},
-			{
-				"name": "December_2021",
+				"name": "Drug_Benefit_Type_Detail",
 				"type": "String"
 			},
 			{
-				"name": "January_2022",
+				"name": "In_network_MOOP_Amount",
 				"type": "String"
 			},
 			{
-				"name": "February_2022",
+				"name": "Overall_Star_Rating",
 				"type": "String"
 			},
 			{
-				"name": "March_2022",
+				"name": "MMP",
 				"type": "String"
 			},
 			{
-				"name": "April_2022",
+				"name": "Organization_Type",
 				"type": "String"
 			},
 			{
-				"name": "May_2022",
+				"name": "plan_type_p",
 				"type": "String"
 			},
 			{
-				"name": "June_2022",
+				"name": "PartD_Basic_Prm_Blw_Rgnl_bnchmrk",
 				"type": "String"
 			},
 			{
-				"name": "July_2022",
+				"name": "partc_premium2",
 				"type": "String"
 			},
 			{
-				"name": "August_2022",
+				"name": "PartD_Basic_Premium3",
 				"type": "String"
 			},
 			{
-				"name": "September_2022",
+				"name": "PartD_Supplemental_Premium4",
 				"type": "String"
 			},
 			{
-				"name": "October_2022",
+				"name": "PartD_Total_Premium5",
 				"type": "String"
 			},
 			{
-				"name": "November_2022",
+				"name": "PartD_Prm_oblgtn_Full_prm_assist",
 				"type": "String"
 			},
 			{
-				"name": "December_2022",
+				"name": "PartD_Prm_oblgtn_75_prm_assist",
 				"type": "String"
 			},
 			{
-				"name": "January_2023",
+				"name": "PartD_Prm_oblgtn_50_prm_assist",
 				"type": "String"
 			},
 			{
-				"name": "February_2023",
+				"name": "PartD_Prm_oblgtn_25_prm_assist",
 				"type": "String"
 			},
 			{
-				"name": "March_2023",
+				"name": "PartD_Drug_Deductible",
 				"type": "String"
 			},
 			{
-				"name": "April_2023",
+				"name": "key_segment1",
 				"type": "String"
 			},
 			{
-				"name": "May_2023",
+				"name": "star_rating",
 				"type": "String"
 			},
 			{
-				"name": "June_2023",
+				"name": "parent_organization",
 				"type": "String"
 			},
 			{
-				"name": "July_2023",
+				"name": "Premium_C_new",
 				"type": "String"
 			},
 			{
-				"name": "August_2023",
+				"name": "Premium_D_new",
 				"type": "String"
 			},
 			{
-				"name": "September_2023",
+				"name": "SNP",
 				"type": "String"
 			},
 			{
-				"name": "October_2023",
+				"name": "Special_Needs_Plan_Type",
 				"type": "String"
 			},
 			{
-				"name": "November_2023",
+				"name": "PartD",
 				"type": "String"
 			},
 			{
-				"name": "December_2023",
+				"name": "Year",
 				"type": "String"
 			}
 		]
