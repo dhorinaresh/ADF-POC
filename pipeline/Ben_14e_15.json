@@ -248,7 +248,7 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"notebookPath": "/Users/hwaitech@healthworksai.com/Plan_Finder/Benefit_scripts_new/Blank Interpretation/b14e_BlankInterpretation_new"
+					"notebookPath": "/Users/hwaitech@healthworksai.com/Plan_Finder/Benefit_scripts_new/Blank Interpretation/b14e_BlankInterpretation"
 				},
 				"linkedServiceName": {
 					"referenceName": "AzureDatabricks4_pfcluster3",
