@@ -91,8 +91,8 @@
 								},
 								"sink": {
 									"name": "Plan_ID",
-									"type": "String",
-									"physicalType": "nvarchar"
+									"type": "Int32",
+									"physicalType": "int"
 								}
 							},
 							{
@@ -103,8 +103,8 @@
 								},
 								"sink": {
 									"name": "Segment_ID",
-									"type": "String",
-									"physicalType": "nvarchar"
+									"type": "Int32",
+									"physicalType": "int"
 								}
 							},
 							{
@@ -151,8 +151,8 @@
 								},
 								"sink": {
 									"name": "Monthly_Consolidated_Premium_C_D",
-									"type": "String",
-									"physicalType": "nvarchar"
+									"type": "Double",
+									"physicalType": "float"
 								}
 							},
 							{
@@ -163,8 +163,8 @@
 								},
 								"sink": {
 									"name": "Annual_Drug_Deductible",
-									"type": "String",
-									"physicalType": "nvarchar"
+									"type": "Int32",
+									"physicalType": "int"
 								}
 							},
 							{
@@ -283,20 +283,8 @@
 								},
 								"sink": {
 									"name": "partc_premium2",
-									"type": "String",
-									"physicalType": "nvarchar"
-								}
-							},
-							{
-								"source": {
-									"name": "PartD_Basic_Premium3",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "PartD_Basic_Premium3",
-									"type": "String",
-									"physicalType": "nvarchar"
+									"type": "Double",
+									"physicalType": "float"
 								}
 							},
 							{
@@ -307,8 +295,8 @@
 								},
 								"sink": {
 									"name": "PartD_Supplemental_Premium4",
-									"type": "String",
-									"physicalType": "nvarchar"
+									"type": "Double",
+									"physicalType": "float"
 								}
 							},
 							{
@@ -319,8 +307,8 @@
 								},
 								"sink": {
 									"name": "PartD_Total_Premium5",
-									"type": "String",
-									"physicalType": "nvarchar"
+									"type": "Double",
+									"physicalType": "float"
 								}
 							},
 							{
@@ -331,8 +319,8 @@
 								},
 								"sink": {
 									"name": "PartD_Prm_oblgtn_Full_prm_assist",
-									"type": "String",
-									"physicalType": "nvarchar"
+									"type": "Double",
+									"physicalType": "float"
 								}
 							},
 							{
@@ -343,8 +331,8 @@
 								},
 								"sink": {
 									"name": "PartD_Prm_oblgtn_75_prm_assist",
-									"type": "String",
-									"physicalType": "nvarchar"
+									"type": "Double",
+									"physicalType": "float"
 								}
 							},
 							{
@@ -355,8 +343,8 @@
 								},
 								"sink": {
 									"name": "PartD_Prm_oblgtn_50_prm_assist",
-									"type": "String",
-									"physicalType": "nvarchar"
+									"type": "Double",
+									"physicalType": "float"
 								}
 							},
 							{
@@ -367,8 +355,8 @@
 								},
 								"sink": {
 									"name": "PartD_Prm_oblgtn_25_prm_assist",
-									"type": "String",
-									"physicalType": "nvarchar"
+									"type": "Double",
+									"physicalType": "float"
 								}
 							},
 							{
@@ -379,8 +367,8 @@
 								},
 								"sink": {
 									"name": "PartD_Drug_Deductible",
-									"type": "String",
-									"physicalType": "nvarchar"
+									"type": "Int32",
+									"physicalType": "int"
 								}
 							},
 							{
@@ -403,8 +391,8 @@
 								},
 								"sink": {
 									"name": "star_rating",
-									"type": "String",
-									"physicalType": "nvarchar"
+									"type": "Double",
+									"physicalType": "float"
 								}
 							},
 							{
@@ -427,8 +415,8 @@
 								},
 								"sink": {
 									"name": "Premium_C_new",
-									"type": "String",
-									"physicalType": "nvarchar"
+									"type": "Double",
+									"physicalType": "float"
 								}
 							},
 							{
@@ -439,8 +427,8 @@
 								},
 								"sink": {
 									"name": "Premium_D_new",
-									"type": "String",
-									"physicalType": "nvarchar"
+									"type": "Double",
+									"physicalType": "float"
 								}
 							},
 							{
@@ -487,8 +475,8 @@
 								},
 								"sink": {
 									"name": "Year",
-									"type": "String",
-									"physicalType": "nvarchar"
+									"type": "Int32",
+									"physicalType": "int"
 								}
 							}
 						],
