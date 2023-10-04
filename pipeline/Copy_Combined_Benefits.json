@@ -1,0 +1,165 @@
+{
+	"name": "Copy_Combined_Benefits",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy ombined benefits",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"wildcardFolderPath": "Output/Output_Benefit_combined/Combined_Benefits_AllBenefits_Yes_No_Melted_New.csv",
+							"wildcardFileName": "p*",
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false,
+						"disableMetricsCollection": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "Bid_Id",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Bid_Id",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Plan_Name",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Plan_Name",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Year",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Year",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							},
+							{
+								"source": {
+									"name": "Benefits",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Benefits",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "BenefitValue",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "BenefitValue",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Benefit_Files",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "dataset_sql",
+						"type": "DatasetReference",
+						"parameters": {
+							"sql_server_dataset": {
+								"value": "@pipeline().parameters.sql_server_dataset_name",
+								"type": "Expression"
+							},
+							"db_name_dataset": {
+								"value": "@pipeline().parameters.db_name",
+								"type": "Expression"
+							},
+							"user_name_dataset": {
+								"value": "@pipeline().parameters.user_name",
+								"type": "Expression"
+							},
+							"password_dataset": {
+								"value": "@pipeline().parameters.password",
+								"type": "Expression"
+							},
+							"sql_table_name": "Org_Benefits_New"
+						}
+					}
+				]
+			}
+		],
+		"parameters": {
+			"sql_server_dataset_name": {
+				"type": "string",
+				"defaultValue": "teghws.database.windows.net"
+			},
+			"db_name": {
+				"type": "string",
+				"defaultValue": "hwai_production_db_AEP"
+			},
+			"user_name": {
+				"type": "string",
+				"defaultValue": "hwstegadmin"
+			},
+			"password": {
+				"type": "string",
+				"defaultValue": "Goteg@12345"
+			}
+		},
+		"folder": {
+			"name": "PF_Pipelines/AEP_Refresh/PBP_Files_Processing"
+		},
+		"annotations": []
+	}
+}
