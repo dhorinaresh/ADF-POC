@@ -1,0 +1,85 @@
+{
+	"name": "DelimitedText11",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Linked_service_AzureDataLakeStorage2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "Final_OrgClientBenfitsConfig.csv",
+				"folderPath": "QC",
+				"fileSystem": "pfcontainer"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "BenefitID",
+				"type": "String"
+			},
+			{
+				"name": "SortOrder",
+				"type": "String"
+			},
+			{
+				"name": "Benefits",
+				"type": "String"
+			},
+			{
+				"name": "BenefitGroup",
+				"type": "String"
+			},
+			{
+				"name": "IsCostShareOnly",
+				"type": "String"
+			},
+			{
+				"name": "ActiveIndicator",
+				"type": "String"
+			},
+			{
+				"name": "isColorCodeApplicable",
+				"type": "String"
+			},
+			{
+				"name": "isColorCodeApplicable_Client",
+				"type": "String"
+			},
+			{
+				"name": "BusinessLogic",
+				"type": "String"
+			},
+			{
+				"name": "0_Code_Color",
+				"type": "String"
+			},
+			{
+				"name": "1_Code_Color",
+				"type": "String"
+			},
+			{
+				"name": "2_Code_Color",
+				"type": "String"
+			},
+			{
+				"name": "4_Code_Color",
+				"type": "String"
+			},
+			{
+				"name": "logic_group",
+				"type": "String"
+			},
+			{
+				"name": "ClientID",
+				"type": "String"
+			}
+		]
+	}
+}
