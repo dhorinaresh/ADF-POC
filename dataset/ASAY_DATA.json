@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "pred24_final.csv",
+				"fileName": "pred24_final_mock.csv",
 				"folderPath": "EnrollmentTrendTechStack",
 				"fileSystem": "hwaicontainer"
 			},
