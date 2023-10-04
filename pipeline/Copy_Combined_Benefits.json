@@ -20,7 +20,7 @@
 						"storeSettings": {
 							"type": "AzureBlobFSReadSettings",
 							"recursive": true,
-							"wildcardFolderPath": "Output/Output_Benefit_combined/Combined_Benefits_AllBenefits_Yes_No_Melted_New.csv",
+							"wildcardFolderPath": "Output / Output_Benefit_combined / Combined_Benefits_AllBenefits_Yes_No_Melted_New.csv",
 							"wildcardFileName": "p*",
 							"enablePartitionDiscovery": false
 						},
