@@ -133,7 +133,7 @@
 								"value": "@pipeline().parameters.password",
 								"type": "Expression"
 							},
-							"sql_table_name": "Org_Benefits_New"
+							"sql_table_name": "OrgBenefits"
 						}
 					}
 				]
