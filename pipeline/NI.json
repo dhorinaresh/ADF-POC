@@ -1517,7 +1517,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "NPI_Special_group",
+						"referenceName": "NPI_non_phy_specialist_1",
 						"type": "DatasetReference"
 					}
 				]
