@@ -18,7 +18,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "SqlServerSource",
-						"sqlReaderQuery": "select top(436) [specialty_code]\n      ,[specialty_category]\n      ,[specialty_name]\n      ,[specialty_subspecialty]\n      ,[New_Flag]\n      ,[DAC_specialty_name],id from [NPISearchSpecialGroup_mjhs] order by id",
+						"sqlReaderQuery": "select [specialty_code]\n      ,[specialty_category]\n      ,[specialty_name]\n      ,[specialty_subspecialty]\n      ,[New_Flag]\n      ,[DAC_specialty_name],id from [NPISearchSpecialGroup_mjhs] order by id \n\t  offset 436 rows FETCH NEXT 436 ROWS ONLY",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
