@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "NPI_mjhs_part2.csv",
+				"fileName": "NPI_non_phy_spec_part1.csv",
 				"folderPath": "GL_Tables_CSV",
 				"container": "hwaicontainer"
 			},

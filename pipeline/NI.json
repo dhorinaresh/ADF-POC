@@ -18,7 +18,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "SqlServerSource",
-						"sqlReaderQuery": "select [specialty_code]\n      ,[specialty_category]\n      ,[specialty_name]\n      ,[specialty_subspecialty]\n      ,[New_Flag]\n      ,[DAC_specialty_name],id from [NPISearchSpecialGroup_mjhs] order by id \n\t  offset 436 rows FETCH NEXT 436 ROWS ONLY",
+						"sqlReaderQuery": "SELECT [npi]\n      ,[npis]\n      ,[type]\n      ,[presentation_name]\n      ,[first_name]\n      ,[last_name]\n      ,[network_id]\n      ,[network_name]\n      ,[carrier_name]\n      ,[specialty_category]\n      ,[specialty_name]\n      ,[specialty_subspecialty]\n      ,[specialty_code]\n      ,[New_Flag]\n      ,[Address_First_Line]\n      ,[Address_Second_Line]\n      ,[city]\n      ,[state]\n      ,[zip_code]\n      ,[county_name]\n      ,[FIPS_State_County_Code]\n      ,[latitude]\n      ,[longitude]\n      ,[accepting_new_patients]\n      ,[Comments]\n      ,[NDF_specialty]\n      ,[Data_flag]\n      FROM [HWAI_ProviderData].[dbo].[NPISearchProviderNetworkData_non_physicianSpecialist_mjhs]\n\t  where state in ('AK','AL','AR','AZ','CA','CO','CT','DC','DE','FL','GA','HI','IA')",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},

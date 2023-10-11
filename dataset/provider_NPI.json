@@ -40,7 +40,7 @@
 		],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "NPISearchSpecialGroup_mjhs"
+			"table": "NPISearchProviderNetworkData_non_physicianSpecialist_mjhs"
 		}
 	}
 }
