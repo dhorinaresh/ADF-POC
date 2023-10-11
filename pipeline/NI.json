@@ -39,108 +39,12 @@
 						"mappings": [
 							{
 								"source": {
-									"name": "npi",
-									"type": "Int64",
-									"physicalType": "bigint"
-								},
-								"sink": {
-									"name": "npi",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "npis",
-									"type": "Int64",
-									"physicalType": "bigint"
-								},
-								"sink": {
-									"name": "npis",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "type",
+									"name": "specialty_code",
 									"type": "String",
 									"physicalType": "varchar"
 								},
 								"sink": {
-									"name": "type",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "presentation_name",
-									"type": "String",
-									"physicalType": "varchar"
-								},
-								"sink": {
-									"name": "presentation_name",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "first_name",
-									"type": "String",
-									"physicalType": "varchar"
-								},
-								"sink": {
-									"name": "first_name",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "last_name",
-									"type": "String",
-									"physicalType": "varchar"
-								},
-								"sink": {
-									"name": "last_name",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "network_id",
-									"type": "Int32",
-									"physicalType": "int"
-								},
-								"sink": {
-									"name": "network_id",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "network_name",
-									"type": "String",
-									"physicalType": "varchar"
-								},
-								"sink": {
-									"name": "network_name",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "carrier_name",
-									"type": "String",
-									"physicalType": "varchar"
-								},
-								"sink": {
-									"name": "carrier_name",
+									"name": "specialty_code",
 									"type": "String",
 									"physicalType": "String"
 								}
@@ -183,18 +87,6 @@
 							},
 							{
 								"source": {
-									"name": "specialty_code",
-									"type": "String",
-									"physicalType": "varchar"
-								},
-								"sink": {
-									"name": "specialty_code",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
 									"name": "New_Flag",
 									"type": "String",
 									"physicalType": "varchar"
@@ -207,156 +99,12 @@
 							},
 							{
 								"source": {
-									"name": "Address_First_Line",
+									"name": "DAC_specialty_name",
 									"type": "String",
 									"physicalType": "varchar"
 								},
 								"sink": {
-									"name": "Address_First_Line",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "Address_Second_Line",
-									"type": "String",
-									"physicalType": "varchar"
-								},
-								"sink": {
-									"name": "Address_Second_Line",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "city",
-									"type": "String",
-									"physicalType": "varchar"
-								},
-								"sink": {
-									"name": "city",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "state",
-									"type": "String",
-									"physicalType": "varchar"
-								},
-								"sink": {
-									"name": "state",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "zip_code",
-									"type": "Int32",
-									"physicalType": "int"
-								},
-								"sink": {
-									"name": "zip_code",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "county_name",
-									"type": "String",
-									"physicalType": "varchar"
-								},
-								"sink": {
-									"name": "county_name",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "FIPS_State_County_Code",
-									"type": "Int32",
-									"physicalType": "int"
-								},
-								"sink": {
-									"name": "FIPS_State_County_Code",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "latitude",
-									"type": "String",
-									"physicalType": "varchar"
-								},
-								"sink": {
-									"name": "latitude",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "longitude",
-									"type": "String",
-									"physicalType": "varchar"
-								},
-								"sink": {
-									"name": "longitude",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "accepting_new_patients",
-									"type": "String",
-									"physicalType": "varchar"
-								},
-								"sink": {
-									"name": "accepting_new_patients",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "Comments",
-									"type": "String",
-									"physicalType": "varchar"
-								},
-								"sink": {
-									"name": "Comments",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "NDF_specialty",
-									"type": "String",
-									"physicalType": "varchar"
-								},
-								"sink": {
-									"name": "NDF_specialty",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "Data_flag",
-									"type": "Int32",
-									"physicalType": "int"
-								},
-								"sink": {
-									"name": "Data_flag",
+									"name": "DAC_specialty_name",
 									"type": "String",
 									"physicalType": "String"
 								}
