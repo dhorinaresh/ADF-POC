@@ -757,7 +757,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "NPI_Special_group",
+						"referenceName": "non_phy_spec_part3",
 						"type": "DatasetReference"
 					}
 				]
