@@ -10,11 +10,12 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "NPI_non_phy_spec_part1",
+				"fileName": "NPI_non_phy_spec_part1_row-col_delim",
 				"folderPath": "GL_Tables_CSV",
 				"container": "hwaicontainer"
 			},
 			"columnDelimiter": "\t",
+			"rowDelimiter": "\n",
 			"escapeChar": "\\",
 			"firstRowAsHeader": true,
 			"quoteChar": "\""
