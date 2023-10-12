@@ -2,17 +2,14 @@
 	"name": "NPI_non_phy_specialist_1",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "AzureBlobStorage5",
+			"referenceName": "AzureBlobStorage4",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
 			"location": {
-				"type": "AzureBlobStorageLocation",
-				"fileName": "NPI_non_phy_spec_part1_row-col_delim",
-				"folderPath": "GL_Tables_CSV",
-				"container": "hwaicontainer"
+				"type": "AzureBlobStorageLocation"
 			},
 			"columnDelimiter": "\t",
 			"rowDelimiter": "\n",
