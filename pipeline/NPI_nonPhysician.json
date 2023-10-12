@@ -55,6 +55,91 @@
 						"type": "DatasetReference"
 					}
 				]
+			},
+			{
+				"name": "non_physician_data_part2",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": "SELECT [npi]\r\n      ,[npis]\r\n      ,[type]\r\n      ,[presentation_name]\r\n      ,[first_name]\r\n      ,[last_name]\r\n      ,[network_id]\r\n      ,[network_name]\r\n      ,[carrier_name]\r\n      ,[specialty_category]\r\n      ,[specialty_name]\r\n      ,[specialty_subspecialty]\r\n      ,[specialty_code]\r\n      ,[New_Flag]\r\n      ,[Address_First_Line]\r\n      ,[Address_Second_Line]\r\n      ,[city]\r\n      ,[state]\r\n      ,[zip_code]\r\n      ,[county_name]\r\n      ,[FIPS_State_County_Code]\r\n      ,[latitude]\r\n      ,[longitude]\r\n      ,[accepting_new_patients]\r\n      ,[Comments]\r\n      ,[NDF_specialty]\r\n      ,[Data_flag]\r\n      FROM [HWAI_ProviderData].[dbo].[NPISearchProviderNetworkData_non_physicianSpecialist_mjhs]\r\n\t  where state in ('ID','IL','IN','KS','KY','LA','MA','MD','ME','MI','MN','MO','MP')",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "AzureBlobStorageWriteSettings"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ".txt"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "provider_NPI",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "NPI_non_phy2",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "Copy data2",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"enableStaging": false
+				}
+			},
+			{
+				"name": "Copy data3",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"enableStaging": false
+				}
 			}
 		],
 		"folder": {
