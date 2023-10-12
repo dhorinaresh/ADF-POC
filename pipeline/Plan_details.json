@@ -1,0 +1,289 @@
+{
+	"name": "Plan_details",
+	"properties": {
+		"activities": [
+			{
+				"name": "Plan_details_GL Script",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Plan_Deatils_GL_Script"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks4_pfcluster3",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Copy plan_details to db",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Plan_details_GL Script",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"wildcardFolderPath": "AllstateAllYears/ASAY_Directory/Monthly_Plan_details",
+							"wildcardFileName": "part*",
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"preCopyScript": "Delete from HWai_Plan_Details_Final\nwhere Data_Source='CMS'",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false,
+						"disableMetricsCollection": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "Plan_Name",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Plan_Name",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Plan_Type",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Plan_Type",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Parent_Organization",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Parent_Organization",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CPID",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "CPID",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Organization_Type",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Organization_Type",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Offers_Part_D",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Offers_Part_D",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "SNP_Plan",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SNP_Plan",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Organization_Name",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Organization_Name",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Organization_Marketing_Name",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Organization_Marketing_Name",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Year",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Year",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							},
+							{
+								"source": {
+									"name": "Month",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Month",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							},
+							{
+								"source": {
+									"name": "Active_Ind",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Active_Ind",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							},
+							{
+								"source": {
+									"name": "Data_Source",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Data_Source",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "DelimitedText12",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "dataset_sql",
+						"type": "DatasetReference",
+						"parameters": {
+							"sql_server_dataset": {
+								"value": "@pipeline().parameters.sql_server_dataset_name",
+								"type": "Expression"
+							},
+							"db_name_dataset": {
+								"value": "@pipeline().parameters.db_name",
+								"type": "Expression"
+							},
+							"user_name_dataset": {
+								"value": "@pipeline().parameters.user_name",
+								"type": "Expression"
+							},
+							"password_dataset": {
+								"value": "@pipeline().parameters.password",
+								"type": "Expression"
+							},
+							"sql_table_name": "HWai_Plan_Details_Final"
+						}
+					}
+				]
+			}
+		],
+		"parameters": {
+			"sql_server_dataset_name": {
+				"type": "string",
+				"defaultValue": "hwpilot.database.windows.net"
+			},
+			"db_name": {
+				"type": "string",
+				"defaultValue": "HWai_Dashboards"
+			},
+			"user_name": {
+				"type": "string",
+				"defaultValue": "pladmin"
+			},
+			"password": {
+				"type": "string",
+				"defaultValue": "Goteg@12345"
+			}
+		},
+		"folder": {
+			"name": "Hwai_Refresh/Golden_Layer_Tables"
+		},
+		"annotations": []
+	}
+}
