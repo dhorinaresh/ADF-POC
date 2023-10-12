@@ -1,0 +1,30 @@
+{
+	"name": "nonPHY1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "part1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "non_phy_spec1",
+				"folderPath": "GL_Tables_CSV",
+				"container": "hwaicontainer"
+			},
+			"columnDelimiter": "\t",
+			"rowDelimiter": "\n",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "DefaultFilterID\tClientID\tStateIDs\tSalesRegionIDs\tCountyIDs\tIndGrpPlansIDs\tPlanTypeIDs\tMAPDPIDs\tSNPIDs\tOrganizationID\tMarketIDs\tSubMarketIDs\tFootPrintsIDs\tStatePos\tSalesRegionPos\tCountyPos\tIndGrpPlansPos\tPlanTypePos\tMAPDPPos\tSNPPos\tOrganizationPos\tMarketPos\tSubmarketPos\tFootprintsPos\tIsStateMS\tIsCountyMS\tIsSalesRegionMS\tIsIndGrpPlansMS\tIsPlanTypeMS\tIsMAPDPMS\tIsSNPMS\tIsOrganizationMS\tIsMarketMS\tIsSubmarketMS\tIsFootprintsMS\tStarEnrollmentsOn\tTerminatedPlansOn\tOOAreaOn\tisPredicted",
+				"type": "String"
+			}
+		]
+	}
+}
