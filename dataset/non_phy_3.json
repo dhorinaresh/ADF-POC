@@ -1,0 +1,25 @@
+{
+	"name": "non_phy_3",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "non_phy3",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "non_phy_spec3.csv",
+				"folderPath": "GL_Tables_CSV",
+				"container": "hwaicontainer"
+			},
+			"columnDelimiter": "\t",
+			"rowDelimiter": "\n",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
