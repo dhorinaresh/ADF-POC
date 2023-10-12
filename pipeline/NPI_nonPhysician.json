@@ -1,0 +1,10 @@
+{
+	"name": "NPI_nonPhysician",
+	"properties": {
+		"description": "load data from nonPhysician table to csv",
+		"folder": {
+			"name": "NI_NPI"
+		},
+		"annotations": []
+	}
+}
