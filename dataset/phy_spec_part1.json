@@ -1,0 +1,25 @@
+{
+	"name": "phy_spec_part1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "phy_spec_part1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "phy_spec_part1.csv",
+				"folderPath": "GL_Tables_CSV",
+				"container": "hwaicontainer"
+			},
+			"columnDelimiter": "\t",
+			"rowDelimiter": "\n",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
