@@ -2,188 +2,185 @@
 	"name": "AzureSqlTable5",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "AzureSqlDatabase1",
+			"referenceName": "AzureSqlDatabase5",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
 		"type": "AzureSqlTable",
 		"schema": [
 			{
-				"name": "Id",
+				"name": "ETKey",
 				"type": "int",
 				"precision": 10
 			},
 			{
-				"name": "StateId",
+				"name": "FilterID",
 				"type": "int",
 				"precision": 10
 			},
 			{
-				"name": "CountyId",
+				"name": "StateID",
 				"type": "int",
 				"precision": 10
 			},
 			{
-				"name": "BidId",
-				"type": "nvarchar"
+				"name": "CountyID",
+				"type": "int",
+				"precision": 10
 			},
 			{
-				"name": "RichPlans",
-				"type": "float",
-				"precision": 15
+				"name": "IndGrpPlansID",
+				"type": "int",
+				"precision": 10
 			},
 			{
-				"name": "LeanPlans",
-				"type": "float",
-				"precision": 15
+				"name": "MAPDPID",
+				"type": "int",
+				"precision": 10
 			},
 			{
-				"name": "WinningPlans",
-				"type": "float",
-				"precision": 15
+				"name": "SNPID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "PlanTypeID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "OrganizationID",
+				"type": "int",
+				"precision": 10
 			},
 			{
 				"name": "PlanName",
-				"type": "nvarchar"
+				"type": "varchar"
 			},
 			{
-				"name": "PremiumCD",
-				"type": "float",
-				"precision": 15
+				"name": "BidId",
+				"type": "varchar"
 			},
 			{
-				"name": "PartD",
-				"type": "float",
-				"precision": 15
-			},
-			{
-				"name": "PartBGiveBack",
-				"type": "float",
-				"precision": 15
-			},
-			{
-				"name": "PlanCoverage",
-				"type": "nvarchar"
-			},
-			{
-				"name": "SbWorldWideEmegency",
-				"type": "nvarchar"
-			},
-			{
-				"name": "SbHearing",
-				"type": "nvarchar"
-			},
-			{
-				"name": "HealthDeductible",
-				"type": "float",
-				"precision": 15
-			},
-			{
-				"name": "AnnualDrugDeductible",
-				"type": "float",
-				"precision": 15
-			},
-			{
-				"name": "MOOP",
-				"type": "float",
-				"precision": 15
-			},
-			{
-				"name": "SbVision",
-				"type": "nvarchar"
-			},
-			{
-				"name": "TEGPlanValue",
-				"type": "float",
-				"precision": 15
-			},
-			{
-				"name": "OOPC",
-				"type": "float",
-				"precision": 15
-			},
-			{
-				"name": "PCP",
-				"type": "nvarchar"
-			},
-			{
-				"name": "Specalist",
-				"type": "nvarchar"
-			},
-			{
-				"name": "InpatAcute",
-				"type": "nvarchar"
-			},
-			{
-				"name": "SbInpatient",
-				"type": "nvarchar"
-			},
-			{
-				"name": "OCTCoverage",
-				"type": "nvarchar"
-			},
-			{
-				"name": "SbOTC",
-				"type": "nvarchar"
-			},
-			{
-				"name": "SbCompDental",
-				"type": "nvarchar"
-			},
-			{
-				"name": "CompDentalCoverage",
-				"type": "nvarchar"
-			},
-			{
-				"name": "SbChiropractor",
+				"name": "Year",
 				"type": "int",
 				"precision": 10
 			},
 			{
-				"name": "SbMeal",
+				"name": "Enrollments",
 				"type": "int",
 				"precision": 10
 			},
 			{
-				"name": "SbFitness",
-				"type": "nvarchar"
+				"name": "MAEligibles",
+				"type": "float",
+				"precision": 15
 			},
 			{
-				"name": "EmergencyCare",
-				"type": "nvarchar"
+				"name": "StabilityIndex",
+				"type": "float",
+				"precision": 15
 			},
 			{
-				"name": "OpHospital",
-				"type": "nvarchar"
+				"name": "Prediction",
+				"type": "varchar"
 			},
 			{
-				"name": "SbTeleHealth",
-				"type": "nvarchar"
+				"name": "EGHP",
+				"type": "varchar"
 			},
 			{
-				"name": "SbHomeSupport",
-				"type": "nvarchar"
+				"name": "FIPS_State_County_Code",
+				"type": "varchar"
 			},
 			{
-				"name": "SbHomeSafety",
-				"type": "nvarchar"
+				"name": "Offers_Part_D",
+				"type": "varchar"
 			},
 			{
-				"name": "SBPers",
-				"type": "nvarchar"
+				"name": "Other_Dual_Full_Medicaid_Benefit",
+				"type": "float",
+				"precision": 15
 			},
 			{
-				"name": "SbAmbulance",
-				"type": "nvarchar"
+				"name": "Plan_ID",
+				"type": "varchar"
 			},
 			{
-				"name": "OverallStarRating",
+				"name": "QDWI",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "QI",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "QMB_Only",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "QMB_Plus_Full_Medicaid_Benefits",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "SLMB_only",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "SLMB_Plus_Full_Medicaid_Benefits",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "SNP_Eligibles",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "SNP_Plan",
+				"type": "varchar"
+			},
+			{
+				"name": "SSA_State_County_Code",
+				"type": "varchar"
+			},
+			{
+				"name": "Contract_ID",
+				"type": "varchar"
+			},
+			{
+				"name": "MonthNumber",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "IsTerminated",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "IsOutofArea",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "IsStarEnr",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Status",
 				"type": "varchar"
 			}
 		],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "OrgPlansCopy"
+			"table": "EnrollmentTrendsData"
 		}
 	},
 	"type": "Microsoft.DataFactory/factories/datasets"
