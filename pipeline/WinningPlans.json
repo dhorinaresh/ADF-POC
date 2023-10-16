@@ -326,7 +326,7 @@
 				"userProperties": [
 					{
 						"name": "Source",
-						"value": "hwaicontainer/WinningPlans/Output/TopPlans_September2023/p*"
+						"value": "hwaicontainer/WinningPlans/Output/TopPlans_October2023/p*"
 					},
 					{
 						"name": "Destination",
@@ -340,7 +340,7 @@
 							"type": "AzureBlobFSReadSettings",
 							"recursive": true,
 							"modifiedDatetimeStart": "2023-03-07T00:00:00.000Z",
-							"wildcardFolderPath": "WinningPlans/Output/TopPlans_September2023",
+							"wildcardFolderPath": "WinningPlans/Output/TopPlans_October2023",
 							"wildcardFileName": "p*",
 							"enablePartitionDiscovery": false
 						},
@@ -2092,7 +2092,7 @@
 				"userProperties": [
 					{
 						"name": "Source",
-						"value": "hwaicontainer/WinningPlans/Output/TopPlans_September2023/p*"
+						"value": "hwaicontainer/WinningPlans/Output/TopPlans_October2023/p*"
 					},
 					{
 						"name": "Destination",
@@ -2106,7 +2106,7 @@
 							"type": "AzureBlobFSReadSettings",
 							"recursive": true,
 							"modifiedDatetimeStart": "2023-03-07T00:00:00.000Z",
-							"wildcardFolderPath": "WinningPlans/Output/TopPlans_September2023",
+							"wildcardFolderPath": "WinningPlans/Output/TopPlans_October2023",
 							"wildcardFileName": "p*",
 							"enablePartitionDiscovery": false
 						},
