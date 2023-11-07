@@ -16,16 +16,9 @@
 				"userProperties": [],
 				"typeProperties": {
 					"source": {
-						"type": "DelimitedTextSource",
-						"storeSettings": {
-							"type": "AzureBlobFSReadSettings",
-							"recursive": true,
-							"wildcardFolderPath": "HWai_Plan_Details_Final.csv",
-							"enablePartitionDiscovery": false
-						},
-						"formatSettings": {
-							"type": "DelimitedTextReadSettings"
-						}
+						"type": "AzureSqlSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
 					},
 					"sink": {
 						"type": "AzureSqlSink",
@@ -44,8 +37,15 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "DelimitedText12",
-						"type": "DatasetReference"
+						"referenceName": "dataset_sql",
+						"type": "DatasetReference",
+						"parameters": {
+							"sql_server_dataset": "datalakesql.analytics-hub.com",
+							"db_name_dataset": "HWai_Staging_DB",
+							"user_name_dataset": "teghwaistg",
+							"password_dataset": "GD87de$sdr&",
+							"sql_table_name": "HWAI_Crosswalk"
+						}
 					}
 				],
 				"outputs": [
@@ -53,23 +53,11 @@
 						"referenceName": "dataset_sql",
 						"type": "DatasetReference",
 						"parameters": {
-							"sql_server_dataset": {
-								"value": "@pipeline().parameters.sql_server_dataset_name",
-								"type": "Expression"
-							},
-							"db_name_dataset": {
-								"value": "@pipeline().parameters.db_name",
-								"type": "Expression"
-							},
-							"user_name_dataset": {
-								"value": "@pipeline().parameters.user_name",
-								"type": "Expression"
-							},
-							"password_dataset": {
-								"value": "@pipeline().parameters.password",
-								"type": "Expression"
-							},
-							"sql_table_name": "HWai_Plan_Details_Final"
+							"sql_server_dataset": "datalakesql.analytics-hub.com",
+							"db_name_dataset": "DE_POC",
+							"user_name_dataset": "teghwaistg",
+							"password_dataset": "GD87de$sdr&",
+							"sql_table_name": "HWAI_Crosswalk"
 						}
 					}
 				]
