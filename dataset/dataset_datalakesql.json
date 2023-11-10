@@ -1,0 +1,54 @@
+{
+	"name": "dataset_datalakesql",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "SqlServer_local",
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"Sql_server": {
+					"value": "@dataset().Sql_server",
+					"type": "Expression"
+				},
+				"Database": {
+					"value": "@dataset().Database",
+					"type": "Expression"
+				},
+				"Username": {
+					"value": "@dataset().Username",
+					"type": "Expression"
+				},
+				"Password": {
+					"value": "@dataset().Password",
+					"type": "Expression"
+				}
+			}
+		},
+		"parameters": {
+			"Sql_server": {
+				"type": "string"
+			},
+			"Database": {
+				"type": "string"
+			},
+			"Username": {
+				"type": "string"
+			},
+			"Password": {
+				"type": "string"
+			},
+			"Table_name": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": {
+				"value": "@dataset().Table_name",
+				"type": "Expression"
+			}
+		}
+	}
+}
