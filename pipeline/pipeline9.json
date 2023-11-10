@@ -16,12 +16,12 @@
 				"userProperties": [],
 				"typeProperties": {
 					"source": {
-						"type": "AzureSqlSource",
+						"type": "SqlServerSource",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
 					"sink": {
-						"type": "AzureSqlSink",
+						"type": "SqlServerSink",
 						"writeBehavior": "insert",
 						"sqlWriterUseTableLock": false
 					},
@@ -37,27 +37,27 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "dataset_sql",
+						"referenceName": "dataset_datalakesql",
 						"type": "DatasetReference",
 						"parameters": {
-							"sql_server_dataset": "datalakesql.analytics-hub.com",
-							"db_name_dataset": "HWai_Staging_DB",
-							"user_name_dataset": "teghwaistg",
-							"password_dataset": "GD87de$sdr&",
-							"sql_table_name": "HWAI_Crosswalk"
+							"Sql_server": "datalakesql.analytics-hub.com",
+							"Database": "HWai_Staging_DB",
+							"Username": "teghwaistg",
+							"Password": "GD87de$sdr&",
+							"Table_name": "HWai_Crosswalk"
 						}
 					}
 				],
 				"outputs": [
 					{
-						"referenceName": "dataset_sql",
+						"referenceName": "dataset_datalakesql",
 						"type": "DatasetReference",
 						"parameters": {
-							"sql_server_dataset": "datalakesql.analytics-hub.com",
-							"db_name_dataset": "DE_POC",
-							"user_name_dataset": "teghwaistg",
-							"password_dataset": "GD87de$sdr&",
-							"sql_table_name": "HWAI_Crosswalk"
+							"Sql_server": "datalakesql.analytics-hub.com",
+							"Database": "DE_POC",
+							"Username": "teghwaistg",
+							"Password": "GD87de$sdr&",
+							"Table_name": "HWai_Crosswalk"
 						}
 					}
 				]
