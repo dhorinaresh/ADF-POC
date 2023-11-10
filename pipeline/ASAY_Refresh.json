@@ -17,6 +17,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "SqlServerSource",
+						"sqlReaderQuery": "INSERT INTO Audit(FileName, Operation, StartTime,Dashboard)\nValues('ASAY', 'ASAY_Create_Base_Data', (Select GETDATE()),'ASAY');\nSelect * from Audit;",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -93,32 +94,32 @@
 				"userProperties": [],
 				"typeProperties": {
 					"source": {
-						"type": "AzureSqlSource",
+						"type": "SqlServerSource",
 						"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'pass'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
 					"dataset": {
-						"referenceName": "dataset_sql",
+						"referenceName": "dataset_datalakesql",
 						"type": "DatasetReference",
 						"parameters": {
-							"sql_server_dataset": {
+							"Sql_server": {
 								"value": "@pipeline().parameters.sql_server_dataset_name",
 								"type": "Expression"
 							},
-							"db_name_dataset": {
+							"Database": {
 								"value": "@pipeline().parameters.db_name",
 								"type": "Expression"
 							},
-							"user_name_dataset": {
+							"Username": {
 								"value": "@pipeline().parameters.user_name",
 								"type": "Expression"
 							},
-							"password_dataset": {
+							"Password": {
 								"value": "@pipeline().parameters.password",
 								"type": "Expression"
 							},
-							"sql_table_name": "Audit"
+							"Table_name": "Audit"
 						}
 					}
 				}
@@ -144,32 +145,32 @@
 				"userProperties": [],
 				"typeProperties": {
 					"source": {
-						"type": "AzureSqlSource",
+						"type": "SqlServerSource",
 						"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'Fail'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
 					"dataset": {
-						"referenceName": "dataset_sql",
+						"referenceName": "dataset_datalakesql",
 						"type": "DatasetReference",
 						"parameters": {
-							"sql_server_dataset": {
+							"Sql_server": {
 								"value": "@pipeline().parameters.sql_server_dataset_name",
 								"type": "Expression"
 							},
-							"db_name_dataset": {
+							"Database": {
 								"value": "@pipeline().parameters.db_name",
 								"type": "Expression"
 							},
-							"user_name_dataset": {
+							"Username": {
 								"value": "@pipeline().parameters.user_name",
 								"type": "Expression"
 							},
-							"password_dataset": {
+							"Password": {
 								"value": "@pipeline().parameters.password",
 								"type": "Expression"
 							},
-							"sql_table_name": "Audit"
+							"Table_name": "Audit"
 						}
 					}
 				}
@@ -454,7 +455,7 @@
 			},
 			"password": {
 				"type": "String",
-				"defaultValue": "GD87de$sdr"
+				"defaultValue": "GD87de$sdr&"
 			}
 		},
 		"folder": {
