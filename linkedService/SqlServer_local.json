@@ -1,0 +1,25 @@
+{
+	"name": "SqlServer_local",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"parameters": {
+			"Sql_server": {
+				"type": "string"
+			},
+			"Database": {
+				"type": "string"
+			},
+			"Username": {
+				"type": "string"
+			},
+			"Password": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "SqlServer",
+		"typeProperties": {
+			"connectionString": "Integrated Security=False;Data Source=@{linkedService().Sql_server};Initial Catalog=@{linkedService().Database};User ID=@{linkedService().Username};Password=@{linkedService().Password}"
+		}
+	}
+}
