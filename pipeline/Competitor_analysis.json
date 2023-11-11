@@ -22,26 +22,14 @@
 						"partitionOption": "None"
 					},
 					"dataset": {
-						"referenceName": "dataset_datalakesql",
+						"referenceName": "datalakesql_server_dataset",
 						"type": "DatasetReference",
 						"parameters": {
-							"Sql_server": {
-								"value": "@pipeline().parameters.sql_server_dataset_name",
+							"database": {
+								"value": "@pipeline().parameters.datalakesql_database_for_Audit",
 								"type": "Expression"
 							},
-							"Database": {
-								"value": "@pipeline().parameters.db_name",
-								"type": "Expression"
-							},
-							"Username": {
-								"value": "@pipeline().parameters.user_name",
-								"type": "Expression"
-							},
-							"Password": {
-								"value": "@pipeline().parameters.password",
-								"type": "Expression"
-							},
-							"Table_name": "Audit"
+							"table": "Audit"
 						}
 					}
 				}
@@ -73,26 +61,14 @@
 						"partitionOption": "None"
 					},
 					"dataset": {
-						"referenceName": "dataset_datalakesql",
+						"referenceName": "datalakesql_server_dataset",
 						"type": "DatasetReference",
 						"parameters": {
-							"Sql_server": {
-								"value": "@pipeline().parameters.sql_server_dataset_name",
+							"database": {
+								"value": "@pipeline().parameters.datalakesql_database_for_Audit",
 								"type": "Expression"
 							},
-							"Database": {
-								"value": "@pipeline().parameters.db_name",
-								"type": "Expression"
-							},
-							"Username": {
-								"value": "@pipeline().parameters.user_name",
-								"type": "Expression"
-							},
-							"Password": {
-								"value": "@pipeline().parameters.password",
-								"type": "Expression"
-							},
-							"Table_name": "Audit"
+							"table": "Audit"
 						}
 					}
 				}
@@ -124,26 +100,14 @@
 						"partitionOption": "None"
 					},
 					"dataset": {
-						"referenceName": "dataset_datalakesql",
+						"referenceName": "datalakesql_server_dataset",
 						"type": "DatasetReference",
 						"parameters": {
-							"Sql_server": {
-								"value": "@pipeline().parameters.sql_server_dataset_name",
+							"database": {
+								"value": "@pipeline().parameters.datalakesql_database_for_Audit",
 								"type": "Expression"
 							},
-							"Database": {
-								"value": "@pipeline().parameters.db_name",
-								"type": "Expression"
-							},
-							"Username": {
-								"value": "@pipeline().parameters.user_name",
-								"type": "Expression"
-							},
-							"Password": {
-								"value": "@pipeline().parameters.password",
-								"type": "Expression"
-							},
-							"Table_name": "Audit"
+							"table": "Audit"
 						}
 					}
 				}
@@ -182,11 +146,9 @@
 						}
 					},
 					"sink": {
-						"type": "AzureSqlSink",
+						"type": "SqlServerSink",
 						"writeBehavior": "insert",
-						"sqlWriterUseTableLock": false,
-						"tableOption": "autoCreate",
-						"disableMetricsCollection": false
+						"sqlWriterUseTableLock": false
 					},
 					"enableStaging": false,
 					"translator": {
@@ -650,26 +612,14 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "dataset_sql",
+						"referenceName": "prodsql_server_dataset",
 						"type": "DatasetReference",
 						"parameters": {
-							"sql_server_dataset": {
-								"value": "@pipeline().parameters.sql_server_dataset_name",
+							"database": {
+								"value": "@pipeline().parameters.prodsql_copy_database_name",
 								"type": "Expression"
 							},
-							"db_name_dataset": {
-								"value": "@pipeline().parameters.db_name",
-								"type": "Expression"
-							},
-							"user_name_dataset": {
-								"value": "@pipeline().parameters.user_name",
-								"type": "Expression"
-							},
-							"password_dataset": {
-								"value": "@pipeline().parameters.password",
-								"type": "Expression"
-							},
-							"sql_table_name": "ca_allstatesallyears"
+							"table": "ca_allstatesallyears"
 						}
 					}
 				]
@@ -701,26 +651,14 @@
 						"partitionOption": "None"
 					},
 					"dataset": {
-						"referenceName": "dataset_datalakesql",
+						"referenceName": "datalakesql_server_dataset",
 						"type": "DatasetReference",
 						"parameters": {
-							"Sql_server": {
-								"value": "@pipeline().parameters.sql_server_dataset_name",
+							"database": {
+								"value": "@pipeline().parameters.datalakesql_database_for_Audit",
 								"type": "Expression"
 							},
-							"Database": {
-								"value": "@pipeline().parameters.db_name",
-								"type": "Expression"
-							},
-							"Username": {
-								"value": "@pipeline().parameters.user_name",
-								"type": "Expression"
-							},
-							"Password": {
-								"value": "@pipeline().parameters.password",
-								"type": "Expression"
-							},
-							"Table_name": "Audit"
+							"table": "Audit"
 						}
 					}
 				}
@@ -752,26 +690,14 @@
 						"partitionOption": "None"
 					},
 					"dataset": {
-						"referenceName": "dataset_datalakesql",
+						"referenceName": "datalakesql_server_dataset",
 						"type": "DatasetReference",
 						"parameters": {
-							"Sql_server": {
-								"value": "@pipeline().parameters.sql_server_dataset_name",
+							"database": {
+								"value": "@pipeline().parameters.datalakesql_database_for_Audit",
 								"type": "Expression"
 							},
-							"Database": {
-								"value": "@pipeline().parameters.db_name",
-								"type": "Expression"
-							},
-							"Username": {
-								"value": "@pipeline().parameters.user_name",
-								"type": "Expression"
-							},
-							"Password": {
-								"value": "@pipeline().parameters.password",
-								"type": "Expression"
-							},
-							"Table_name": "Audit"
+							"table": "Audit"
 						}
 					}
 				}
@@ -803,26 +729,14 @@
 						"partitionOption": "None"
 					},
 					"dataset": {
-						"referenceName": "dataset_datalakesql",
+						"referenceName": "datalakesql_server_dataset",
 						"type": "DatasetReference",
 						"parameters": {
-							"Sql_server": {
-								"value": "@pipeline().parameters.sql_server_dataset_name",
+							"database": {
+								"value": "@pipeline().parameters.datalakesql_database_for_Audit",
 								"type": "Expression"
 							},
-							"Database": {
-								"value": "@pipeline().parameters.db_name",
-								"type": "Expression"
-							},
-							"Username": {
-								"value": "@pipeline().parameters.user_name",
-								"type": "Expression"
-							},
-							"Password": {
-								"value": "@pipeline().parameters.password",
-								"type": "Expression"
-							},
-							"Table_name": "Audit"
+							"table": "Audit"
 						}
 					}
 				}
@@ -931,32 +845,20 @@
 				"userProperties": [],
 				"typeProperties": {
 					"source": {
-						"type": "AzureSqlSource",
+						"type": "SqlServerSource",
 						"sqlReaderQuery": "Truncate table ca_allstatesallyears;\nSELECT TOP 10 * FROM ca_allstatesallyears;",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
 					"dataset": {
-						"referenceName": "dataset_sql",
+						"referenceName": "prodsql_server_dataset",
 						"type": "DatasetReference",
 						"parameters": {
-							"sql_server_dataset": {
-								"value": "@pipeline().parameters.sql_server_dataset_name",
+							"database": {
+								"value": "@pipeline().parameters.prodsql_copy_database_name",
 								"type": "Expression"
 							},
-							"db_name_dataset": {
-								"value": "@pipeline().parameters.db_name",
-								"type": "Expression"
-							},
-							"user_name_dataset": {
-								"value": "@pipeline().parameters.user_name",
-								"type": "Expression"
-							},
-							"password_dataset": {
-								"value": "@pipeline().parameters.password",
-								"type": "Expression"
-							},
-							"sql_table_name": "ca_allstatesallyears"
+							"table": "ca_allstatesallyears"
 						}
 					}
 				}
@@ -1461,8 +1363,15 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "CA_datalake",
-						"type": "DatasetReference"
+						"referenceName": "datalakesql_server_dataset",
+						"type": "DatasetReference",
+						"parameters": {
+							"database": {
+								"value": "@pipeline().parameters.datalakesql_copy_database_name",
+								"type": "Expression"
+							},
+							"table": "ca_allstatesallyears"
+						}
 					}
 				]
 			},
@@ -1493,8 +1402,15 @@
 						"partitionOption": "None"
 					},
 					"dataset": {
-						"referenceName": "CA_datalake",
-						"type": "DatasetReference"
+						"referenceName": "datalakesql_server_dataset",
+						"type": "DatasetReference",
+						"parameters": {
+							"database": {
+								"value": "@pipeline().parameters.datalakesql_copy_database_name",
+								"type": "Expression"
+							},
+							"table": "ca_allstatesallyears"
+						}
 					}
 				}
 			},
@@ -1528,21 +1444,17 @@
 			}
 		],
 		"parameters": {
-			"sql_server_dataset_name": {
-				"type": "String",
-				"defaultValue": "datalakesql.analytics-hub.com"
+			"datalakesql_copy_database_name": {
+				"type": "string",
+				"defaultValue": "HWai_Dashboards"
 			},
-			"db_name": {
-				"type": "String",
+			"datalakesql_database_for_Audit": {
+				"type": "string",
 				"defaultValue": "HWai_Staging_DB"
 			},
-			"user_name": {
-				"type": "String",
-				"defaultValue": "teghwaistg"
-			},
-			"password": {
-				"type": "String",
-				"defaultValue": "GD87de$sdr&"
+			"prodsql_copy_database_name": {
+				"type": "string",
+				"defaultValue": "HWai_Dashboards"
 			}
 		},
 		"folder": {
