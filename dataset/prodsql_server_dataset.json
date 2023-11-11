@@ -1,0 +1,33 @@
+{
+	"name": "prodsql_server_dataset",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "prodsql_linked_service",
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"database_name": {
+					"value": "@dataset().database",
+					"type": "Expression"
+				}
+			}
+		},
+		"parameters": {
+			"database": {
+				"type": "string"
+			},
+			"table": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": {
+				"value": "@dataset().table",
+				"type": "Expression"
+			}
+		}
+	}
+}
