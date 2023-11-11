@@ -1,0 +1,15 @@
+{
+	"name": "datalakesql_server_dataset",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "datalakesql_linked_service",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo"
+		}
+	}
+}
