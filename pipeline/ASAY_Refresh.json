@@ -205,26 +205,14 @@
 						"partitionOption": "None"
 					},
 					"dataset": {
-						"referenceName": "dataset_datalakesql",
+						"referenceName": "datalakesql_server_dataset",
 						"type": "DatasetReference",
 						"parameters": {
-							"Sql_server": {
-								"value": "@pipeline().parameters.sql_server_dataset_name",
+							"database": {
+								"value": "@pipeline().parameters.database_name",
 								"type": "Expression"
 							},
-							"Database": {
-								"value": "@pipeline().parameters.db_name",
-								"type": "Expression"
-							},
-							"Username": {
-								"value": "@pipeline().parameters.user_name",
-								"type": "Expression"
-							},
-							"Password": {
-								"value": "@pipeline().parameters.password",
-								"type": "Expression"
-							},
-							"Table_name": "Audit"
+							"table": "Audit"
 						}
 					}
 				}
