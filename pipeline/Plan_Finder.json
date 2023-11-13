@@ -16,32 +16,20 @@
 				"userProperties": [],
 				"typeProperties": {
 					"source": {
-						"type": "AzureSqlSource",
+						"type": "SqlServerSource",
 						"sqlReaderQuery": "INSERT INTO Audit(FileName, Operation, StartTime,Dashboard)\nValues('Plan_Finder', 'PF_Data_prep', (Select GETDATE()),'Plan_Finder');\nSelect * from Audit;",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
 					"dataset": {
-						"referenceName": "dataset_sql",
+						"referenceName": "prodsql_server_dataset",
 						"type": "DatasetReference",
 						"parameters": {
-							"sql_server_dataset": {
-								"value": "@pipeline().parameters.sql_server_dataset_name",
+							"database": {
+								"value": "@pipeline().parameters.database",
 								"type": "Expression"
 							},
-							"db_name_dataset": {
-								"value": "@pipeline().parameters.db_name",
-								"type": "Expression"
-							},
-							"user_name_dataset": {
-								"value": "@pipeline().parameters.user_name",
-								"type": "Expression"
-							},
-							"password_dataset": {
-								"value": "@pipeline().parameters.password",
-								"type": "Expression"
-							},
-							"sql_table_name": "Audit"
+							"table": "Audit"
 						}
 					}
 				}
@@ -94,32 +82,20 @@
 				"userProperties": [],
 				"typeProperties": {
 					"source": {
-						"type": "AzureSqlSource",
+						"type": "SqlServerSource",
 						"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'pass'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
 					"dataset": {
-						"referenceName": "dataset_sql",
+						"referenceName": "prodsql_server_dataset",
 						"type": "DatasetReference",
 						"parameters": {
-							"sql_server_dataset": {
-								"value": "@pipeline().parameters.sql_server_dataset_name",
+							"database": {
+								"value": "@pipeline().parameters.database",
 								"type": "Expression"
 							},
-							"db_name_dataset": {
-								"value": "@pipeline().parameters.db_name",
-								"type": "Expression"
-							},
-							"user_name_dataset": {
-								"value": "@pipeline().parameters.user_name",
-								"type": "Expression"
-							},
-							"password_dataset": {
-								"value": "@pipeline().parameters.password",
-								"type": "Expression"
-							},
-							"sql_table_name": "Audit"
+							"table": "Audit"
 						}
 					}
 				}
@@ -145,32 +121,20 @@
 				"userProperties": [],
 				"typeProperties": {
 					"source": {
-						"type": "AzureSqlSource",
+						"type": "SqlServerSource",
 						"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'Fail'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
 					"dataset": {
-						"referenceName": "dataset_sql",
+						"referenceName": "prodsql_server_dataset",
 						"type": "DatasetReference",
 						"parameters": {
-							"sql_server_dataset": {
-								"value": "@pipeline().parameters.sql_server_dataset_name",
+							"database": {
+								"value": "@pipeline().parameters.database",
 								"type": "Expression"
 							},
-							"db_name_dataset": {
-								"value": "@pipeline().parameters.db_name",
-								"type": "Expression"
-							},
-							"user_name_dataset": {
-								"value": "@pipeline().parameters.user_name",
-								"type": "Expression"
-							},
-							"password_dataset": {
-								"value": "@pipeline().parameters.password",
-								"type": "Expression"
-							},
-							"sql_table_name": "Audit"
+							"table": "Audit"
 						}
 					}
 				}
@@ -209,7 +173,7 @@
 						}
 					},
 					"sink": {
-						"type": "AzureSqlSink",
+						"type": "SqlServerSink",
 						"writeBehavior": "insert",
 						"sqlWriterUseTableLock": false
 					},
@@ -231,26 +195,14 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "dataset_sql",
+						"referenceName": "prodsql_server_dataset",
 						"type": "DatasetReference",
 						"parameters": {
-							"sql_server_dataset": {
-								"value": "@pipeline().parameters.sql_server_dataset_name",
+							"database": {
+								"value": "@pipeline().parameters.database",
 								"type": "Expression"
 							},
-							"db_name_dataset": {
-								"value": "@pipeline().parameters.db_name",
-								"type": "Expression"
-							},
-							"user_name_dataset": {
-								"value": "@pipeline().parameters.user_name",
-								"type": "Expression"
-							},
-							"password_dataset": {
-								"value": "@pipeline().parameters.password",
-								"type": "Expression"
-							},
-							"sql_table_name": "OrgEnrollment"
+							"table": "OrgEnrollment"
 						}
 					}
 				]
@@ -276,32 +228,20 @@
 				"userProperties": [],
 				"typeProperties": {
 					"source": {
-						"type": "AzureSqlSource",
+						"type": "SqlServerSource",
 						"sqlReaderQuery": "INSERT INTO Audit(FileName, Operation, StartTime,Dashboard)\nValues('Crosswalk', 'Crosswalk_data_load_to_db', (Select GETDATE()),'Crosswalk');\nSelect * from Audit;",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
 					"dataset": {
-						"referenceName": "dataset_sql",
+						"referenceName": "prodsql_server_dataset",
 						"type": "DatasetReference",
 						"parameters": {
-							"sql_server_dataset": {
-								"value": "@pipeline().parameters.sql_server_dataset_name",
+							"database": {
+								"value": "@pipeline().parameters.database",
 								"type": "Expression"
 							},
-							"db_name_dataset": {
-								"value": "@pipeline().parameters.db_name",
-								"type": "Expression"
-							},
-							"user_name_dataset": {
-								"value": "@pipeline().parameters.user_name",
-								"type": "Expression"
-							},
-							"password_dataset": {
-								"value": "@pipeline().parameters.password",
-								"type": "Expression"
-							},
-							"sql_table_name": "Audit"
+							"table": "Audit"
 						}
 					}
 				}
@@ -327,32 +267,20 @@
 				"userProperties": [],
 				"typeProperties": {
 					"source": {
-						"type": "AzureSqlSource",
+						"type": "SqlServerSource",
 						"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'pass'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
 					"dataset": {
-						"referenceName": "dataset_sql",
+						"referenceName": "prodsql_server_dataset",
 						"type": "DatasetReference",
 						"parameters": {
-							"sql_server_dataset": {
-								"value": "@pipeline().parameters.sql_server_dataset_name",
+							"database": {
+								"value": "@pipeline().parameters.database",
 								"type": "Expression"
 							},
-							"db_name_dataset": {
-								"value": "@pipeline().parameters.db_name",
-								"type": "Expression"
-							},
-							"user_name_dataset": {
-								"value": "@pipeline().parameters.user_name",
-								"type": "Expression"
-							},
-							"password_dataset": {
-								"value": "@pipeline().parameters.password",
-								"type": "Expression"
-							},
-							"sql_table_name": "Audit"
+							"table": "Audit"
 						}
 					}
 				}
@@ -378,32 +306,20 @@
 				"userProperties": [],
 				"typeProperties": {
 					"source": {
-						"type": "AzureSqlSource",
+						"type": "SqlServerSource",
 						"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'Fail'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
 					"dataset": {
-						"referenceName": "dataset_sql",
+						"referenceName": "prodsql_server_dataset",
 						"type": "DatasetReference",
 						"parameters": {
-							"sql_server_dataset": {
-								"value": "@pipeline().parameters.sql_server_dataset_name",
+							"database": {
+								"value": "@pipeline().parameters.database",
 								"type": "Expression"
 							},
-							"db_name_dataset": {
-								"value": "@pipeline().parameters.db_name",
-								"type": "Expression"
-							},
-							"user_name_dataset": {
-								"value": "@pipeline().parameters.user_name",
-								"type": "Expression"
-							},
-							"password_dataset": {
-								"value": "@pipeline().parameters.password",
-								"type": "Expression"
-							},
-							"sql_table_name": "Audit"
+							"table": "Audit"
 						}
 					}
 				}
@@ -494,21 +410,9 @@
 			}
 		],
 		"parameters": {
-			"sql_server_dataset_name": {
-				"type": "String",
-				"defaultValue": "teghws.database.windows.net"
-			},
-			"db_name": {
-				"type": "String",
+			"database": {
+				"type": "string",
 				"defaultValue": "hwai_production_db"
-			},
-			"user_name": {
-				"type": "String",
-				"defaultValue": "hwstegadmin"
-			},
-			"password": {
-				"type": "String",
-				"defaultValue": "Goteg@12345"
 			}
 		},
 		"folder": {
