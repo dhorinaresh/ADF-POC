@@ -1,0 +1,193 @@
+{
+	"name": "Product_Insight_new",
+	"properties": {
+		"activities": [
+			{
+				"name": "start time update",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": "INSERT INTO Audit(FileName, Operation, StartTime,Dashboard)\nValues('Product_Insight', 'Product_Insight_prep', (Select GETDATE()),'Product_Insight_base_data');\nSelect * from Audit;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "datalakesql_server_dataset",
+						"type": "DatasetReference",
+						"parameters": {
+							"database": {
+								"value": "@pipeline().parameters.datalakesql_database_for_Audit",
+								"type": "Expression"
+							},
+							"table": "Audit"
+						}
+					}
+				}
+			},
+			{
+				"name": "Product_Insight_script",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "start time update",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Product_Insight/Product_Insight_script"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks4_pfcluster3",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Pass_status_update_Product_Insight",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Product_Insight_script",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'pass'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "datalakesql_server_dataset",
+						"type": "DatasetReference",
+						"parameters": {
+							"database": {
+								"value": "@pipeline().parameters.datalakesql_database_for_Audit",
+								"type": "Expression"
+							},
+							"table": "Audit"
+						}
+					}
+				}
+			},
+			{
+				"name": "Fail_status_update_Product_Insight",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Product_Insight_script",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'Fail'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "datalakesql_server_dataset",
+						"type": "DatasetReference",
+						"parameters": {
+							"database": {
+								"value": "@pipeline().parameters.datalakesql_database_for_Audit",
+								"type": "Expression"
+							},
+							"table": "Audit"
+						}
+					}
+				}
+			},
+			{
+				"name": "start time update_data_upload_DB",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Pass_status_update_Product_Insight",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": "INSERT INTO Audit(FileName, Operation, StartTime,Dashboard)\nValues('Product_Insight_script', 'Product_Insight_upload_DB', (Select GETDATE()),'Product_Insight_base_data');\nSelect * from Audit;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "datalakesql_server_dataset",
+						"type": "DatasetReference",
+						"parameters": {
+							"database": {
+								"value": "@pipeline().parameters.datalakesql_database_for_Audit",
+								"type": "Expression"
+							},
+							"table": "Audit"
+						}
+					}
+				}
+			}
+		],
+		"parameters": {
+			"datalakesql_database_for_Audit": {
+				"type": "string",
+				"defaultValue": "HWai_Staging_DB"
+			}
+		},
+		"folder": {
+			"name": "Hwai_Refresh/Hwai_product_insight"
+		},
+		"annotations": []
+	}
+}
