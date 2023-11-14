@@ -140,7 +140,8 @@
 				"defaultValue": "HWai_Staging_DB"
 			},
 			"prodsql_copy_database": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "hwai_production_db"
 			}
 		},
 		"folder": {
