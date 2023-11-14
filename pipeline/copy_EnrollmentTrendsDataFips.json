@@ -1,0 +1,151 @@
+{
+	"name": "copy_EnrollmentTrendsDataFips",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy data to datalakesql",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"wildcardFolderPath": "EnrollmentTrendTechStack/Output",
+							"wildcardFileName": "EnrollmentTrendData.csv",
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "SqlServerSink",
+						"preCopyScript": "Truncate table EnrollmentTrendsDataFips;",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "hwaicontainer_dataset",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "datalakesql_server_dataset",
+						"type": "DatasetReference",
+						"parameters": {
+							"database": {
+								"value": "@pipeline().parameters.datalakesql_copy_database",
+								"type": "Expression"
+							},
+							"table": "EnrollmentTrendsDataFips"
+						}
+					}
+				]
+			},
+			{
+				"name": "Copy data to prodsql",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Copy data to datalakesql",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"wildcardFolderPath": "EnrollmentTrendTechStack/Output",
+							"wildcardFileName": "EnrollmentTrendData.csv",
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "SqlServerSink",
+						"preCopyScript": "Truncate table EnrollmentTrendsDataFips;",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "hwaicontainer_dataset",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "prodsql_server_dataset",
+						"type": "DatasetReference",
+						"parameters": {
+							"database": {
+								"value": "@pipeline().parameters.prodsql_copy_database",
+								"type": "Expression"
+							},
+							"table": "EnrollmentTrendsDataFips"
+						}
+					}
+				]
+			}
+		],
+		"parameters": {
+			"datalakesql_copy_database": {
+				"type": "string",
+				"defaultValue": "HWai_Staging_DB"
+			},
+			"prodsql_copy_database": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "Hwai_Refresh/Hwai_enr_trends"
+		},
+		"annotations": []
+	}
+}
