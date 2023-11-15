@@ -280,6 +280,7 @@
 					},
 					"sink": {
 						"type": "SqlServerSink",
+						"preCopyScript": "DECLARE @month VARCHAR(20) = DATENAME(MONTH, GETDATE()) + '_' + CAST(YEAR(GETDATE()) AS VARCHAR(4))\nDECLARE @sql NVARCHAR(MAX)\n\nSET @sql = 'ALTER TABLE [dbo].[pi_pivot_2023] ADD ' + @month + ' DECIMAL(18,0)'\nIF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'pi_pivot_2023' AND COLUMN_NAME = @month)\nBEGIN\n  EXEC(@sql)\nEND",
 						"writeBehavior": "insert",
 						"sqlWriterUseTableLock": false
 					},
