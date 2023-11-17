@@ -476,11 +476,11 @@
 						"referenceName": "dataset_sql",
 						"type": "DatasetReference",
 						"parameters": {
-							"sql_server_dataset": "teghws.database.windows.net",
+							"sql_server_dataset": "Prodsql.analytics-hub.com",
 							"db_name_dataset": "hwai_production_db_AEP",
-							"user_name_dataset": "hwstegadmin",
-							"password_dataset": "Goteg@12345",
-							"sql_table_name": "EnrollmentTrendsData"
+							"user_name_dataset": "teghwaitech",
+							"password_dataset": "BypT7024*FeyU9115",
+							"sql_table_name": "EnrollmentTrendsDataFips"
 						}
 					}
 				]
