@@ -39,13 +39,6 @@
 						"type": "TabularTranslator",
 						"mappings": [
 							{
-								"sink": {
-									"name": "ETKey",
-									"type": "Int32",
-									"physicalType": "int"
-								}
-							},
-							{
 								"source": {
 									"name": "FilterID",
 									"type": "String",
