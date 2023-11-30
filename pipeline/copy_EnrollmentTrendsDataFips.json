@@ -478,7 +478,7 @@
 						"type": "DatasetReference",
 						"parameters": {
 							"database": {
-								"value": "@pipeline().parameters.prodsql_copy_database",
+								"value": "@pipeline().parameters.datalakesql_copy_database",
 								"type": "Expression"
 							},
 							"table": "EnrollmentTrendsDataFips"
