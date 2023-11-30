@@ -18,7 +18,7 @@
 					"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Competitor Analysis/Competitor_Final"
 				},
 				"linkedServiceName": {
-					"referenceName": "AzureDatabricks4_pfcluster3",
+					"referenceName": "AzureDatabricks1",
 					"type": "LinkedServiceReference"
 				}
 			}
