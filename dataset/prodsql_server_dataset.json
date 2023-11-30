@@ -2,14 +2,8 @@
 	"name": "prodsql_server_dataset",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "prodsql_linked_service",
-			"type": "LinkedServiceReference",
-			"parameters": {
-				"database_name": {
-					"value": "@dataset().database",
-					"type": "Expression"
-				}
-			}
+			"referenceName": "datalake_Hwai",
+			"type": "LinkedServiceReference"
 		},
 		"parameters": {
 			"database": {
