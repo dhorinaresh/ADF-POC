@@ -494,7 +494,7 @@
 			},
 			"prodsql_copy_database": {
 				"type": "string",
-				"defaultValue": "hwai_production_db_AEP"
+				"defaultValue": "hwai_production_db"
 			}
 		},
 		"folder": {
