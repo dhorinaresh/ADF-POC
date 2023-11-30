@@ -18,7 +18,7 @@
 					"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Competitor Analysis/ASAY-QC-PARENTORG-ACQ-MERGER"
 				},
 				"linkedServiceName": {
-					"referenceName": "AzureDatabricks4_pfcluster3",
+					"referenceName": "AzureDatabricks1",
 					"type": "LinkedServiceReference"
 				}
 			},
@@ -45,7 +45,7 @@
 					"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Competitor Analysis/CREATE BASE DATA:ASAY"
 				},
 				"linkedServiceName": {
-					"referenceName": "AzureDatabricks4_pfcluster3",
+					"referenceName": "AzureDatabricks1",
 					"type": "LinkedServiceReference"
 				}
 			},
@@ -72,7 +72,7 @@
 					"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Competitor Analysis/ADD GEO_ID TO ASAY"
 				},
 				"linkedServiceName": {
-					"referenceName": "AzureDatabricks4_pfcluster3",
+					"referenceName": "AzureDatabricks1",
 					"type": "LinkedServiceReference"
 				}
 			}
