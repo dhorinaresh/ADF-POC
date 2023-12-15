@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Copy Crosswalk to Db",
+				"name": "Copy MS data to Db",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
@@ -20,7 +20,7 @@
 						"storeSettings": {
 							"type": "AzureBlobFSReadSettings",
 							"recursive": true,
-							"wildcardFolderPath": "Competitor_Analysis/Output/Competitor_Analysis",
+							"wildcardFolderPath": "Market_Snapshot/Output/MS_Final_Dataset",
 							"wildcardFileName": "p*",
 							"enablePartitionDiscovery": false
 						},
@@ -30,6 +30,7 @@
 					},
 					"sink": {
 						"type": "SqlServerSink",
+						"preCopyScript": "Truncate table ms_allstatesallyears;",
 						"writeBehavior": "insert",
 						"sqlWriterUseTableLock": false
 					},
@@ -111,7 +112,7 @@
 							},
 							{
 								"source": {
-									"name": "enrollments",
+									"name": "Enrollments",
 									"type": "String",
 									"physicalType": "String"
 								},
@@ -185,7 +186,7 @@
 							},
 							{
 								"source": {
-									"name": "EGHP",
+									"name": "Eghp",
 									"type": "String",
 									"physicalType": "String"
 								},
@@ -259,7 +260,7 @@
 							},
 							{
 								"source": {
-									"name": "ma_eligibles",
+									"name": "Ma_Eligibles",
 									"type": "String",
 									"physicalType": "String"
 								},
@@ -273,7 +274,7 @@
 							},
 							{
 								"source": {
-									"name": "key",
+									"name": "Key",
 									"type": "String",
 									"physicalType": "String"
 								},
@@ -353,7 +354,7 @@
 							},
 							{
 								"source": {
-									"name": "QDWI",
+									"name": "Qdwi",
 									"type": "String",
 									"physicalType": "String"
 								},
@@ -409,72 +410,386 @@
 							},
 							{
 								"source": {
-									"name": "MA Sales Region",
+									"name": "Sex_And_Age_Population_65_To_74_Years",
 									"type": "String",
 									"physicalType": "String"
 								},
 								"sink": {
-									"name": "MA Sales Region",
+									"name": "Sex_And_Age_Population_65_To_74_Years",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Sex_And_Age_Population_75_To_84_Years",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Sex_And_Age_Population_75_To_84_Years",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Sex_And_Age_Population_85_Years_And_Over",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Sex_And_Age_Population_85_Years_And_Over",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Sex_And_Age_Population_Above_65",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Sex_And_Age_Population_Above_65",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Sex_And_Age_Population_Above_65_Male",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Sex_And_Age_Population_Above_65_Male",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Sex_And_Age_Population_Above_65_Female",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Sex_And_Age_Population_Above_65_Female",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Total_In_Households_Above_65",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Total_In_Households_Above_65",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Total_Above_65_Has_A_Computer",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Total_Above_65_Has_A_Computer",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Total_Male_Above_65_With_Employer-Based_Health_Insurance",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Total_Male_Above_65_With_Employer-Based_Health_Insurance",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Total_Female_Above_65_With_Employer-Based_Health_Insurance",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Total_Female_Above_65_With_Employer-Based_Health_Insurance",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Total_Male_Above_65_With_Medicare_Coverage",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Total_Male_Above_65_With_Medicare_Coverage",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Total_Male_Above_65_No_Medicare_Coverage",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Total_Male_Above_65_No_Medicare_Coverage",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Total_Female_Above_65_With_Medicare_Coverage",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Total_Female_Above_65_With_Medicare_Coverage",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Total_Female_Above_65_No_Medicare_Coverage",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Total_Female_Above_65_No_Medicare_Coverage",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Total_Income_In_The_Past_12_Months_Below_Poverty_Level_Male_65_To_74_Years",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Total_Income_In_The_Past_12_Months_Below_Poverty_Level_Male_65_To_74_Years",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Total_Income_In_The_Past_12_Months_Below_Poverty_Level_Male_75_Years_And_Over",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Total_Income_In_The_Past_12_Months_Below_Poverty_Level_Male_75_Years_And_Over",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Total_Income_In_The_Past_12_Months_Below_Poverty_Level_Female_65_To_74_Years",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Total_Income_In_The_Past_12_Months_Below_Poverty_Level_Female_65_To_74_Years",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Total_Income_In_The_Past_12_Months_Below_Poverty_Level_Female_75_Years_And_Over",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Total_Income_In_The_Past_12_Months_Below_Poverty_Level_Female_75_Years_And_Over",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Total_Male_65_To_74_Years_With_A_Disability",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Total_Male_65_To_74_Years_With_A_Disability",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Total_Male_75_Years_And_Over_With_A_Disability",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Total_Male_75_Years_And_Over_With_A_Disability",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Total_Female_65_To_74_Years_With_A_Disability",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Total_Female_65_To_74_Years_With_A_Disability",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Total_Female_75_Years_And_Over_With_A_Disability",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Total_Female_75_Years_And_Over_With_A_Disability",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Household_Received_Snap_In_The_Past_12_Months_At_Least_One_Person_In_Household_60_Years_Or_Over",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Household_Received_Snap_In_The_Past_12_Months_At_Least_One_Person_In_Household_60_Years_Or_Over",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Not_Received_Snap_In_The_Past_12_Months_At_Least_One_Person_In_Household_60_Years_Or_Over",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Not_Received_Snap_In_The_Past_12_Months_At_Least_One_Person_In_Household_60_Years_Or_Over",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "Total_Above_65_Literate",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Total_Above_65_Literate",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 0,
+									"precision": 18
+								}
+							},
+							{
+								"source": {
+									"name": "D-SNP Type",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "D-SNP Type",
 									"type": "String",
 									"physicalType": "nvarchar"
 								}
 							},
 							{
 								"source": {
-									"name": "MA Product Region",
+									"name": "Out of Area",
 									"type": "String",
 									"physicalType": "String"
 								},
 								"sink": {
-									"name": "MA Product Region",
+									"name": "Out of Area",
 									"type": "String",
 									"physicalType": "nvarchar"
 								}
 							},
 							{
 								"source": {
-									"name": "Double County",
+									"name": "Termination Status",
 									"type": "String",
 									"physicalType": "String"
 								},
 								"sink": {
-									"name": "Double County",
-									"type": "String",
-									"physicalType": "nvarchar"
-								}
-							},
-							{
-								"source": {
-									"name": "POA",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "POA",
-									"type": "String",
-									"physicalType": "nvarchar"
-								}
-							},
-							{
-								"source": {
-									"name": "Note",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "Note",
-									"type": "String",
-									"physicalType": "nvarchar"
-								}
-							},
-							{
-								"source": {
-									"name": "Acquisition_Type",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "Acquisition_Type",
+									"name": "Termination Status",
 									"type": "String",
 									"physicalType": "nvarchar"
 								}
@@ -489,7 +804,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "Competitor_final",
+						"referenceName": "Crosswalk",
 						"type": "DatasetReference"
 					}
 				],
@@ -499,30 +814,12 @@
 						"type": "DatasetReference",
 						"parameters": {
 							"database": "HWai_Dashboards",
-							"table": "ca_allstatesallyears"
+							"table": "ms_allstatesallyears"
 						}
 					}
 				]
 			}
 		],
-		"parameters": {
-			"sql_server_dataset_name": {
-				"type": "string",
-				"defaultValue": "hwpilot.database.windows.net"
-			},
-			"db_name": {
-				"type": "string",
-				"defaultValue": "HWai_Dashboards"
-			},
-			"user_name": {
-				"type": "string",
-				"defaultValue": "pladmin"
-			},
-			"password": {
-				"type": "string",
-				"defaultValue": "Goteg@12345"
-			}
-		},
 		"folder": {
 			"name": "Test"
 		},
