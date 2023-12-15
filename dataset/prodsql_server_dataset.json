@@ -2,7 +2,7 @@
 	"name": "prodsql_server_dataset",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "datalake_Hwai",
+			"referenceName": "prodsql_linked_service",
 			"type": "LinkedServiceReference"
 		},
 		"parameters": {
