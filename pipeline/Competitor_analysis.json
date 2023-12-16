@@ -117,7 +117,7 @@
 				"type": "Copy",
 				"dependsOn": [
 					{
-						"activity": "Truncate competitor final table",
+						"activity": "Copy Crosswalk to DL DB",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -147,6 +147,7 @@
 					},
 					"sink": {
 						"type": "SqlServerSink",
+						"preCopyScript": "Truncate table ca_allstatesallyears;",
 						"writeBehavior": "insert",
 						"sqlWriterUseTableLock": false
 					},
@@ -822,45 +823,6 @@
 				"linkedServiceName": {
 					"referenceName": "AzureDatabricks4_pfcluster3",
 					"type": "LinkedServiceReference"
-				}
-			},
-			{
-				"name": "Truncate competitor final table",
-				"type": "Lookup",
-				"dependsOn": [
-					{
-						"activity": "Copy Crosswalk to DL DB",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"policy": {
-					"timeout": "0.12:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"source": {
-						"type": "SqlServerSource",
-						"sqlReaderQuery": "Truncate table ca_allstatesallyears;\nSELECT TOP 10 * FROM ca_allstatesallyears;",
-						"queryTimeout": "02:00:00",
-						"partitionOption": "None"
-					},
-					"dataset": {
-						"referenceName": "prodsql_server_dataset",
-						"type": "DatasetReference",
-						"parameters": {
-							"database": {
-								"value": "@pipeline().parameters.prodsql_copy_database_name",
-								"type": "Expression"
-							},
-							"table": "ca_allstatesallyears"
-						}
-					}
 				}
 			},
 			{
