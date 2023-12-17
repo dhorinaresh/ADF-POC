@@ -1301,7 +1301,7 @@
 						"partitionOption": "None"
 					},
 					"dataset": {
-						"referenceName": "datalakesql_server_dataset",
+						"referenceName": "prodsql_server_dataset",
 						"type": "DatasetReference",
 						"parameters": {
 							"database": {
