@@ -246,79 +246,11 @@
 				}
 			},
 			{
-				"name": "Copy WinningPlans to DL DB",
-				"type": "Copy",
-				"dependsOn": [
-					{
-						"activity": "Delete Existing record from DL DB",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"policy": {
-					"timeout": "0.12:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"source": {
-						"type": "DelimitedTextSource",
-						"storeSettings": {
-							"type": "AzureBlobFSReadSettings",
-							"recursive": true,
-							"wildcardFolderPath": "WinningPlans/Output/TopPlans_December2023",
-							"wildcardFileName": "p*",
-							"enablePartitionDiscovery": false
-						},
-						"formatSettings": {
-							"type": "DelimitedTextReadSettings"
-						}
-					},
-					"sink": {
-						"type": "SqlServerSink",
-						"writeBehavior": "insert",
-						"sqlWriterUseTableLock": false
-					},
-					"enableStaging": false,
-					"translator": {
-						"type": "TabularTranslator",
-						"typeConversion": true,
-						"typeConversionSettings": {
-							"allowDataTruncation": true,
-							"treatBooleanAsNumber": false
-						}
-					}
-				},
-				"inputs": [
-					{
-						"referenceName": "WinningPlans",
-						"type": "DatasetReference"
-					}
-				],
-				"outputs": [
-					{
-						"referenceName": "datalakesql_server_dataset",
-						"type": "DatasetReference",
-						"parameters": {
-							"database": {
-								"value": "@pipeline().parameters.datalakesql_copy_database",
-								"type": "Expression"
-							},
-							"table": "winning_plans"
-						}
-					}
-				]
-			},
-			{
 				"name": "Delete Existing record from DB",
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "Copy WinningPlans to DL DB",
+						"activity": "Copy WP to staging",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -357,7 +289,7 @@
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "Copy WinningPlans to DL DB",
+						"activity": "Copy WP to staging",
 						"dependencyConditions": [
 							"Failed"
 						]
@@ -392,74 +324,6 @@
 				}
 			},
 			{
-				"name": "Copy WinningPlans to Db",
-				"type": "Copy",
-				"dependsOn": [
-					{
-						"activity": "Delete Existing record from DB",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"policy": {
-					"timeout": "0.12:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"source": {
-						"type": "DelimitedTextSource",
-						"storeSettings": {
-							"type": "AzureBlobFSReadSettings",
-							"recursive": true,
-							"wildcardFolderPath": "WinningPlans/Output/TopPlans_December2023",
-							"wildcardFileName": "p*",
-							"enablePartitionDiscovery": false
-						},
-						"formatSettings": {
-							"type": "DelimitedTextReadSettings"
-						}
-					},
-					"sink": {
-						"type": "SqlServerSink",
-						"writeBehavior": "insert",
-						"sqlWriterUseTableLock": false
-					},
-					"enableStaging": false,
-					"translator": {
-						"type": "TabularTranslator",
-						"typeConversion": true,
-						"typeConversionSettings": {
-							"allowDataTruncation": true,
-							"treatBooleanAsNumber": false
-						}
-					}
-				},
-				"inputs": [
-					{
-						"referenceName": "WinningPlans",
-						"type": "DatasetReference"
-					}
-				],
-				"outputs": [
-					{
-						"referenceName": "prodsql_server_dataset",
-						"type": "DatasetReference",
-						"parameters": {
-							"database": {
-								"value": "@pipeline().parameters.prodsql_copy_database",
-								"type": "Expression"
-							},
-							"table": "winning_plans"
-						}
-					}
-				]
-			},
-			{
 				"name": "send email update for fail WinningPlans to DB_copy1",
 				"type": "WebActivity",
 				"dependsOn": [
@@ -492,7 +356,7 @@
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "Copy WinningPlans to Db",
+						"activity": "Copy WP to production",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -531,7 +395,7 @@
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "Copy WinningPlans to Db",
+						"activity": "Copy WP to production",
 						"dependencyConditions": [
 							"Failed"
 						]
@@ -619,6 +483,60 @@
 						"value": "{\n \"title\":\"PIPELINE RUN FOR WinningPlans_to_DB FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the WinningPlans_to_DB and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
 						"type": "Expression"
 					}
+				}
+			},
+			{
+				"name": "Copy WP to staging",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Delete Existing record from DL DB",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Winning_Plans/WP data to staging"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks4_pfcluster3",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Copy WP to production",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Delete Existing record from DB",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Winning_Plans/WP data to production"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks4_pfcluster3",
+					"type": "LinkedServiceReference"
 				}
 			}
 		],
