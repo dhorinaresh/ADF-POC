@@ -1518,7 +1518,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "SqlServerSource",
-						"sqlReaderQuery": "DECLARE @month VARCHAR(20) = DATENAME(MONTH, GETDATE()) + '_' + CAST(YEAR(GETDATE()) AS VARCHAR(4))\nDECLARE @sql NVARCHAR(MAX)\n\nSET @sql = 'ALTER TABLE [dbo].[pi_trends_2023] ADD ' + @month + ' DECIMAL(18,0)'\nIF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'pi_trends_2023' AND COLUMN_NAME = @month)\nBEGIN\n  EXEC(@sql)\nEND;\n\nSelect top(3) * from pi_trends_2023",
+						"sqlReaderQuery": "DECLARE @month VARCHAR(20) = DATENAME(MONTH, GETDATE()) + '_' + CAST(YEAR(GETDATE()) AS VARCHAR(4))\nDECLARE @sql NVARCHAR(MAX)\n\nSET @sql = 'ALTER TABLE [dbo].[pi_trends_2023] ADD ' + @month + ' DECIMAL(18,0)'\nIF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'pi_trends_2023' AND COLUMN_NAME = @month)\nBEGIN\n  EXEC(@sql)\nEND;\n\nSelect top(3) * from pi_trends_2023;",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
