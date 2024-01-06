@@ -246,45 +246,6 @@
 				}
 			},
 			{
-				"name": "Delete Existing record from pi_pivot",
-				"type": "Lookup",
-				"dependsOn": [
-					{
-						"activity": "copy pi_pivot to staging",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"policy": {
-					"timeout": "0.12:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"source": {
-						"type": "SqlServerSource",
-						"sqlReaderQuery": "truncate table pi_pivot_2023; \nSELECT TOP 10 * FROM pi_pivot_2023;",
-						"queryTimeout": "02:00:00",
-						"partitionOption": "None"
-					},
-					"dataset": {
-						"referenceName": "prodsql_server_dataset",
-						"type": "DatasetReference",
-						"parameters": {
-							"database": {
-								"value": "@pipeline().parameters.prodsql_copy_database",
-								"type": "Expression"
-							},
-							"table": "pi_pivot_2023"
-						}
-					}
-				}
-			},
-			{
 				"name": "Fail_status_update_pi_lsacpe_to_DB_copy3",
 				"type": "Lookup",
 				"dependsOn": [
@@ -324,75 +285,6 @@
 				}
 			},
 			{
-				"name": "Copy pi_pivot to Db",
-				"type": "Copy",
-				"dependsOn": [
-					{
-						"activity": "precopy_script_pi_pivot to production",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"policy": {
-					"timeout": "0.12:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"source": {
-						"type": "DelimitedTextSource",
-						"storeSettings": {
-							"type": "AzureBlobFSReadSettings",
-							"recursive": true,
-							"wildcardFolderPath": "Product_Insights/Output/pi_lscape_pivot",
-							"wildcardFileName": "p*",
-							"enablePartitionDiscovery": false
-						},
-						"formatSettings": {
-							"type": "DelimitedTextReadSettings"
-						}
-					},
-					"sink": {
-						"type": "SqlServerSink",
-						"preCopyScript": "DECLARE @month VARCHAR(20) = DATENAME(MONTH, GETDATE()) + '_' + CAST(YEAR(GETDATE()) AS VARCHAR(4))\nDECLARE @sql NVARCHAR(MAX)\n\nSET @sql = 'ALTER TABLE [dbo].[pi_pivot_2023] ADD ' + @month + ' DECIMAL(18,0)'\nIF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'pi_pivot_2023' AND COLUMN_NAME = @month)\nBEGIN\n  EXEC(@sql)\nEND",
-						"writeBehavior": "insert",
-						"sqlWriterUseTableLock": false
-					},
-					"enableStaging": false,
-					"translator": {
-						"type": "TabularTranslator",
-						"typeConversion": true,
-						"typeConversionSettings": {
-							"allowDataTruncation": true,
-							"treatBooleanAsNumber": false
-						}
-					}
-				},
-				"inputs": [
-					{
-						"referenceName": "pi_pivot",
-						"type": "DatasetReference"
-					}
-				],
-				"outputs": [
-					{
-						"referenceName": "prodsql_server_dataset",
-						"type": "DatasetReference",
-						"parameters": {
-							"database": {
-								"value": "@pipeline().parameters.prodsql_copy_database",
-								"type": "Expression"
-							},
-							"table": "pi_pivot_2023"
-						}
-					}
-				]
-			},
-			{
 				"name": "send email update for fail pi_lsacpe to DB_copy3",
 				"type": "WebActivity",
 				"dependsOn": [
@@ -425,7 +317,7 @@
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "Copy pi_pivot to Db",
+						"activity": "copy pi_pivot to production",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -464,7 +356,7 @@
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "Copy pi_pivot to Db",
+						"activity": "copy pi_pivot to production",
 						"dependencyConditions": [
 							"Failed"
 						]
@@ -594,45 +486,6 @@
 				}
 			},
 			{
-				"name": "Delete Existing record from pi_trends",
-				"type": "Lookup",
-				"dependsOn": [
-					{
-						"activity": "copy pi_trends to staging",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"policy": {
-					"timeout": "0.12:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"source": {
-						"type": "SqlServerSource",
-						"sqlReaderQuery": "truncate table pi_trends_2023;\nSELECT TOP 10 * FROM pi_trends_2023;",
-						"queryTimeout": "02:00:00",
-						"partitionOption": "None"
-					},
-					"dataset": {
-						"referenceName": "prodsql_server_dataset",
-						"type": "DatasetReference",
-						"parameters": {
-							"database": {
-								"value": "@pipeline().parameters.prodsql_copy_database",
-								"type": "Expression"
-							},
-							"table": "pi_trends_2023"
-						}
-					}
-				}
-			},
-			{
 				"name": "Fail_status_update_pi_lsacpe_to_DB_copy2",
 				"type": "Lookup",
 				"dependsOn": [
@@ -672,75 +525,6 @@
 				}
 			},
 			{
-				"name": "Copy pi_trends to Db",
-				"type": "Copy",
-				"dependsOn": [
-					{
-						"activity": "precopy_script_pi_pivot_ to production",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"policy": {
-					"timeout": "0.12:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"source": {
-						"type": "DelimitedTextSource",
-						"storeSettings": {
-							"type": "AzureBlobFSReadSettings",
-							"recursive": true,
-							"wildcardFolderPath": "Product_Insights/Output/pi_trends",
-							"wildcardFileName": "p*",
-							"enablePartitionDiscovery": false
-						},
-						"formatSettings": {
-							"type": "DelimitedTextReadSettings"
-						}
-					},
-					"sink": {
-						"type": "SqlServerSink",
-						"preCopyScript": "DECLARE @month VARCHAR(20) = DATENAME(MONTH, GETDATE()) + '_' + CAST(YEAR(GETDATE()) AS VARCHAR(4))\nDECLARE @sql NVARCHAR(MAX)\n\nSET @sql = 'ALTER TABLE [dbo].[pi_trends_2023] ADD ' + @month + ' DECIMAL(18,0)'\nIF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'pi_trends_2023' AND COLUMN_NAME = @month)\nBEGIN\n  EXEC(@sql)\nEND",
-						"writeBehavior": "insert",
-						"sqlWriterUseTableLock": false
-					},
-					"enableStaging": false,
-					"translator": {
-						"type": "TabularTranslator",
-						"typeConversion": true,
-						"typeConversionSettings": {
-							"allowDataTruncation": true,
-							"treatBooleanAsNumber": false
-						}
-					}
-				},
-				"inputs": [
-					{
-						"referenceName": "pi_trends",
-						"type": "DatasetReference"
-					}
-				],
-				"outputs": [
-					{
-						"referenceName": "prodsql_server_dataset",
-						"type": "DatasetReference",
-						"parameters": {
-							"database": {
-								"value": "@pipeline().parameters.prodsql_copy_database",
-								"type": "Expression"
-							},
-							"table": "pi_trends_2023"
-						}
-					}
-				]
-			},
-			{
 				"name": "send email update for fail pi_lsacpe to DB_copy2",
 				"type": "WebActivity",
 				"dependsOn": [
@@ -773,7 +557,7 @@
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "Copy pi_trends to Db",
+						"activity": "copy pi_trends to production",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -812,7 +596,7 @@
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "Copy pi_trends to Db",
+						"activity": "copy pi_trends to production",
 						"dependencyConditions": [
 							"Failed"
 						]
@@ -942,45 +726,6 @@
 				}
 			},
 			{
-				"name": "Delete Existing record from pi_landscape",
-				"type": "Lookup",
-				"dependsOn": [
-					{
-						"activity": "copy pi_landscape to staging",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"policy": {
-					"timeout": "0.12:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"source": {
-						"type": "SqlServerSource",
-						"sqlReaderQuery": "truncate table pi_landscape_2023;\nSELECT TOP 10 * FROM pi_landscape_2023;\n",
-						"queryTimeout": "02:00:00",
-						"partitionOption": "None"
-					},
-					"dataset": {
-						"referenceName": "prodsql_server_dataset",
-						"type": "DatasetReference",
-						"parameters": {
-							"database": {
-								"value": "@pipeline().parameters.prodsql_copy_database",
-								"type": "Expression"
-							},
-							"table": "pi_landscape_2023"
-						}
-					}
-				}
-			},
-			{
 				"name": "Fail_status_update_pi_lsacpe_to_DB_copy1",
 				"type": "Lookup",
 				"dependsOn": [
@@ -1020,75 +765,6 @@
 				}
 			},
 			{
-				"name": "Copy to pi_landscape Db",
-				"type": "Copy",
-				"dependsOn": [
-					{
-						"activity": "precopy_script_pi_landscape to production",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"policy": {
-					"timeout": "0.12:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"source": {
-						"type": "DelimitedTextSource",
-						"storeSettings": {
-							"type": "AzureBlobFSReadSettings",
-							"recursive": true,
-							"wildcardFolderPath": "Product_Insights/Output/pi_lscape_December2023",
-							"wildcardFileName": "p*",
-							"enablePartitionDiscovery": false
-						},
-						"formatSettings": {
-							"type": "DelimitedTextReadSettings"
-						}
-					},
-					"sink": {
-						"type": "SqlServerSink",
-						"preCopyScript": "DECLARE @month VARCHAR(20) = DATENAME(MONTH, GETDATE()) + '_' + CAST(YEAR(GETDATE()) AS VARCHAR(4))\nDECLARE @sql NVARCHAR(MAX)\n\nSET @sql = 'ALTER TABLE [dbo].[pi_landscape_2023] ADD ' + @month + ' DECIMAL(18,0)'\nIF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'pi_landscape_2023' AND COLUMN_NAME = @month)\nBEGIN\n  EXEC(@sql)\nEND",
-						"writeBehavior": "insert",
-						"sqlWriterUseTableLock": false
-					},
-					"enableStaging": false,
-					"translator": {
-						"type": "TabularTranslator",
-						"typeConversion": true,
-						"typeConversionSettings": {
-							"allowDataTruncation": true,
-							"treatBooleanAsNumber": false
-						}
-					}
-				},
-				"inputs": [
-					{
-						"referenceName": "pi_lsacpe",
-						"type": "DatasetReference"
-					}
-				],
-				"outputs": [
-					{
-						"referenceName": "prodsql_server_dataset",
-						"type": "DatasetReference",
-						"parameters": {
-							"database": {
-								"value": "@pipeline().parameters.prodsql_copy_database",
-								"type": "Expression"
-							},
-							"table": "pi_landscape_2023"
-						}
-					}
-				]
-			},
-			{
 				"name": "send email update for fail pi_lsacpe to DB_copy1",
 				"type": "WebActivity",
 				"dependsOn": [
@@ -1121,7 +797,7 @@
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "Copy to pi_landscape Db",
+						"activity": "copy pi_landscape to production",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -1160,7 +836,7 @@
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "Copy to pi_landscape Db",
+						"activity": "copy pi_landscape to production",
 						"dependencyConditions": [
 							"Failed"
 						]
@@ -1453,7 +1129,7 @@
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "Delete Existing record from pi_pivot",
+						"activity": "copy pi_pivot to staging",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -1470,7 +1146,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "SqlServerSource",
-						"sqlReaderQuery": "DECLARE @month VARCHAR(20) = DATENAME(MONTH, GETDATE()) + '_' + CAST(YEAR(GETDATE()) AS VARCHAR(4))\nDECLARE @sql NVARCHAR(MAX)\n\nSET @sql = 'ALTER TABLE [dbo].[pi_pivot_2023] ADD ' + @month + ' DECIMAL(18,0)'\nIF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'pi_pivot_2023' AND COLUMN_NAME = @month)\nBEGIN\n  EXEC(@sql)\nEND;\n\nSelect top(3) * from pi_pivot_2023;",
+						"sqlReaderQuery": "truncate table pi_pivot_2023; \n\nDECLARE @month VARCHAR(20) = DATENAME(MONTH, GETDATE()) + '_' + CAST(YEAR(GETDATE()) AS VARCHAR(4))\nDECLARE @sql NVARCHAR(MAX)\n\nSET @sql = 'ALTER TABLE [dbo].[pi_pivot_2023] ADD ' + @month + ' DECIMAL(18,0)'\nIF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'pi_pivot_2023' AND COLUMN_NAME = @month)\nBEGIN\n  EXEC(@sql)\nEND;\n\nSelect top(3) * from pi_pivot_2023;",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -1492,7 +1168,7 @@
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "Delete Existing record from pi_trends",
+						"activity": "copy pi_trends to staging",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -1509,7 +1185,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "SqlServerSource",
-						"sqlReaderQuery": "DECLARE @month VARCHAR(20) = DATENAME(MONTH, GETDATE()) + '_' + CAST(YEAR(GETDATE()) AS VARCHAR(4))\nDECLARE @sql NVARCHAR(MAX)\n\nSET @sql = 'ALTER TABLE [dbo].[pi_trends_2023] ADD ' + @month + ' DECIMAL(18,0)'\nIF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'pi_trends_2023' AND COLUMN_NAME = @month)\nBEGIN\n  EXEC(@sql)\nEND;\nSelect top(3) * from pi_trends_2023;",
+						"sqlReaderQuery": "truncate table pi_trends_2023;\n\nDECLARE @month VARCHAR(20) = DATENAME(MONTH, GETDATE()) + '_' + CAST(YEAR(GETDATE()) AS VARCHAR(4))\nDECLARE @sql NVARCHAR(MAX)\n\nSET @sql = 'ALTER TABLE [dbo].[pi_trends_2023] ADD ' + @month + ' DECIMAL(18,0)'\nIF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'pi_trends_2023' AND COLUMN_NAME = @month)\nBEGIN\n  EXEC(@sql)\nEND;\n\nSelect top(3) * from pi_trends_2023;",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -1531,7 +1207,7 @@
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "Delete Existing record from pi_landscape",
+						"activity": "copy pi_landscape to staging",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -1548,7 +1224,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "SqlServerSource",
-						"sqlReaderQuery": "DECLARE @month VARCHAR(20) = DATENAME(MONTH, GETDATE()) + '_' + CAST(YEAR(GETDATE()) AS VARCHAR(4))\nDECLARE @sql NVARCHAR(MAX)\n\nSET @sql = 'ALTER TABLE [dbo].[pi_landscape_2023] ADD ' + @month + ' DECIMAL(18,0)'\nIF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'pi_landscape_2023' AND COLUMN_NAME = @month)\nBEGIN\n  EXEC(@sql)\nEND;\nSelect top(3) * from pi_landscape_2023;",
+						"sqlReaderQuery": "truncate table pi_landscape_2023;\n\nDECLARE @month VARCHAR(20) = DATENAME(MONTH, GETDATE()) + '_' + CAST(YEAR(GETDATE()) AS VARCHAR(4))\nDECLARE @sql NVARCHAR(MAX)\n\nSET @sql = 'ALTER TABLE [dbo].[pi_landscape_2023] ADD ' + @month + ' DECIMAL(18,0)'\nIF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'pi_landscape_2023' AND COLUMN_NAME = @month)\nBEGIN\n  EXEC(@sql)\nEND;\nSelect top(3) * from pi_landscape_2023;",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -1563,6 +1239,87 @@
 							"table": "pi_landscape_2023"
 						}
 					}
+				}
+			},
+			{
+				"name": "copy pi_pivot to production",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "precopy_script_pi_pivot to production",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Product_Insight/PI_pivot data to production"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks4_pfcluster3",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "copy pi_trends to production",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "precopy_script_pi_pivot_ to production",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Product_Insight/PI_trends data to production"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks4_pfcluster3",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "copy pi_landscape to production",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "precopy_script_pi_landscape to production",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Product_Insight/PI_landscape data to production"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks4_pfcluster3",
+					"type": "LinkedServiceReference"
 				}
 			}
 		],
