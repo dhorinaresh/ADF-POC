@@ -207,45 +207,6 @@
 				}
 			},
 			{
-				"name": "Delete Existing record from DL pi_pivot",
-				"type": "Lookup",
-				"dependsOn": [
-					{
-						"activity": "start time update_data_upload_DB",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"policy": {
-					"timeout": "0.12:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"source": {
-						"type": "SqlServerSource",
-						"sqlReaderQuery": "truncate table pi_pivot_2023; \nSELECT TOP 10 * FROM pi_pivot_2023;",
-						"queryTimeout": "02:00:00",
-						"partitionOption": "None"
-					},
-					"dataset": {
-						"referenceName": "datalakesql_server_dataset",
-						"type": "DatasetReference",
-						"parameters": {
-							"database": {
-								"value": "@pipeline().parameters.datalakesql_copy_database",
-								"type": "Expression"
-							},
-							"table": "pi_pivot_2023"
-						}
-					}
-				}
-			},
-			{
 				"name": "Fail_status_update_pi_lsacpe_to_DB_copy3",
 				"type": "Lookup",
 				"dependsOn": [
@@ -447,45 +408,6 @@
 				}
 			},
 			{
-				"name": "Delete Existing record from DL_pi_trends",
-				"type": "Lookup",
-				"dependsOn": [
-					{
-						"activity": "start time update_data_upload_DB",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"policy": {
-					"timeout": "0.12:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"source": {
-						"type": "SqlServerSource",
-						"sqlReaderQuery": "truncate table pi_trends_2023;\nSELECT TOP 10 * FROM pi_trends_2023;",
-						"queryTimeout": "02:00:00",
-						"partitionOption": "None"
-					},
-					"dataset": {
-						"referenceName": "datalakesql_server_dataset",
-						"type": "DatasetReference",
-						"parameters": {
-							"database": {
-								"value": "@pipeline().parameters.datalakesql_copy_database",
-								"type": "Expression"
-							},
-							"table": "pi_trends_2023"
-						}
-					}
-				}
-			},
-			{
 				"name": "Fail_status_update_pi_lsacpe_to_DB_copy2",
 				"type": "Lookup",
 				"dependsOn": [
@@ -683,45 +605,6 @@
 					"body": {
 						"value": "{\n \"title\":\"PIPELINE RUN FOR pi_trends_to_DB FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the pi_trends_to_DB and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
 						"type": "Expression"
-					}
-				}
-			},
-			{
-				"name": "Delete Existing record from DL pi_landscape",
-				"type": "Lookup",
-				"dependsOn": [
-					{
-						"activity": "start time update_data_upload_DB",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"policy": {
-					"timeout": "0.12:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"source": {
-						"type": "SqlServerSource",
-						"sqlReaderQuery": "truncate table pi_landscape_2023;\nSELECT TOP 10 * FROM pi_landscape_2023;",
-						"queryTimeout": "02:00:00",
-						"partitionOption": "None"
-					},
-					"dataset": {
-						"referenceName": "datalakesql_server_dataset",
-						"type": "DatasetReference",
-						"parameters": {
-							"database": {
-								"value": "@pipeline().parameters.datalakesql_copy_database",
-								"type": "Expression"
-							},
-							"table": "pi_landscape_2023"
-						}
 					}
 				}
 			},
@@ -931,7 +814,7 @@
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "Delete Existing record from DL pi_pivot",
+						"activity": "start time update_data_upload_DB",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -948,7 +831,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "SqlServerSource",
-						"sqlReaderQuery": "DECLARE @month VARCHAR(20) = DATENAME(MONTH, GETDATE()) + '_' + CAST(YEAR(GETDATE()) AS VARCHAR(4))\nDECLARE @sql NVARCHAR(MAX)\n\nSET @sql = 'ALTER TABLE [dbo].[pi_pivot_2023] ADD ' + @month + ' DECIMAL(18,0)'\nIF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'pi_pivot_2023' AND COLUMN_NAME = @month)\nBEGIN\n  EXEC(@sql)\nEND;\n\nSelect top(3) * from pi_pivot_2023;",
+						"sqlReaderQuery": "truncate table pi_pivot_2023; \n\nDECLARE @month VARCHAR(20) = DATENAME(MONTH, GETDATE()) + '_' + CAST(YEAR(GETDATE()) AS VARCHAR(4))\nDECLARE @sql NVARCHAR(MAX)\n\nSET @sql = 'ALTER TABLE [dbo].[pi_pivot_2023] ADD ' + @month + ' DECIMAL(18,0)'\nIF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'pi_pivot_2023' AND COLUMN_NAME = @month)\nBEGIN\n  EXEC(@sql)\nEND;\n\nSelect top(3) * from pi_pivot_2023;",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -970,7 +853,7 @@
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "Delete Existing record from DL_pi_trends",
+						"activity": "start time update_data_upload_DB",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -987,7 +870,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "SqlServerSource",
-						"sqlReaderQuery": "DECLARE @month VARCHAR(20) = DATENAME(MONTH, GETDATE()) + '_' + CAST(YEAR(GETDATE()) AS VARCHAR(4))\nDECLARE @sql NVARCHAR(MAX)\n\nSET @sql = 'ALTER TABLE [dbo].[pi_trends_2023] ADD ' + @month + ' DECIMAL(18,0)'\nIF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'pi_trends_2023' AND COLUMN_NAME = @month)\nBEGIN\n  EXEC(@sql)\nEND;\n\nSelect top(3) * from pi_trends_2023;",
+						"sqlReaderQuery": "truncate table pi_trends_2023;\n\nDECLARE @month VARCHAR(20) = DATENAME(MONTH, GETDATE()) + '_' + CAST(YEAR(GETDATE()) AS VARCHAR(4))\nDECLARE @sql NVARCHAR(MAX)\n\nSET @sql = 'ALTER TABLE [dbo].[pi_trends_2023] ADD ' + @month + ' DECIMAL(18,0)'\nIF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'pi_trends_2023' AND COLUMN_NAME = @month)\nBEGIN\n  EXEC(@sql)\nEND;\n\nSelect top(3) * from pi_trends_2023;",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -1009,7 +892,7 @@
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "Delete Existing record from DL pi_landscape",
+						"activity": "start time update_data_upload_DB",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -1026,7 +909,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "SqlServerSource",
-						"sqlReaderQuery": "DECLARE @month VARCHAR(20) = DATENAME(MONTH, GETDATE()) + '_' + CAST(YEAR(GETDATE()) AS VARCHAR(4))\nDECLARE @sql NVARCHAR(MAX)\n\nSET @sql = 'ALTER TABLE [dbo].[pi_landscape_2023] ADD ' + @month + ' DECIMAL(18,0)'\nIF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'pi_landscape_2023' AND COLUMN_NAME = @month)\nBEGIN\n  EXEC(@sql)\nEND;\n\nSelect top(3) * from pi_landscape_2023;",
+						"sqlReaderQuery": "truncate table pi_landscape_2023;\n\nDECLARE @month VARCHAR(20) = DATENAME(MONTH, GETDATE()) + '_' + CAST(YEAR(GETDATE()) AS VARCHAR(4))\nDECLARE @sql NVARCHAR(MAX)\n\nSET @sql = 'ALTER TABLE [dbo].[pi_landscape_2023] ADD ' + @month + ' DECIMAL(18,0)'\nIF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'pi_landscape_2023' AND COLUMN_NAME = @month)\nBEGIN\n  EXEC(@sql)\nEND;\n\nSelect top(3) * from pi_landscape_2023;",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
