@@ -250,7 +250,7 @@
 				"type": "Copy",
 				"dependsOn": [
 					{
-						"activity": "Delete Existing record from DL pi_pivot",
+						"activity": "precopy_script_pi_pivot",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -667,7 +667,7 @@
 				"type": "Copy",
 				"dependsOn": [
 					{
-						"activity": "Delete Existing record from DL_pi_trends",
+						"activity": "precopy_script_pi_trends",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -1084,7 +1084,7 @@
 				"type": "Copy",
 				"dependsOn": [
 					{
-						"activity": "Delete Existing record from DL pi_landscape",
+						"activity": "precopy_script_pi_landscape",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -1454,6 +1454,123 @@
 					"body": {
 						"value": "{\n \"title\":\"PIPELINE RUN FOR pi_lsacpe_to_DB FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the pi_lsacpe_to_DB and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
 						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "precopy_script_pi_pivot",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Delete Existing record from DL pi_pivot",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": "DECLARE @month VARCHAR(20) = DATENAME(MONTH, GETDATE()) + '_' + CAST(YEAR(GETDATE()) AS VARCHAR(4))\nDECLARE @sql NVARCHAR(MAX)\n\nSET @sql = 'ALTER TABLE [dbo].[pi_pivot_2023] ADD ' + @month + ' DECIMAL(18,0)'\nIF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'pi_pivot_2023' AND COLUMN_NAME = @month)\nBEGIN\n  EXEC(@sql)\nEND;\n\nSelect top(3) * from pi_pivot_2023;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "datalakesql_server_dataset",
+						"type": "DatasetReference",
+						"parameters": {
+							"database": {
+								"value": "@pipeline().parameters.datalakesql_copy_database",
+								"type": "Expression"
+							},
+							"table": "pi_pivot_2023"
+						}
+					}
+				}
+			},
+			{
+				"name": "precopy_script_pi_trends",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Delete Existing record from DL_pi_trends",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": "DECLARE @month VARCHAR(20) = DATENAME(MONTH, GETDATE()) + '_' + CAST(YEAR(GETDATE()) AS VARCHAR(4))\nDECLARE @sql NVARCHAR(MAX)\n\nSET @sql = 'ALTER TABLE [dbo].[pi_trends_2023] ADD ' + @month + ' DECIMAL(18,0)'\nIF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'pi_trends_2023' AND COLUMN_NAME = @month)\nBEGIN\n  EXEC(@sql)\nEND;\n\nSelect top(3) * from pi_trends_2023",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "datalakesql_server_dataset",
+						"type": "DatasetReference",
+						"parameters": {
+							"database": {
+								"value": "@pipeline().parameters.datalakesql_copy_database",
+								"type": "Expression"
+							},
+							"table": "pi_trends_2023"
+						}
+					}
+				}
+			},
+			{
+				"name": "precopy_script_pi_landscape",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Delete Existing record from DL pi_landscape",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": "DECLARE @month VARCHAR(20) = DATENAME(MONTH, GETDATE()) + '_' + CAST(YEAR(GETDATE()) AS VARCHAR(4))\nDECLARE @sql NVARCHAR(MAX)\n\nSET @sql = 'ALTER TABLE [dbo].[pi_landscape_2023] ADD ' + @month + ' DECIMAL(18,0)'\nIF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'pi_landscape_2023' AND COLUMN_NAME = @month)\nBEGIN\n  EXEC(@sql)\nEND;\n\nSelect top(3) * from pi_landscape_2023;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "datalakesql_server_dataset",
+						"type": "DatasetReference",
+						"parameters": {
+							"database": {
+								"value": "@pipeline().parameters.datalakesql_copy_database",
+								"type": "Expression"
+							},
+							"table": "pi_landscape_2023"
+						}
 					}
 				}
 			}
