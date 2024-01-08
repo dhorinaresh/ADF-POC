@@ -156,7 +156,7 @@
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "Copy_to staging_copy1",
+						"activity": "Copy_to production",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -195,7 +195,7 @@
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "Copy_to staging_copy1",
+						"activity": "Copy_to production",
 						"dependencyConditions": [
 							"Failed"
 						]
@@ -446,7 +446,7 @@
 				}
 			},
 			{
-				"name": "Copy_to staging_copy1",
+				"name": "Copy_to production",
 				"type": "DatabricksNotebook",
 				"dependsOn": [
 					{
