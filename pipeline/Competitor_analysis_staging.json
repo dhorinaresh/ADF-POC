@@ -1,0 +1,297 @@
+{
+	"name": "Competitor_analysis_staging",
+	"properties": {
+		"activities": [
+			{
+				"name": "start time update",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": "INSERT INTO Audit(FileName, Operation, StartTime,Dashboard)\nValues('Competitor_Analysis', 'Competitor_Analysis_data_prep', (Select GETDATE()),'Competitor_Analysis');\nSelect * from Audit;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "datalakesql_server_dataset",
+						"type": "DatasetReference",
+						"parameters": {
+							"database": {
+								"value": "@pipeline().parameters.datalakesql_database_for_Audit",
+								"type": "Expression"
+							},
+							"table": "Audit"
+						}
+					}
+				}
+			},
+			{
+				"name": "end time update for Competitor_Analysis_file_processing",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Competitor_Analysis_Final",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'pass'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "datalakesql_server_dataset",
+						"type": "DatasetReference",
+						"parameters": {
+							"database": {
+								"value": "@pipeline().parameters.datalakesql_database_for_Audit",
+								"type": "Expression"
+							},
+							"table": "Audit"
+						}
+					}
+				}
+			},
+			{
+				"name": "end time update for Competitor_Analysisfail",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Competitor_Analysis_Final",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'Fail'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "datalakesql_server_dataset",
+						"type": "DatasetReference",
+						"parameters": {
+							"database": {
+								"value": "@pipeline().parameters.datalakesql_database_for_Audit",
+								"type": "Expression"
+							},
+							"table": "Audit"
+						}
+					}
+				}
+			},
+			{
+				"name": "start time update_copy_Competitor_Analysis_data",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "end time update for Competitor_Analysis_file_processing",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": "INSERT INTO Audit(FileName, Operation, StartTime,Dashboard)\nValues('Crosswalk', 'Crosswalk_data_load_to_db', (Select GETDATE()),'Crosswalk');\nSelect * from Audit;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "datalakesql_server_dataset",
+						"type": "DatasetReference",
+						"parameters": {
+							"database": {
+								"value": "@pipeline().parameters.datalakesql_database_for_Audit",
+								"type": "Expression"
+							},
+							"table": "Audit"
+						}
+					}
+				}
+			},
+			{
+				"name": "Competitor_Analysis_Final",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "start time update",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Competitor Analysis/Competitor_Final"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks4_pfcluster3",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Truncate competitor final DL Table",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "start time update_copy_Competitor_Analysis_data",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": "Truncate table ca_allstatesallyears;\nSELECT TOP 10 * FROM ca_allstatesallyears;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "datalakesql_server_dataset",
+						"type": "DatasetReference",
+						"parameters": {
+							"database": {
+								"value": "@pipeline().parameters.datalakesql_copy_database_name",
+								"type": "Expression"
+							},
+							"table": "ca_allstatesallyears"
+						}
+					}
+				}
+			},
+			{
+				"name": "send email update for crosswalk data load fail_DL",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "Copy_to staging",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+					"method": "POST",
+					"body": {
+						"value": "{\n \"title\":\"PIPELINE RUN FOR crosswalk data load FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the Crosswalk Data Load to DL and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Copy_to staging",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Truncate competitor final DL Table",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Competitor Analysis/CA data to staging"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks4_pfcluster3",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"datalakesql_copy_database_name": {
+				"type": "string",
+				"defaultValue": "HWai_Dashboards"
+			},
+			"datalakesql_database_for_Audit": {
+				"type": "string",
+				"defaultValue": "HWai_Staging_DB"
+			},
+			"prodsql_copy_database_name": {
+				"type": "string",
+				"defaultValue": "HWai_Dashboards"
+			}
+		},
+		"folder": {
+			"name": "Monthly_Refresh_New_Pipelines/Competitor_Analysis"
+		},
+		"annotations": [],
+		"lastPublishTime": "2023-04-18T12:23:03Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}
