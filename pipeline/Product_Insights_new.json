@@ -207,7 +207,7 @@
 				}
 			},
 			{
-				"name": "Fail_status_update_pi_lsacpe_to_DB_copy3",
+				"name": "Fail_status_update_pi_pivot_to_DB_staging",
 				"type": "Lookup",
 				"dependsOn": [
 					{
@@ -250,7 +250,7 @@
 				"type": "WebActivity",
 				"dependsOn": [
 					{
-						"activity": "Fail_status_update_pi_lsacpe_to_DB_copy3",
+						"activity": "Fail_status_update_pi_pivot_to_DB_staging",
 						"dependencyConditions": [
 							"Succeeded"
 						]
