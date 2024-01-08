@@ -1,0 +1,362 @@
+{
+	"name": "Winning_Plans_staging",
+	"properties": {
+		"activities": [
+			{
+				"name": "start time update",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": "INSERT INTO Audit(FileName, Operation, StartTime,Dashboard)\nValues('WinningPlans_Script', 'WinningPlansScript_prep', (Select GETDATE()),'WinningPlans');\nSelect * from Audit;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "datalakesql_server_dataset",
+						"type": "DatasetReference",
+						"parameters": {
+							"database": {
+								"value": "@pipeline().parameters.datalakesql_database_for_Audit",
+								"type": "Expression"
+							},
+							"table": "Audit"
+						}
+					}
+				}
+			},
+			{
+				"name": "Winning_Plans",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "start time update",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Winning_Plans/Winning_Plans"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks4_pfcluster3",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Pass_status_update_WinningPlans",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Winning_Plans",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'pass'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;\n",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "datalakesql_server_dataset",
+						"type": "DatasetReference",
+						"parameters": {
+							"database": {
+								"value": "@pipeline().parameters.datalakesql_database_for_Audit",
+								"type": "Expression"
+							},
+							"table": "Audit"
+						}
+					}
+				}
+			},
+			{
+				"name": "Fail_status_update_WinningPlans",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Winning_Plans",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'Fail'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "datalakesql_server_dataset",
+						"type": "DatasetReference",
+						"parameters": {
+							"database": {
+								"value": "@pipeline().parameters.datalakesql_database_for_Audit",
+								"type": "Expression"
+							},
+							"table": "Audit"
+						}
+					}
+				}
+			},
+			{
+				"name": "start time update_data_upload_DB",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Pass_status_update_WinningPlans",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": "INSERT INTO Audit(FileName, Operation, StartTime,Dashboard)\nValues('WinningPlans_Script', 'WinningPlans_upload_DB', (Select GETDATE()),'WinningPlans_base_data');\nSelect * from Audit;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "datalakesql_server_dataset",
+						"type": "DatasetReference",
+						"parameters": {
+							"database": {
+								"value": "@pipeline().parameters.datalakesql_database_for_Audit",
+								"type": "Expression"
+							},
+							"table": "Audit"
+						}
+					}
+				}
+			},
+			{
+				"name": "send email update for Eligibles script",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "Fail_status_update_WinningPlans",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+					"method": "POST",
+					"body": {
+						"value": "{\n \"title\":\"PIPELINE RUN FOR WinningPlans_Script FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the WinningPlans_Script and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Delete Existing record from DL DB",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "start time update_data_upload_DB",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": "Truncate table winning_plans;\nSELECT TOP 10 * FROM winning_plans;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "datalakesql_server_dataset",
+						"type": "DatasetReference",
+						"parameters": {
+							"database": {
+								"value": "@pipeline().parameters.datalakesql_copy_database",
+								"type": "Expression"
+							},
+							"table": "winning_plans"
+						}
+					}
+				}
+			},
+			{
+				"name": "Fail_status_update_WinningPlans_to_DB_copy1",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Copy WP to staging",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": "Update Audit\nset EndTime = (Select GETDATE())\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nSET Status = 'Fail'\nwhere Id = (select Count(*) from Audit);\n\nUpdate Audit\nset Timetaken = EndTime-StartTime\nwhere Id = (select Count(*) from Audit);\n\nSelect * from Audit;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "datalakesql_server_dataset",
+						"type": "DatasetReference",
+						"parameters": {
+							"database": {
+								"value": "@pipeline().parameters.datalakesql_database_for_Audit",
+								"type": "Expression"
+							},
+							"table": "Audit"
+						}
+					}
+				}
+			},
+			{
+				"name": "send email update for fail WinningPlans to DB_copy1",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "Fail_status_update_WinningPlans_to_DB_copy1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://prod-07.centralus.logic.azure.com:443/workflows/41ee3b475c3949a7a5b339451b7da176/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=L_dZ_r329mUA0Y029uo0EScLdKpIB5WuW_D8lJMZ4cU",
+					"method": "POST",
+					"body": {
+						"value": "{\n \"title\":\"PIPELINE RUN FOR WinningPlans_to_DB FAILED\",\n \"color\":\"RED\",\n \"message\":\"Debug the WinningPlans_to_DB and run the Pipeline again\",\n \"dataFactoryName\":\"@{pipeline().DataFactory}\",\n \"pipelineName\":\"@{pipeline().Pipeline}\",\n \"pipelineRunId\":\"@{pipeline().RunId}\",\n \"time\":\"@{utcnow()}\"\n}",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Copy WP to staging",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Delete Existing record from DL DB",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/Winning_Plans/WP data to staging"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks4_pfcluster3",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"datalakesql_database_for_Audit": {
+				"type": "string",
+				"defaultValue": "HWai_Staging_DB"
+			},
+			"datalakesql_copy_database": {
+				"type": "string",
+				"defaultValue": "HWai_Dashboards"
+			},
+			"prodsql_copy_database": {
+				"type": "string",
+				"defaultValue": "HWai_Dashboards"
+			}
+		},
+		"folder": {
+			"name": "Monthly_Refresh_New_Pipelines/Winning_Plans"
+		},
+		"annotations": []
+	}
+}
