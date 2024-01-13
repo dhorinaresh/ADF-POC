@@ -1,0 +1,139 @@
+{
+	"name": "ET_NewTechStack",
+	"properties": {
+		"activities": [
+			{
+				"name": "Et_step1a",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/EtNewTech/Et_step1a"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks4_pfcluster3",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Et_step1b",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Et_step1a",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/EtNewTech/Et_step1b"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks4_pfcluster3",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Et_step1c",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Et_step1b",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/EtNewTech/Et_step1c"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks4_pfcluster3",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Et_step1d",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Et_step1c",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/EtNewTech/Et_step1d"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks4_pfcluster3",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "EtNewTech_Step2a",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Et_step1d",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/hwaitech@healthworksai.com/HWai_Monthly_refresh/EtNewTech/EtNewTech Step2a"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks4_pfcluster3",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"folder": {
+			"name": "Monthly_Refresh_New_Pipelines/Enrollment_Trends"
+		},
+		"annotations": []
+	}
+}
