@@ -1,0 +1,9 @@
+{
+	"name": "PF-POC",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "be9db9df-cb98-4311-8897-04773f6b3792",
+		"tenantId": "7437f0e8-98de-4c15-b609-14b4fcc57cfe"
+	}
+}
